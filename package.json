@@ -1,0 +1,35 @@
+{
+  "name": "mustard-project",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^18.11.7",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31"
+  },
+  "scripts": {
+    "dev:core": "pnpm --filter mustard-core dev"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/test/**",
+      "**/docs/**",
+      "node_modules"
+    ],
+    "verbose": true,
+    "restartable": "rs",
+    "execMap": {
+      "ts": "ts-node-esm"
+    },
+    "delay": 500,
+    "watch": [
+      "*.ts"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "ts,json"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "ts-node": {
+    "swc": false,
+    "pretty": true,
+    "transpileOnly": true,
+    "require": ["tsconfig-paths/register"]
+  },
+  "compilerOptions": {
+    "lib": [],
+    "target": "ES6",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "core": ["./ioc/Impls/Core"],
+      "container": ["./ioc/Impls/Container"],
+      "decorators": ["./ioc/Impls/Decorators"],
+      "server-utils": ["./ioc/Impls/Utils"],
+      "create-server": ["./ioc/Impls/CreateServer"]
+    }
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["_samples", "advanced"]
+}

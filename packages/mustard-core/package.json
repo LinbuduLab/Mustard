@@ -1,0 +1,40 @@
+{
+  "name": "mustard-core",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "yargs-parser": "^21.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.7",
+    "@types/yargs-parser": "^21.0.0",
+    "lodash": "^4.17.21",
+    "nodemon": "^2.0.20",
+    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0"
+  },
+  "scripts": {
+    "dev": "nodemon ./mustard/index.ts"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/test/**",
+      "**/docs/**",
+      "node_modules"
+    ],
+    "verbose": true,
+    "restartable": "rs",
+    "execMap": {
+      "ts": "ts-node-esm"
+    },
+    "delay": 500,
+    "watch": [
+      "*.ts"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "ts,json"
+  }
+}
