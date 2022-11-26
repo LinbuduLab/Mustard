@@ -1,3 +1,3 @@
-import { Container } from "./Core";
+import { DecoratorImpl } from "./DecoratorImpl";
 
-export const { Command, RootCommand, Option, Options } = Container;
+export const { Command, RootCommand, Option, Options } = DecoratorImpl;

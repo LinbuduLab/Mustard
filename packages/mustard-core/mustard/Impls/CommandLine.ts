@@ -1,44 +1,8 @@
 import parse from "yargs-parser";
-import { ClassStruct, Container } from "./Core";
 
-export abstract class CommandStruct {
-  abstract example?: () => string;
-
-  abstract run(): void;
-}
-
-type Dictionary<T = unknown> = Record<string, T>;
-
-type PackageManagerUtils = {
-  install: () => void;
-  uninstall: () => void;
-  update: () => void;
-  getUsingPackageManager: () => void;
-};
-
-type JSONUtils = {
-  readSync: () => void;
-  read: () => Promise<void>;
-
-  writeSync: () => void;
-  write: () => Promise<void>;
-};
-
-type BuiltInUtils = {
-  pm: PackageManagerUtils;
-  json: JSONUtils;
-};
-
-export class BaseCommand {
-  protected readonly utils: BuiltInUtils;
-}
-
-export interface ICLIConfiguration {
-  enableUsage: boolean;
-  enableVersion: boolean;
-
-  debug: boolean;
-}
+import { DecoratorImpl } from "./DecoratorImpl";
+import { ICLIConfiguration } from "./types/Configuration.struct";
+import { ClassStruct, Dictionary } from "./types/Shared.struct";
 
 export class CLI {
   public commandRegistry = new Map<string, any>();
@@ -66,7 +30,7 @@ export class CLI {
 
   private internalRegisterCommand(Commands: ClassStruct[]) {
     const CommandToLoad = Commands.map((Command) =>
-      Container.commandRegistry.get(Command.name)
+      DecoratorImpl.commandRegistry.get(Command.name)
     );
 
     // 然后将这些命令注册到命令注册表中
@@ -95,7 +59,7 @@ export class CLI {
 
   private collectCommandUsage() {
     // 如何在这一步收集 options 的描述？
-    // 如果每个命令实例化一个肯定句就可以了嗷
+    // 如果每个命令实例化一个肯定就可以了嗷
     const rootUsage = [];
     const commandNames = new Set();
     const commonUsages = [];

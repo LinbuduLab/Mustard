@@ -1,5 +1,7 @@
 import { Command, RootCommand, Option, Options } from "./Impls/Decorators";
-import { CLI, BaseCommand, CommandStruct } from "./Impls/CommandLine";
+import { CLI } from "./Impls/CommandLine";
+import { BaseCommand } from "./Impls/BaseCommand";
+import { CommandStruct } from "./Impls/types/Command.struct";
 import { Validator } from "./Impls/Validator";
 
 @Command("sync")
@@ -30,8 +32,10 @@ class RunCommand extends BaseCommand implements CommandStruct {
     return `run xxx --dry`;
   }
 
-  @Option("dry", "d")
-  // @Option("dry", Validator.Required().String().MinLength(3).MaxLength(5))  public dryOption;
+  // @Option("dry", "d")
+  @Option("dry", Validator.Required().String().MinLength(3).MaxLength(5))
+  public dryOption;
+
   @Options()
   public allOptions;
 

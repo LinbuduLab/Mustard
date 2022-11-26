@@ -1,12 +1,3 @@
-export type FuncStruct<
-  TArgs extends unknown[] = unknown[],
-  TReturnType extends unknown = unknown
-> = (...args: TArgs) => Promise<TReturnType>;
-
-export type ClassStruct<TInstanceType extends unknown = unknown> = new (
-  ...args: any[]
-) => TInstanceType;
-
 const CommandRrgistry = Map<
   string,
   {
@@ -17,28 +8,8 @@ const CommandRrgistry = Map<
   }
 >;
 
-const OptionRegistry = Map<
-  string,
-  {
-    optionName: string;
-    commandName: string;
-    class: any;
-    // 是否注入全部
-    eager: boolean;
-  }
->;
-
-const ClassRegistryMap = Map<string, ClassStruct<any>>;
-const InstanceRegistryMap = Map<string, any>;
-
 export class Container {
-  public static classMap = new ClassRegistryMap();
-
-  public static instanceMap = new InstanceRegistryMap();
-
   public static commandRegistry = new CommandRrgistry();
-
-  public static optionRegistry = new CommandRrgistry();
 
   public static Command(
     commandName: string,
@@ -95,19 +66,5 @@ export class Container {
       initValue,
       rule: "rule",
     });
-  }
-
-  public static register(identifier: string, cls: ClassStruct): void {
-    Container.classMap.set(identifier, cls);
-  }
-
-  public static collect(instance: unknown) {}
-
-  public static produce<T extends any = any>(identifier: string): T {
-    const Cls = Container.classMap.get(identifier);
-
-    const instance = new Cls();
-
-    return instance;
   }
 }

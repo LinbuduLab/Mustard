@@ -1,6 +1,7 @@
 import { z, ZodDate } from "zod";
 import type { ZodType, ZodBoolean, ZodNull, ZodNumber, ZodString } from "zod";
 
+// todo: support object type validations
 type AvaliableSchemaValidations =
   | keyof typeof z
   | keyof ZodString
@@ -15,20 +16,26 @@ type ValidationItem = {
 };
 
 export class ValidatorFactory {
-  private schema: ZodType = null;
+  public schema: ZodType = null;
 
   private required = false;
 
-  private validations: ValidationItem[] = [];
+  public validations: ValidationItem[] = [];
 
-  public validate<T>(input: T) {
-    for (const validation of this.validations) {
-      this.schema = this.schema[validation.type](...validation.args);
+  public static validate<T>(
+    input: T,
+    schema: ZodType,
+    validations: ValidationItem[],
+    required: boolean
+  ): T {
+    // todo: findLast primitive validation type and apply first
+    for (const validation of validations) {
+      schema = (schema ?? z)[validation.type](...(validation.args ?? []));
     }
 
-    if (this.required === false) this.schema.optional();
+    if (required === false) schema = schema.optional();
 
-    return this.schema.parse(input);
+    return schema.parse(input);
   }
 
   public Required(): Omit<this, "Required"> {
@@ -41,8 +48,19 @@ export class ValidatorFactory {
     return this;
   }
 
+  // return String Validator!!!
   public String(): Omit<this, "String"> {
     this.validations.push({ type: "string" });
+    return this;
+  }
+
+  public Number(): Omit<this, "Number"> {
+    this.validations.push({ type: "number" });
+    return this;
+  }
+
+  public Boolean(): Omit<this, "Boolean"> {
+    this.validations.push({ type: "boolean" });
     return this;
   }
 
