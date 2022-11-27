@@ -128,10 +128,22 @@ usage: ${item.usage}
     });
   }
 
-  private executeCommand(Command: any, args: Dictionary) {
-    // 在这一步应当完成对所有内部选项值的填充
-    const handler = new Command();
+  private checkUnknownOptions(handler: any, parsedArgs: Dictionary) {
+    const handlerDeclaredOptions = Reflect.ownKeys(handler);
 
+    const unknownOptions = Object.keys(parsedArgs).filter(
+      (key) => !handlerDeclaredOptions.includes(key)
+    );
+
+    if (unknownOptions.length > 0) {
+      // todo: UnknownOptionError
+      // throw new Error(
+      //   `Unknown options: ${unknownOptions.join(", ")}. See --help for usage.`
+      // );
+    }
+  }
+
+  private injectCommandOptions(handler: any, args: Dictionary) {
     const handlerOptions = Reflect.ownKeys(handler);
 
     handlerOptions.forEach((optionKey) => {
@@ -176,6 +188,16 @@ usage: ${item.usage}
         Reflect.set(handler, optionKey, args);
       }
     });
+  }
+
+  private executeCommand(Command: any, args: Dictionary) {
+    // 在这一步应当完成对所有内部选项值的填充
+    const handler = new Command();
+
+    !this?.options?.allowUnknownOptions &&
+      this.checkUnknownOptions(handler, args);
+
+    this.injectCommandOptions(handler, args);
 
     // 执行命令
     handler.run();

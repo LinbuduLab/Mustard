@@ -3,4 +3,6 @@ export interface ICLIConfiguration {
   enableVersion: boolean;
 
   debug: boolean;
+
+  allowUnknownOptions: boolean;
 }
