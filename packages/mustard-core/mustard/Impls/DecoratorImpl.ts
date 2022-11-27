@@ -83,6 +83,13 @@ export class DecoratorImpl {
         };
   }
 
+  public static Input(): ClassFieldDecoratorFunction {
+    return (_, { name }) =>
+      (initValue) => ({
+        type: "Input",
+      });
+  }
+
   public static Context(): ClassFieldDecoratorFunction {
     return (_, { name }) =>
       (initValue) =>

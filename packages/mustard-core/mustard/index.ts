@@ -4,6 +4,7 @@ import {
   Option,
   Options,
   Context,
+  Input,
 } from "./Impls/Decorators";
 import { CLI } from "./Impls/CommandLine";
 import { BaseCommand } from "./Impls/BaseCommand";
@@ -48,7 +49,11 @@ class RunCommand extends BaseCommand implements CommandStruct {
   @Context()
   public context;
 
+  @Input()
+  public input;
+
   public run(): void {
+    console.log("this.input: ", this.input);
     console.log("this.context: ", this.context);
     console.log("Hello World! ", this.dryOption);
     console.log("All Options! ", this.allOptions);

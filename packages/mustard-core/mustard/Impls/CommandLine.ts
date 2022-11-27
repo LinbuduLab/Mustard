@@ -2,7 +2,10 @@ import parse from "yargs-parser";
 
 import { DecoratorImpl } from "./DecoratorImpl";
 import { ICLIConfiguration } from "./types/Configuration.struct";
-import { ContextInitializerPlaceHolder } from "./types/Context.struct";
+import {
+  ContextInitializerPlaceHolder,
+  InputInitializerPlaceHolder,
+} from "./types/Context.struct";
 import { OptionInitializerPlaceHolder } from "./types/Option.struct";
 import { ClassStruct, Dictionary } from "./types/Shared.struct";
 
@@ -41,7 +44,7 @@ export class CLI {
         ? this.rootCommandRegistry.set("root", Command)
         : this.commandRegistry.set(Command.commandName, Command);
 
-      Command.aliasName && this.commandRegistry.set(Command.aliasName, Command);
+      Command.alias && this.commandRegistry.set(Command.alias, Command);
     });
   }
 
@@ -145,7 +148,8 @@ usage: ${item.usage}
     handlerOptions.forEach((optionKey) => {
       const value:
         | OptionInitializerPlaceHolder
-        | ContextInitializerPlaceHolder = Reflect.get(handler, optionKey);
+        | ContextInitializerPlaceHolder
+        | InputInitializerPlaceHolder = Reflect.get(handler, optionKey);
 
       const { type } = value;
 
@@ -226,6 +230,7 @@ usage: ${item.usage}
   public start() {
     const args = process.argv.slice(2);
     const parsed = parse(args);
+    console.log("parsed: ", parsed);
 
     const { _, ...parsedArgs } = parsed;
 

@@ -24,3 +24,7 @@ export type ExecutionContext = {};
 export type ContextInitializerPlaceHolder = {
   type: "Context";
 };
+
+export type InputInitializerPlaceHolder = {
+  type: "Input";
+};
