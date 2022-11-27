@@ -1,4 +1,4 @@
-import { z, ZodDate, ZodOptional, ZodType } from "zod";
+import { z, ZodDate, ZodOptional } from "zod";
 import type { ZodType, ZodBoolean, ZodNull, ZodNumber, ZodString } from "zod";
 
 // todo: support object type validations
@@ -56,6 +56,32 @@ export class StringValidator extends PrimitiveValidator<ZodType<String>> {
   }
 }
 
+export class BooleanValidator extends PrimitiveValidator<ZodType<Boolean>> {
+  private _schema: ZodBoolean;
+
+  constructor(private required: boolean = false) {
+    super();
+    this._schema = z.boolean();
+  }
+
+  public get schema(): MaybeOptionalZodType<ZodBoolean> {
+    return this.required ? this._schema : this._schema.optional();
+  }
+
+  public addValidation(type: keyof ZodBoolean, args?: unknown[]) {
+    const validation: ValidationItem = {
+      type,
+      args,
+    };
+
+    this._schema = this._schema[validation.type](...validation.args);
+  }
+
+  public validate(value: unknown) {
+    return this._schema.parse(value);
+  }
+}
+
 export class Base {}
 
 export class ValidatorFactory {
@@ -90,9 +116,10 @@ export class ValidatorFactory {
   public String(): StringValidator {
     return new StringValidator(this.required);
   }
+
+  public Boolean(): BooleanValidator {
+    return new BooleanValidator(this.required);
+  }
 }
 
 export const Validator = new ValidatorFactory();
-
-// Required  / Optional should be called first if needed
-Validator.String().MinLength(3).MaxLength(10).schema.parse();

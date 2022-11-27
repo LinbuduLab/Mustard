@@ -33,7 +33,7 @@ class RunCommand extends BaseCommand implements CommandStruct {
   }
 
   // @Option("dry", "d")
-  @Option("dry", Validator.Required().String().MinLength(3).MaxLength(5))
+  @Option("dry", Validator.Boolean())
   public dryOption;
 
   @Options()

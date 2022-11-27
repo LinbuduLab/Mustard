@@ -1,6 +1,11 @@
-import { CommandRegistry } from "./types/Instantiation.struct";
-import { OptionInitializerPlaceHolder, OptionInjectionType } from './types/Option.struct';
 import { ValidatorFactory } from "./Validator";
+import { CommandRegistry } from "./types/Instantiation.struct";
+import type { OptionInitializerPlaceHolder } from './types/Option.struct';
+
+
+
+
+
 
 export class DecoratorImpl {
   public static commandRegistry = new CommandRegistry();
@@ -37,7 +42,7 @@ export class DecoratorImpl {
   ): ClassFieldDecoratorFunction {
     return (_, { name }) =>
       (initValue) => ({
-        type: OptionInjectionType.Option,
+        type: 'Option',
         optionName: optionName ?? String(name),
         initValue,
         schema: validator?.schema,
@@ -48,7 +53,7 @@ export class DecoratorImpl {
   // @Options accept no args as it represents all options received
   public static Options(): ClassFieldDecoratorFunction {
     return (initValue) => () => ({
-      type: OptionInjectionType.Options,
+      type: 'Options',
       initValue,
     } satisfies OptionInitializerPlaceHolder);
   }

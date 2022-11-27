@@ -2,6 +2,7 @@ import parse from "yargs-parser";
 
 import { DecoratorImpl } from "./DecoratorImpl";
 import { ICLIConfiguration } from "./types/Configuration.struct";
+import { OptionInitializerPlaceHolder } from "./types/Option.struct";
 import { ClassStruct, Dictionary } from "./types/Shared.struct";
 
 export class CLI {
@@ -133,15 +134,24 @@ usage: ${item.usage}
     const handlerOptions = Reflect.ownKeys(handler);
 
     handlerOptions.forEach((optionKey) => {
-      const value = Reflect.get(handler, optionKey);
+      const value: OptionInitializerPlaceHolder = Reflect.get(
+        handler,
+        optionKey
+      );
 
-      const { type, optionName: injectKey, initValue, rule } = value;
+      const { type, optionName: injectKey, initValue, schema } = value;
 
       // use value from parsed args
       if (injectKey in args) {
         const argValue = args[injectKey];
 
-        Reflect.set(handler, optionKey, argValue);
+        // control parse / safeParse from options
+        // hijack zoderror for better error message
+        const validatedValue = schema ? schema.safeParse(argValue) : argValue;
+
+        Reflect.set(handler, optionKey, validatedValue);
+
+        // validate for values from parsed args
       } else {
         // use default value or mark as undefined
         // null should also be converted to undefined
