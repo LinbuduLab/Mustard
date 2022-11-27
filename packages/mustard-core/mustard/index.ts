@@ -1,4 +1,10 @@
-import { Command, RootCommand, Option, Options } from "./Impls/Decorators";
+import {
+  Command,
+  RootCommand,
+  Option,
+  Options,
+  Context,
+} from "./Impls/Decorators";
 import { CLI } from "./Impls/CommandLine";
 import { BaseCommand } from "./Impls/BaseCommand";
 import { CommandStruct } from "./Impls/types/Command.struct";
@@ -39,7 +45,11 @@ class RunCommand extends BaseCommand implements CommandStruct {
   @Options()
   public allOptions;
 
+  @Context()
+  public context;
+
   public run(): void {
+    console.log("this.context: ", this.context);
     console.log("Hello World! ", this.dryOption);
     console.log("All Options! ", this.allOptions);
   }

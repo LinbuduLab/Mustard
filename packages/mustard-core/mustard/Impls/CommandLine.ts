@@ -2,6 +2,7 @@ import parse from "yargs-parser";
 
 import { DecoratorImpl } from "./DecoratorImpl";
 import { ICLIConfiguration } from "./types/Configuration.struct";
+import { ContextInitializerPlaceHolder } from "./types/Context.struct";
 import { OptionInitializerPlaceHolder } from "./types/Option.struct";
 import { ClassStruct, Dictionary } from "./types/Shared.struct";
 
@@ -134,12 +135,25 @@ usage: ${item.usage}
     const handlerOptions = Reflect.ownKeys(handler);
 
     handlerOptions.forEach((optionKey) => {
-      const value: OptionInitializerPlaceHolder = Reflect.get(
-        handler,
-        optionKey
-      );
+      const value:
+        | OptionInitializerPlaceHolder
+        | ContextInitializerPlaceHolder = Reflect.get(handler, optionKey);
 
-      const { type, optionName: injectKey, initValue, schema } = value;
+      const { type } = value;
+
+      if (type === "Context") {
+        Reflect.set(handler, optionKey, {
+          temp: "this is context...",
+        });
+        return;
+      }
+
+      const {
+        optionName: injectKey,
+        initValue,
+        schema,
+        // todo: by XOR types
+      } = value as OptionInitializerPlaceHolder;
 
       // use value from parsed args
       if (injectKey in args) {

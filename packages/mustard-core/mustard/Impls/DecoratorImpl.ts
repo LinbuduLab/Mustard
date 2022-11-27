@@ -1,14 +1,13 @@
 import { ValidatorFactory } from "./Validator";
 import { CommandRegistry } from "./types/Instantiation.struct";
 import type { OptionInitializerPlaceHolder } from './types/Option.struct';
-
-
-
-
-
+import { ContextInitializerPlaceHolder } from './types/Context.struct';
 
 export class DecoratorImpl {
+
+
   public static commandRegistry = new CommandRegistry();
+
 
   public static Command(
     commandName: string,
@@ -48,6 +47,15 @@ export class DecoratorImpl {
         schema: validator?.schema,
         // description,
       } satisfies OptionInitializerPlaceHolder);
+  }
+
+   public static Context(
+  ): ClassFieldDecoratorFunction {
+    return (_, { name }) =>
+      (initValue) => ({
+        type: 'Context',
+        // description,
+      } satisfies ContextInitializerPlaceHolder);
   }
 
   // @Options accept no args as it represents all options received

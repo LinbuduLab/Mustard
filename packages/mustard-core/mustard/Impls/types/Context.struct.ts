@@ -18,3 +18,9 @@ export type BuiltInUtils = {
   pm: PackageManagerUtils;
   json: JSONUtils;
 };
+
+export type ExecutionContext = {};
+
+export type ContextInitializerPlaceHolder = {
+  type: "Context";
+};
