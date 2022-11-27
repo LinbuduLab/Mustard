@@ -28,7 +28,7 @@ class RunSyncCommand extends BaseCommand implements CommandStruct {
   }
 }
 
-@Command("run", "r")
+@Command("run", "r", "run command")
 class RunCommand extends BaseCommand implements CommandStruct {
   constructor() {
     super();
@@ -98,9 +98,3 @@ cli.registerCommand([CheckCommand]);
 cli.start();
 
 cli.configure({});
-
-/**
- * - nested commands support
- * - option description
- * - validator related
- */

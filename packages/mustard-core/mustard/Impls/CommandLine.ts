@@ -53,10 +53,6 @@ export class CLI {
 
     // 注册命令
     this.internalRegisterCommand(Commands);
-
-    // 实例化 Parser
-    // 初始化配置
-    // 检查环境
   }
 
   private collectCommandUsage() {
