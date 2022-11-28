@@ -4,6 +4,13 @@
 
 IoC &amp; native ecmascript decotator based command-line app builder.
 
+## Todos
+
+- option alias / description
+- https://github.com/tj/commander.js/blob/HEAD/Readme_zh-CN.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%AE%E5%8A%A9
+- events
+- nest commander 相关
+
 ## Notes
 
 - packages
