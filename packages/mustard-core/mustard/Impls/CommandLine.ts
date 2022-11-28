@@ -150,12 +150,56 @@ usage: ${item.usage}
   private injectCommandOptions(
     handler: any,
     inputs: string[],
-    args: Dictionary
+    _args: Dictionary
   ) {
     const handlerOptions = Reflect.ownKeys(handler);
 
-    // 如何确保 VariadicOption 先被处理...？
-    handlerOptions.forEach((optionKey) => {
+    const commonOptions: Array<{
+      key: string;
+      value: OptionInitializerPlaceHolder;
+    }> = [];
+    const variadicOptions: Array<{
+      key: string;
+      value: OptionInitializerPlaceHolder;
+    }> = [];
+
+    const variadicOptionsInjectKey: string[] = [];
+
+    handlerOptions.forEach((key: string) => {
+      const value: OptionInitializerPlaceHolder = Reflect.get(handler, key);
+
+      if (value.type === "VariadicOption") {
+        variadicOptions.push({
+          key,
+          value,
+        });
+        variadicOptionsInjectKey.push(value.optionName);
+      } else {
+        commonOptions.push({
+          key,
+          value,
+        });
+      }
+    });
+
+    const parseForVariadic = parse(this.rawArgs, {
+      array: variadicOptionsInjectKey,
+      configuration: {
+        "combine-arrays": true,
+        "greedy-arrays": true,
+        "halt-at-non-option": false,
+      },
+    });
+
+    // 需要将 variadic 从 parsed 中移除
+    // 这一步可以通过对 this.rawArgs 做处理，建议直接自己实现一个 parser
+
+    variadicOptions.forEach((opt) => {
+      const injectKey = opt.value.optionName;
+      Reflect.set(handler, opt.key, parseForVariadic[injectKey]);
+    });
+
+    commonOptions.forEach(({ key: optionKey, value: _value }) => {
       const value:
         | OptionInitializerPlaceHolder
         | ContextInitializerPlaceHolder
@@ -182,29 +226,9 @@ usage: ${item.usage}
         // todo: by XOR types
       } = value as OptionInitializerPlaceHolder;
 
-      if (type === "VariadicOption") {
-        const parsed = parse(this.rawArgs, {
-          array: [injectKey],
-          configuration: {
-            "combine-arrays": true,
-            "greedy-arrays": true,
-            "halt-at-non-option": false,
-          },
-        });
-
-        Reflect.set(handler, optionKey, parsed[injectKey]);
-
-        // 处理 this.parsedArgs，把这部分移除掉
-
-        // delete from args
-        delete args[injectKey];
-
-        return;
-      }
-
       // use value from parsed args
-      if (injectKey in args) {
-        const argValue = args[injectKey];
+      if (injectKey in this.parsedArgs) {
+        const argValue = this.parsedArgs[injectKey];
 
         // control parse / safeParse from options
         // hijack zoderror for better error message
@@ -220,7 +244,7 @@ usage: ${item.usage}
       }
 
       if (type === "Options") {
-        Reflect.set(handler, optionKey, args);
+        Reflect.set(handler, optionKey, this.parsedArgs);
       }
     });
   }
