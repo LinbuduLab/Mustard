@@ -7,6 +7,7 @@ export type CommandRegistryPayload = {
   // todo: fix after typing fixed in #50820
   class: any;
   root: boolean;
+  childCommandList: any[];
 };
 
 export abstract class CommandStruct {

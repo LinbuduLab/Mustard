@@ -17,8 +17,11 @@ class RunSyncCommand extends BaseCommand implements CommandStruct {
     super();
   }
 
-  // @Option("dry", Validator.Required().String().MinLength(3).MaxLength(5))
+  @Option("dry")
   public dryOption;
+
+  @Input()
+  public input;
 
   static usage() {
     return `run sync --dry`;
@@ -26,10 +29,11 @@ class RunSyncCommand extends BaseCommand implements CommandStruct {
 
   public run(): void {
     console.log("Nested! ", this.dryOption);
+    console.log("this.input: ", this.input);
   }
 }
 
-@Command("run", "r", "run command")
+@Command("run", "r", "run command", [RunSyncCommand])
 class RunCommand extends BaseCommand implements CommandStruct {
   constructor() {
     super();

@@ -45,6 +45,11 @@ export class CLI {
         : this.commandRegistry.set(Command.commandName, Command);
 
       Command.alias && this.commandRegistry.set(Command.alias, Command);
+
+      if (Command.childCommandList.length > 0) {
+        // 如果希望将子命令的注册名更改为 run:update:sync 这种形式，那感觉最好把 alias 也统一
+        this.internalRegisterCommand(Command.childCommandList);
+      }
     });
   }
 
@@ -142,7 +147,11 @@ usage: ${item.usage}
     }
   }
 
-  private injectCommandOptions(handler: any, args: Dictionary) {
+  private injectCommandOptions(
+    handler: any,
+    inputs: string[],
+    args: Dictionary
+  ) {
     const handlerOptions = Reflect.ownKeys(handler);
 
     handlerOptions.forEach((optionKey) => {
@@ -157,6 +166,11 @@ usage: ${item.usage}
         Reflect.set(handler, optionKey, {
           temp: "this is context...",
         });
+        return;
+      }
+
+      if (type === "Input") {
+        Reflect.set(handler, optionKey, inputs ?? []);
         return;
       }
 
@@ -190,26 +204,51 @@ usage: ${item.usage}
     });
   }
 
-  private executeCommand(Command: any, args: Dictionary) {
+  private executeCommand(Command: any, inputs: string[], args: Dictionary) {
     // 在这一步应当完成对所有内部选项值的填充
     const handler = new Command();
 
     !this?.options?.allowUnknownOptions &&
       this.checkUnknownOptions(handler, args);
 
-    this.injectCommandOptions(handler, args);
+    this.injectCommandOptions(handler, inputs, args);
 
     // 执行命令
     handler.run();
   }
 
+  private getRealHandleCommand(command: string[]) {
+    // 这里还是要处理下是否存在 sub-command 的情况
+    // 如果 command.length === 1
+    // 如果当前 command 没有 handler，则打印帮助信息
+    // 如果当前 command 有 handler，则执行 handler
+    // 如果 command.length > 1
+    // 尝试查找是否存在 sub-command
+    // 如果存在，则递归向下查找
+    // 否则，存为 Input
+    // 不太对，还需要处理 Root Command 的 Input 的情况...
+    const [currentCommandNameMatch, ...inputs] = command;
+
+    const CommandInfo = this.commandRegistry.get(currentCommandNameMatch);
+
+    if (!CommandInfo) {
+      return null;
+    }
+
+    const fallback = { Command: CommandInfo.class, inputs };
+
+    // 如果存在子命令且仍然存在可供匹配的项，才继续向下
+    if (CommandInfo?.childCommandList?.length && command.length >= 1) {
+      return this.getRealHandleCommand(command.slice(1)) ?? fallback;
+    }
+
+    return fallback;
+  }
+
   private dispatchCommand(command: string[], args: Dictionary) {
-    // todo: sub command
-    const [main, ...subs] = command;
+    const { Command, inputs } = this.getRealHandleCommand(command);
 
-    const Command = this.commandRegistry.get(main).class;
-
-    this.executeCommand(Command, args);
+    this.executeCommand(Command, inputs, args);
   }
 
   private tryExecuteRootCommandOrPrintUsage(parsedArgs) {
@@ -229,7 +268,12 @@ usage: ${item.usage}
   // 调用此方法后，再修改配置和添加命令将不会生效
   public start() {
     const args = process.argv.slice(2);
-    const parsed = parse(args);
+    const parsed = parse(args, {
+      configuration: {
+        "combine-arrays": true,
+        "greedy-arrays": true,
+      },
+    });
     console.log("parsed: ", parsed);
 
     const { _, ...parsedArgs } = parsed;

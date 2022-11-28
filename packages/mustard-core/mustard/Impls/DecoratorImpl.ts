@@ -7,44 +7,57 @@ import { Nullable } from "./types/Shared.struct";
 export class DecoratorImpl {
   public static commandRegistry = new CommandRegistry();
 
-  public static Command(commandName: string): ClassDecoratorFunction;
-  public static Command(
-    commandName: string,
-    aliasOrDescription: string
-  ): ClassDecoratorFunction;
-  public static Command(
-    commandName: string,
-    alias: string,
-    description: string
-  ): ClassDecoratorFunction;
+  // public static Command(commandName: string): ClassDecoratorFunction;
+  // public static Command(
+  //   commandName: string,
+  //   aliasOrDescription: string
+  // ): ClassDecoratorFunction;
+  // public static Command(
+  //   commandName: string,
+  //   alias: string,
+  //   description: string
+  // ): ClassDecoratorFunction;
   public static Command(
     commandName: string,
     aliasOrDescription?: string,
-    description?: string
+    description?: string,
+    childCommandList: any[] = []
   ): ClassDecoratorFunction {
     if (typeof description === "string") {
       return DecoratorImpl.CommandImpl(
         commandName,
         aliasOrDescription,
-        description
+        description,
+        childCommandList
       );
     }
 
     if (typeof aliasOrDescription === "string") {
       if (aliasOrDescription.length <= 2) {
-        return DecoratorImpl.CommandImpl(commandName, aliasOrDescription, null);
+        return DecoratorImpl.CommandImpl(
+          commandName,
+          aliasOrDescription,
+          null,
+          childCommandList
+        );
       } else {
-        return DecoratorImpl.CommandImpl(commandName, null, aliasOrDescription);
+        return DecoratorImpl.CommandImpl(
+          commandName,
+          null,
+          aliasOrDescription,
+          childCommandList
+        );
       }
     }
 
-    return DecoratorImpl.CommandImpl(commandName, null, null);
+    return DecoratorImpl.CommandImpl(commandName, null, null, childCommandList);
   }
 
   public static CommandImpl(
     commandName: string,
     alias: Nullable<string>,
-    description: Nullable<string>
+    description: Nullable<string>,
+    childCommandList?: any[]
   ): ClassDecoratorFunction {
     return (target, context) => {
       DecoratorImpl.commandRegistry.set(context.name, {
@@ -53,6 +66,7 @@ export class DecoratorImpl {
         description,
         class: target,
         root: false,
+        childCommandList,
       });
     };
   }
@@ -63,6 +77,7 @@ export class DecoratorImpl {
         commandName: "root",
         class: target,
         root: true,
+        childCommandList: [],
       });
     };
   }
