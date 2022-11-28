@@ -98,6 +98,18 @@ export class DecoratorImpl {
         };
   }
 
+  public static VariadicOption(
+    optionName?: string
+  ): ClassFieldDecoratorFunction {
+    return (_, { name }) =>
+      (initValue) =>
+        <OptionInitializerPlaceHolder>{
+          type: "VariadicOption",
+          optionName: optionName ?? String(name),
+          initValue,
+        };
+  }
+
   public static Input(): ClassFieldDecoratorFunction {
     return (_, { name }) =>
       (initValue) => ({

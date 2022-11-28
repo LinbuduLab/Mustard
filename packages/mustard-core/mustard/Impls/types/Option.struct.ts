@@ -2,7 +2,7 @@ import { ZodType } from "zod";
 
 import type { ClassStruct } from "./Shared.struct";
 
-export type OptionInjectionType = "Option" | "Options";
+export type OptionInjectionType = "VariadicOption" | "Option" | "Options";
 
 export type OptionRegistryPayload = {
   optionName: string;

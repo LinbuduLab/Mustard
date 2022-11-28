@@ -5,6 +5,7 @@ import {
   Options,
   Context,
   Input,
+  VariadicOption,
 } from "./Impls/Decorators";
 import { CLI } from "./Impls/CommandLine";
 import { BaseCommand } from "./Impls/BaseCommand";
@@ -47,6 +48,9 @@ class RunCommand extends BaseCommand implements CommandStruct {
   @Option("dry", Validator.Boolean())
   public dryOption;
 
+  @VariadicOption("arr")
+  public arrayOption;
+
   @Options()
   public allOptions;
 
@@ -57,6 +61,7 @@ class RunCommand extends BaseCommand implements CommandStruct {
   public input;
 
   public run(): void {
+    console.log("this.arrayOption: ", this.arrayOption);
     console.log("this.input: ", this.input);
     console.log("this.context: ", this.context);
     console.log("Hello World! ", this.dryOption);

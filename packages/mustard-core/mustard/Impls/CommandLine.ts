@@ -1,4 +1,4 @@
-import parse from "yargs-parser";
+import parse, { Arguments } from "yargs-parser";
 
 import { DecoratorImpl } from "./DecoratorImpl";
 import { ICLIConfiguration } from "./types/Configuration.struct";
@@ -154,6 +154,7 @@ usage: ${item.usage}
   ) {
     const handlerOptions = Reflect.ownKeys(handler);
 
+    // 如何确保 VariadicOption 先被处理...？
     handlerOptions.forEach((optionKey) => {
       const value:
         | OptionInitializerPlaceHolder
@@ -180,6 +181,26 @@ usage: ${item.usage}
         schema,
         // todo: by XOR types
       } = value as OptionInitializerPlaceHolder;
+
+      if (type === "VariadicOption") {
+        const parsed = parse(this.rawArgs, {
+          array: [injectKey],
+          configuration: {
+            "combine-arrays": true,
+            "greedy-arrays": true,
+            "halt-at-non-option": false,
+          },
+        });
+
+        Reflect.set(handler, optionKey, parsed[injectKey]);
+
+        // 处理 this.parsedArgs，把这部分移除掉
+
+        // delete from args
+        delete args[injectKey];
+
+        return;
+      }
 
       // use value from parsed args
       if (injectKey in args) {
@@ -265,22 +286,24 @@ usage: ${item.usage}
     // }
   }
 
+  private rawArgs = process.argv.slice(2);
+
+  private parsedArgs: Arguments;
+
   // 调用此方法后，再修改配置和添加命令将不会生效
   public start() {
     // 由于更希望按需实例化，即最终负责的那个 Command Class 才会被实例化
     // 因此无法在这里提前收集到所有 Command 内部选项的 alias
-    const args = process.argv.slice(2);
-    const parsed = parse(args, {
+    const parsed = parse(this.rawArgs, {
       // 这个目前还没法支持
       // 或者说用一个专门的 VariadicOption ...
-      array: ["arr"],
+      // 对于这个 VariadicOption 进行 parse 两次
       configuration: {
-        "combine-arrays": true,
-        "greedy-arrays": true,
         "halt-at-non-option": false,
       },
     });
-    console.log("parsed: ", parsed);
+
+    this.parsedArgs = parsed;
 
     const { _, ...parsedArgs } = parsed;
 
