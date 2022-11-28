@@ -267,11 +267,17 @@ usage: ${item.usage}
 
   // 调用此方法后，再修改配置和添加命令将不会生效
   public start() {
+    // 由于更希望按需实例化，即最终负责的那个 Command Class 才会被实例化
+    // 因此无法在这里提前收集到所有 Command 内部选项的 alias
     const args = process.argv.slice(2);
     const parsed = parse(args, {
+      // 这个目前还没法支持
+      // 或者说用一个专门的 VariadicOption ...
+      array: ["arr"],
       configuration: {
         "combine-arrays": true,
         "greedy-arrays": true,
+        "halt-at-non-option": false,
       },
     });
     console.log("parsed: ", parsed);
