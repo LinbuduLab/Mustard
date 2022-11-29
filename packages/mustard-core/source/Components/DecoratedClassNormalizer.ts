@@ -1,7 +1,9 @@
+import { InjectInitializerPlaceHolder } from "source/Types/Context.struct";
 import { OptionInitializerPlaceHolder } from "source/Types/Option.struct";
 import { Dictionary } from "source/Types/Shared.struct";
 import { MustardUtils } from "../Core/Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
+import { MustardRegistry } from "../Core/Registry";
 
 export class DecoratedClassFieldsNormalizer {
   public static checkUnknownOptions(target, parsedArgs: Dictionary) {
@@ -69,6 +71,16 @@ export class DecoratedClassFieldsNormalizer {
 
   public static normalizeInputField(target, prop, inputs = []) {
     MustardUtils.setInstanceFieldValue(target, prop, inputs);
+  }
+
+  public static normalizeInjectField(target, prop) {
+    const injectValue: InjectInitializerPlaceHolder =
+      MustardUtils.getInstanceFieldValue(target, prop);
+    MustardUtils.setInstanceFieldValue(
+      target,
+      prop,
+      MustardRegistry.ExternalProviderRegistry.get(injectValue.identifier)
+    );
   }
 
   public static normalizeContextField(target, prop) {

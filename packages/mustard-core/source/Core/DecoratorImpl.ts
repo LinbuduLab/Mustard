@@ -2,6 +2,7 @@ import { ValidatorFactory } from "../Validators/Validator";
 import type { OptionInitializerPlaceHolder } from "../Types/Option.struct";
 import {
   ContextInitializerPlaceHolder,
+  InjectInitializerPlaceHolder,
   UtilsInitializerPlaceHolder,
 } from "../Types/Context.struct";
 import { Nullable } from "../Types/Shared.struct";
@@ -166,6 +167,16 @@ export class DecoratorImpl {
       <OptionInitializerPlaceHolder>{
         type: "Options",
         initValue,
+      };
+  }
+
+  public static Inject(
+    identifier: string
+  ): ClassFieldDecoratorFunction<any, any, any> {
+    return () => () =>
+      <InjectInitializerPlaceHolder>{
+        type: "Inject",
+        identifier,
       };
   }
 }

@@ -222,7 +222,7 @@ export class CLI {
   public start() {
     this.completeParse();
 
-    const { _, ...parsedArgs } = this.parsedArgs;
+    const { _ } = this.parsedArgs;
 
     if (_.length === 0) {
       this.tryExecuteRootCommandOrPrintUsage();
@@ -230,5 +230,15 @@ export class CLI {
     }
 
     this.dispatchCommand();
+  }
+
+  public registerProviders(provider: {
+    identifier: string;
+    value: unknown | ClassStruct;
+  }) {
+    MustardRegistry.ExternalProviderRegistry.set(
+      provider.identifier,
+      provider.value
+    );
   }
 }

@@ -42,4 +42,6 @@ export class MustardRegistry {
   }
 
   public static VariadicOptions = new Set<string>();
+
+  public static ExternalProviderRegistry = new Map<string, unknown>();
 }

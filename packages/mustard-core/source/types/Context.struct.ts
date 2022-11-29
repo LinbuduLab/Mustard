@@ -32,3 +32,12 @@ export type InputInitializerPlaceHolder = {
 export type UtilsInitializerPlaceHolder = {
   type: "Utils";
 };
+
+export type InjectInitializerPlaceHolder = {
+  type: "Inject";
+  identifier: string;
+};
+
+export type ProvideInitializerPlaceHolder = {
+  type: "Provide";
+};
