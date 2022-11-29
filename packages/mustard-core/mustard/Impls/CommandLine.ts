@@ -156,7 +156,10 @@ usage: ${item.usage}
 
     const commonOptions: Array<{
       key: string;
-      value: OptionInitializerPlaceHolder;
+      value:
+        | OptionInitializerPlaceHolder
+        | ContextInitializerPlaceHolder
+        | InputInitializerPlaceHolder;
     }> = [];
     const variadicOptions: Array<{
       key: string;
@@ -199,12 +202,7 @@ usage: ${item.usage}
       Reflect.set(handler, opt.key, parseForVariadic[injectKey]);
     });
 
-    commonOptions.forEach(({ key: optionKey, value: _value }) => {
-      const value:
-        | OptionInitializerPlaceHolder
-        | ContextInitializerPlaceHolder
-        | InputInitializerPlaceHolder = Reflect.get(handler, optionKey);
-
+    commonOptions.forEach(({ key: optionKey, value }) => {
       const { type } = value;
 
       if (type === "Context") {
