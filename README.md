@@ -72,7 +72,7 @@ class UpdateCommand {
 }
 
 @RootCommand()
-class RootCommandHandle extends BaseCommand {
+class RootCommandHandle {
 
   public run(): void {
     this.logger.info("Root Command");

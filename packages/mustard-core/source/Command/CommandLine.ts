@@ -1,11 +1,6 @@
 import parse, { Arguments } from "yargs-parser";
 
 import { ICLIConfiguration } from "../Types/Configuration.struct";
-import {
-  ContextInitializerPlaceHolder,
-  InputInitializerPlaceHolder,
-  UtilsInitializerPlaceHolder,
-} from "../Types/Context.struct";
 import { OptionInitializerPlaceHolder } from "../Types/Option.struct";
 import { ClassStruct, Dictionary } from "../Types/Shared.struct";
 import { MustardRegistry } from "../Core/Registry";
@@ -169,7 +164,7 @@ export class CLI {
   }
 
   private dispatchCommand() {
-    const { _: input, ...args } = this.parsedArgs;
+    const { _: input } = this.parsedArgs;
 
     const { command, inputs: commandInput } = this.getRealHandleCommand(input);
 
@@ -183,8 +178,7 @@ export class CLI {
     const root = MustardRegistry.provideRootCommand();
 
     if (root) {
-      const RootCommand = root.class;
-      // this.executeCommand(RootCommand, parsedArgs);
+      this.executeCommand(root, []);
     } else if (this.options.enableUsage) {
       UsageInfoGenerator.collectCommandUsage();
     } else {
