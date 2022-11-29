@@ -6,11 +6,9 @@ import {
   Context,
   Input,
   VariadicOption,
-} from "./Impls/Decorators";
-import { CLI } from "./Impls/CommandLine";
-import { BaseCommand } from "./Impls/BaseCommand";
-import { CommandStruct } from "./Impls/types/Command.struct";
-import { Validator } from "./Impls/Validator";
+} from "./Impls/Exports/Decorators";
+import { CLI, BaseCommand, CommandStruct } from "./Impls/Exports/ComanndLine";
+import { Validator } from "./Impls/Exports/Validator";
 
 @Command("sync")
 class RunSyncCommand extends BaseCommand implements CommandStruct {

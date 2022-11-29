@@ -1,4 +1,4 @@
-import { DecoratorImpl } from "./DecoratorImpl";
+import { DecoratorImpl } from "../DecoratorImpl";
 
 export const {
   Command,

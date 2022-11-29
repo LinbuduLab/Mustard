@@ -176,5 +176,3 @@ export class ValidatorFactory {
     return new NativeEnumValidator(this.required, input);
   }
 }
-
-export const Validator = new ValidatorFactory();
