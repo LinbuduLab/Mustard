@@ -7,7 +7,7 @@ import type {
   ZodNativeEnum,
   ZodOptional,
 } from "zod";
-import { Dictionary } from "./types/Shared.struct";
+import { Dictionary } from "../Types/Shared.struct";
 
 type AvaliableSchemaValidations =
   | keyof typeof z

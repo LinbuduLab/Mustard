@@ -1,13 +1,13 @@
 import parse, { Arguments } from "yargs-parser";
 
-import { DecoratorImpl } from "./DecoratorImpl";
-import { ICLIConfiguration } from "./types/Configuration.struct";
+import { DecoratorImpl } from "../Core/DecoratorImpl";
+import { ICLIConfiguration } from "../Types/Configuration.struct";
 import {
   ContextInitializerPlaceHolder,
   InputInitializerPlaceHolder,
-} from "./types/Context.struct";
-import { OptionInitializerPlaceHolder } from "./types/Option.struct";
-import { ClassStruct, Dictionary } from "./types/Shared.struct";
+} from "../Types/Context.struct";
+import { OptionInitializerPlaceHolder } from "../Types/Option.struct";
+import { ClassStruct, Dictionary } from "../Types/Shared.struct";
 
 export class CLI {
   public commandRegistry = new Map<string, any>();

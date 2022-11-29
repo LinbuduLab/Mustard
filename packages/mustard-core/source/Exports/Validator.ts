@@ -1,4 +1,4 @@
-import { ValidatorFactory } from "../Validator";
+import { ValidatorFactory } from "../Validators/Validator";
 
 export const Validator = new ValidatorFactory();
 

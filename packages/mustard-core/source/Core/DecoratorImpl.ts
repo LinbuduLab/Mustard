@@ -1,8 +1,8 @@
-import { ValidatorFactory } from "./Validator";
-import { CommandRegistry } from "./types/Instantiation.struct";
-import type { OptionInitializerPlaceHolder } from "./types/Option.struct";
-import { ContextInitializerPlaceHolder } from "./types/Context.struct";
-import { Nullable } from "./types/Shared.struct";
+import { ValidatorFactory } from "../Validators/Validator";
+import { CommandRegistry } from "../Types/Instantiation.struct";
+import type { OptionInitializerPlaceHolder } from "../Types/Option.struct";
+import { ContextInitializerPlaceHolder } from "../Types/Context.struct";
+import { Nullable } from "../Types/Shared.struct";
 
 export class DecoratorImpl {
   public static commandRegistry = new CommandRegistry();
