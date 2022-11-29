@@ -1,6 +1,5 @@
 import parse, { Arguments } from "yargs-parser";
 
-import { DecoratorImpl } from "../Core/DecoratorImpl";
 import { ICLIConfiguration } from "../Types/Configuration.struct";
 import {
   ContextInitializerPlaceHolder,
@@ -8,13 +7,10 @@ import {
 } from "../Types/Context.struct";
 import { OptionInitializerPlaceHolder } from "../Types/Option.struct";
 import { ClassStruct, Dictionary } from "../Types/Shared.struct";
+import { MustardRegistry } from "../Core/Registry";
+import { MustardConstanst } from "../Components/Constants";
 
 export class CLI {
-  public commandRegistry = new Map<string, any>();
-
-  // only one key!
-  public rootCommandRegistry = new Map<string, any>();
-
   constructor(
     private readonly identifier: string,
     Commands: ClassStruct[],
@@ -35,16 +31,19 @@ export class CLI {
 
   private internalRegisterCommand(Commands: ClassStruct[]) {
     const CommandToLoad = Commands.map((Command) =>
-      DecoratorImpl.commandRegistry.get(Command.name)
+      MustardRegistry.provide(Command.name)
     );
 
     // 然后将这些命令注册到命令注册表中
     CommandToLoad.forEach((Command) => {
-      Command.root
-        ? this.rootCommandRegistry.set("root", Command)
-        : this.commandRegistry.set(Command.commandName, Command);
+      MustardRegistry.register(
+        Command.root
+          ? MustardConstanst.RootCommandRegistryKey
+          : Command.commandName,
+        Command
+      );
 
-      Command.alias && this.commandRegistry.set(Command.alias, Command);
+      Command.alias && MustardRegistry.register(Command.alias, Command);
 
       if (Command.childCommandList.length > 0) {
         // 如果希望将子命令的注册名更改为 run:update:sync 这种形式，那感觉最好把 alias 也统一
@@ -70,8 +69,10 @@ export class CLI {
     const commandNames = new Set();
     const commonUsages = [];
 
-    if (this.rootCommandRegistry.size > 0) {
-      const RootCommand = this.rootCommandRegistry.get("root").class;
+    const rootCommand = MustardRegistry.provideRootCommand();
+
+    if (rootCommand) {
+      const RootCommand = rootCommand.class;
 
       const instance = new RootCommand();
 
@@ -90,7 +91,7 @@ export class CLI {
       });
     }
 
-    this.commandRegistry.forEach((Command) => {
+    MustardRegistry.CommandRegistry.forEach((Command) => {
       if (commandNames.has(Command)) return;
 
       const collected = {
@@ -121,9 +122,6 @@ usage: ${item.usage}
         const value = Reflect.get(item.instance, optionKey);
 
         const { optionName: injectKey, description } = value;
-
-        console.log("injectKey: ", injectKey);
-        console.log("description: ", description);
       });
     });
 
@@ -272,7 +270,7 @@ usage: ${item.usage}
     // 不太对，还需要处理 Root Command 的 Input 的情况...
     const [currentCommandNameMatch, ...inputs] = command;
 
-    const CommandInfo = this.commandRegistry.get(currentCommandNameMatch);
+    const CommandInfo = MustardRegistry.provide(currentCommandNameMatch);
 
     if (!CommandInfo) {
       return null;

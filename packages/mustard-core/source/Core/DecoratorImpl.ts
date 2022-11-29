@@ -3,6 +3,7 @@ import { CommandRegistry } from "../Types/Instantiation.struct";
 import type { OptionInitializerPlaceHolder } from "../Types/Option.struct";
 import { ContextInitializerPlaceHolder } from "../Types/Context.struct";
 import { Nullable } from "../Types/Shared.struct";
+import { MustardRegistry } from "./Registry";
 
 export class DecoratorImpl {
   public static commandRegistry = new CommandRegistry();
@@ -60,7 +61,7 @@ export class DecoratorImpl {
     childCommandList?: any[]
   ): ClassDecoratorFunction<{}, any> {
     return (target, context) => {
-      DecoratorImpl.commandRegistry.set(context.name, {
+      MustardRegistry.register(context.name, {
         commandName,
         alias,
         description,
@@ -73,7 +74,7 @@ export class DecoratorImpl {
 
   public static RootCommand(): ClassDecoratorFunction<{}, any> {
     return (target, context) => {
-      DecoratorImpl.commandRegistry.set(context.name, {
+      MustardRegistry.register(context.name, {
         commandName: "root",
         class: target,
         root: true,
