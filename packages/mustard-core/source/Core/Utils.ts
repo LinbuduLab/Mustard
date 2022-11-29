@@ -13,5 +13,30 @@ export class MustardUtils {
     return MustardUtils.getInstanceFieldValue(target, prop);
   }
 
+  public static filterDecoratedInstanceFields(target) {
+    const fields = MustardUtils.getInstanceFields(target) as string[];
+
+    return fields.map((field: string) => {
+      const value = MustardUtils.getInstanceFieldValue(target, field);
+
+      if (
+        [
+          "Option",
+          "Options",
+          "VariadicOption",
+          "Input",
+          "Context",
+          "Utils",
+        ].includes(value.type)
+      ) {
+        return {
+          key: field,
+          type: value.type,
+          value,
+        };
+      }
+    });
+  }
+
   public static uniq() {}
 }

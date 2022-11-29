@@ -13,11 +13,33 @@ export class MustardRegistry {
     MustardRegistry._CommandRegistry.set(identifier, payload);
   }
 
-  public static provide(identifier: string) {
-    return MustardRegistry._CommandRegistry.get(identifier);
+  public static upsert(
+    identifier: string,
+    payload: Partial<CommandRegistryPayload>
+  ) {
+    const prev = MustardRegistry.provide(identifier);
+
+    if (prev) {
+      MustardRegistry.register(identifier, {
+        ...prev,
+        ...payload,
+      });
+    } else {
+      MustardRegistry.register(identifier, payload as CommandRegistryPayload);
+    }
+  }
+
+  public static provide(): Map<string, CommandRegistryPayload>;
+  public static provide(identifier: string): CommandRegistryPayload;
+  public static provide(identifier?: string) {
+    return identifier
+      ? MustardRegistry._CommandRegistry.get(identifier)
+      : MustardRegistry._CommandRegistry;
   }
 
   public static provideRootCommand(): CommandRegistryPayload {
     return MustardRegistry.provide(MustardConstanst.RootCommandRegistryKey);
   }
+
+  public static VariadicOptions = new Set<string>();
 }

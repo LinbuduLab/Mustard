@@ -13,6 +13,7 @@ import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "source/Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedClassNormalizer";
 import { MustardUtilsProvider } from "source/Components/MustardUtilsProvider";
+import { MustardUtils } from "source/Core/Utils";
 
 export class CLI {
   constructor(
@@ -66,11 +67,17 @@ export class CLI {
     this.internalRegisterCommand(Commands);
   }
 
-  private injectCommandOptions(
-    handler: any,
-    inputs: string[],
-    _args: Dictionary
-  ) {
+  private injectCommandOptions(handler: any, inputs: string[]) {
+    const parseWithVariadic = parse(this.rawArgs, {
+      array: Array.from(MustardRegistry.VariadicOptions),
+      configuration: {
+        "greedy-arrays": true,
+        "halt-at-non-option": false,
+      },
+    });
+
+    this.parsedArgs = parseWithVariadic;
+
     const handlerOptions = Reflect.ownKeys(handler);
 
     const commonOptions: Array<{
@@ -105,21 +112,12 @@ export class CLI {
       }
     });
 
-    const parseForVariadic = parse(this.rawArgs, {
-      array: variadicOptionsInjectKey,
-      configuration: {
-        "combine-arrays": true,
-        "greedy-arrays": true,
-        "halt-at-non-option": false,
-      },
-    });
-
     // 需要将 variadic 从 parsed 中移除
     // 这一步可以通过对 this.rawArgs 做处理，建议直接自己实现一个 parser
 
     variadicOptions.forEach((opt) => {
       const injectKey = opt.value.optionName;
-      Reflect.set(handler, opt.key, parseForVariadic[injectKey]);
+      Reflect.set(handler, opt.key, parseWithVariadic[injectKey]);
     });
 
     commonOptions.forEach(({ key: optionKey, value }) => {
@@ -179,13 +177,23 @@ export class CLI {
     !this?.options?.allowUnknownOptions &&
       DecoratedClassFieldsNormalizer.checkUnknownOptions(handler, args);
 
-    this.injectCommandOptions(handler, inputs, args);
+    this.injectCommandOptions(handler, inputs);
 
     // 执行命令
     handler.run();
   }
 
-  private getRealHandleCommand(command: string[]) {
+  private getRealHandleCommand() {
+    const { _: input, ...args } = this.parsedArgs;
+    console.log("11-29 this.parsedArgs: ", this.parsedArgs);
+
+    console.log(MustardRegistry.provide());
+
+    // 处理 alias、child
+
+    // 输出
+    // 实际负责的命令，传递给命令的 Input
+
     // 这里还是要处理下是否存在 sub-command 的情况
     // 如果 command.length === 1
     // 如果当前 command 没有 handler，则打印帮助信息
@@ -195,28 +203,28 @@ export class CLI {
     // 如果存在，则递归向下查找
     // 否则，存为 Input
     // 不太对，还需要处理 Root Command 的 Input 的情况...
-    const [currentCommandNameMatch, ...inputs] = command;
+    // const [currentCommandNameMatch, ...inputs] = command;
 
-    const CommandInfo = MustardRegistry.provide(currentCommandNameMatch);
+    // const CommandInfo = MustardRegistry.provide(currentCommandNameMatch);
 
-    if (!CommandInfo) {
-      return null;
-    }
+    // if (!CommandInfo) {
+    //   return null;
+    // }
 
-    const fallback = { Command: CommandInfo.class, inputs };
+    // const fallback = { Command: CommandInfo.class, inputs };
 
-    // 如果存在子命令且仍然存在可供匹配的项，才继续向下
-    if (CommandInfo?.childCommandList?.length && command.length >= 1) {
-      return this.getRealHandleCommand(command.slice(1)) ?? fallback;
-    }
+    // // 如果存在子命令且仍然存在可供匹配的项，才继续向下
+    // if (CommandInfo?.childCommandList?.length && command.length >= 1) {
+    //   return this.getRealHandleCommand(command.slice(1)) ?? fallback;
+    // }
 
-    return fallback;
+    // return fallback;
   }
 
-  private dispatchCommand(command: string[], args: Dictionary) {
-    const { Command, inputs } = this.getRealHandleCommand(command);
-
-    this.executeCommand(Command, inputs, args);
+  private dispatchCommand() {
+    this.getRealHandleCommand();
+    // const { Command, inputs } = this.getRealHandleCommand();
+    // this.executeCommand(Command, inputs, args);
   }
 
   private tryExecuteRootCommandOrPrintUsage() {
@@ -239,25 +247,45 @@ export class CLI {
 
   private parsedArgs: Arguments;
 
-  // 调用此方法后，再修改配置和添加命令将不会生效
-  public start() {
-    // 由于更希望按需实例化，即最终负责的那个 Command Class 才会被实例化
-    // 因此无法在这里提前收集到所有 Command 内部选项的 alias
+  private completeParse() {
+    const CommandMap = MustardRegistry.provide();
+
+    CommandMap.forEach((Command, key) => {
+      const instance = new Command.class();
+
+      const decoratedInstanceFields =
+        MustardUtils.filterDecoratedInstanceFields(instance);
+
+      decoratedInstanceFields
+        .filter((v) => v.type === "VariadicOption")
+        .forEach((v) => {
+          MustardRegistry.VariadicOptions.add(v.value.optionName);
+        });
+
+      MustardRegistry.upsert(key, { instance });
+    });
+
     const parsed = parse(this.rawArgs, {
+      array: Array.from(MustardRegistry.VariadicOptions),
       configuration: {
-        "halt-at-non-option": false,
+        "greedy-arrays": true,
       },
     });
 
     this.parsedArgs = parsed;
+  }
 
-    const { _, ...parsedArgs } = parsed;
+  // 调用此方法后，再修改配置和添加命令将不会生效
+  public start() {
+    this.completeParse();
+
+    const { _, ...parsedArgs } = this.parsedArgs;
 
     if (_.length === 0) {
       this.tryExecuteRootCommandOrPrintUsage();
       return;
     }
 
-    this.dispatchCommand(_ as string[], parsedArgs);
+    this.dispatchCommand();
   }
 }

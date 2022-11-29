@@ -42,6 +42,9 @@ class RunCommand implements CommandStruct {
   @VariadicOption("arr")
   public arrayOption;
 
+  @VariadicOption()
+  public variadic;
+
   @Options()
   public allOptions;
 

@@ -131,12 +131,17 @@ export class DecoratorImpl {
     optionName?: string
   ): ClassFieldDecoratorFunction<any, any, any> {
     return (_, { name }) =>
-      (initValue) =>
-        <OptionInitializerPlaceHolder>{
+      (initValue) => {
+        const optionNameValue = optionName ?? String(name);
+
+        MustardRegistry.VariadicOptions.add(optionNameValue);
+
+        return <OptionInitializerPlaceHolder>{
           type: "VariadicOption",
-          optionName: optionName ?? String(name),
+          optionName: optionNameValue,
           initValue,
         };
+      };
   }
 
   public static Input(): ClassFieldDecoratorFunction<any, any, any> {

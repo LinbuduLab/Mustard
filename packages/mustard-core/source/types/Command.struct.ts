@@ -8,6 +8,8 @@ export type CommandRegistryPayload = {
   class: any;
   root: boolean;
   childCommandList: any[];
+  instance?: any;
+  decoratedInstanceFields?: any;
 };
 
 export abstract class CommandStruct {
