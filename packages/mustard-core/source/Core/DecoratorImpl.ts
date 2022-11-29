@@ -1,12 +1,24 @@
 import { ValidatorFactory } from "../Validators/Validator";
-import { CommandRegistry } from "../Types/Instantiation.struct";
 import type { OptionInitializerPlaceHolder } from "../Types/Option.struct";
-import { ContextInitializerPlaceHolder } from "../Types/Context.struct";
+import {
+  ContextInitializerPlaceHolder,
+  UtilsInitializerPlaceHolder,
+} from "../Types/Context.struct";
 import { Nullable } from "../Types/Shared.struct";
 import { MustardRegistry } from "./Registry";
 
 export class DecoratorImpl {
-  public static commandRegistry = new CommandRegistry();
+  public static Utils(): ClassFieldDecoratorFunction<any, any, any> {
+    return (_, { name }) =>
+      (initValue) =>
+        <UtilsInitializerPlaceHolder>{
+          type: "Utils",
+        };
+  }
+
+  public static App(): ClassDecoratorFunction<{}, any> {
+    return () => {};
+  }
 
   // public static Command(commandName: string): ClassDecoratorFunction;
   // public static Command(

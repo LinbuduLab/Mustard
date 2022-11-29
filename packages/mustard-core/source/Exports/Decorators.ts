@@ -8,4 +8,5 @@ export const {
   Options,
   Context,
   Input,
+  Utils,
 } = DecoratorImpl;

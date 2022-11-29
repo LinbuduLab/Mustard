@@ -6,16 +6,13 @@ import {
   Context,
   Input,
   VariadicOption,
+  Utils,
 } from "./source/Exports/Decorators";
-import { CLI, BaseCommand, CommandStruct } from "./source/Exports/ComanndLine";
+import { CLI, CommandStruct } from "./source/Exports/ComanndLine";
 import { Validator } from "./source/Exports/Validator";
 
 @Command("sync")
-class RunSyncCommand extends BaseCommand implements CommandStruct {
-  constructor() {
-    super();
-  }
-
+class RunSyncCommand implements CommandStruct {
   @Option("dry")
   public dryOption;
 
@@ -33,11 +30,7 @@ class RunSyncCommand extends BaseCommand implements CommandStruct {
 }
 
 @Command("run", "r", "run command", [RunSyncCommand])
-class RunCommand extends BaseCommand implements CommandStruct {
-  constructor() {
-    super();
-  }
-
+class RunCommand implements CommandStruct {
   static usage() {
     return `run xxx --dry`;
   }
@@ -58,9 +51,13 @@ class RunCommand extends BaseCommand implements CommandStruct {
   @Input()
   public input;
 
+  @Utils()
+  public utils;
+
   public run(): void {
     console.log("this.arrayOption: ", this.arrayOption);
     console.log("this.input: ", this.input);
+    // console.log("this.utils: ", this.utils);
     console.log("this.context: ", this.context);
     console.log("Hello World! ", this.dryOption);
     console.log("All Options! ", this.allOptions);
@@ -68,11 +65,7 @@ class RunCommand extends BaseCommand implements CommandStruct {
 }
 
 @Command("check")
-class CheckCommand extends BaseCommand {
-  constructor() {
-    super();
-  }
-
+class CheckCommand {
   @Option("dry")
   public dry;
 
@@ -86,11 +79,7 @@ class CheckCommand extends BaseCommand {
 }
 
 @RootCommand()
-class RootCommandHandle extends BaseCommand {
-  constructor() {
-    super();
-  }
-
+class RootCommandHandle {
   @Option("dry", "dry option")
   public dry = "default value of dry";
 

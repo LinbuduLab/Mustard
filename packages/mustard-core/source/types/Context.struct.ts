@@ -28,3 +28,7 @@ export type ContextInitializerPlaceHolder = {
 export type InputInitializerPlaceHolder = {
   type: "Input";
 };
+
+export type UtilsInitializerPlaceHolder = {
+  type: "Utils";
+};

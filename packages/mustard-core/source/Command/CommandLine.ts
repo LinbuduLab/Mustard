@@ -4,6 +4,7 @@ import { ICLIConfiguration } from "../Types/Configuration.struct";
 import {
   ContextInitializerPlaceHolder,
   InputInitializerPlaceHolder,
+  UtilsInitializerPlaceHolder,
 } from "../Types/Context.struct";
 import { OptionInitializerPlaceHolder } from "../Types/Option.struct";
 import { ClassStruct, Dictionary } from "../Types/Shared.struct";
@@ -11,6 +12,7 @@ import { MustardRegistry } from "../Core/Registry";
 import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "source/Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedClassNormalizer";
+import { MustardUtilsProvider } from "source/Components/MustardUtilsProvider";
 
 export class CLI {
   constructor(
@@ -76,7 +78,8 @@ export class CLI {
       value:
         | OptionInitializerPlaceHolder
         | ContextInitializerPlaceHolder
-        | InputInitializerPlaceHolder;
+        | InputInitializerPlaceHolder
+        | UtilsInitializerPlaceHolder;
     }> = [];
     const variadicOptions: Array<{
       key: string;
@@ -126,6 +129,11 @@ export class CLI {
         Reflect.set(handler, optionKey, {
           temp: "this is context...",
         });
+        return;
+      }
+
+      if (type === "Utils") {
+        Reflect.set(handler, optionKey, MustardUtilsProvider.produce());
         return;
       }
 
