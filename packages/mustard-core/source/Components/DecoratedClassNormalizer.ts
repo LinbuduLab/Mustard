@@ -1,3 +1,4 @@
+import { OptionInitializerPlaceHolder } from "source/Types/Option.struct";
 import { Dictionary } from "source/Types/Shared.struct";
 import { MustardUtils } from "../Core/Utils";
 
@@ -25,5 +26,5 @@ export class DecoratedClassFieldsNormalizer {
 
   public static normalizeVariadicOptions() {}
 
-  public static normalizeOptions() {}
+  public static normalizeOptions(initializer: OptionInitializerPlaceHolder) {}
 }

@@ -68,84 +68,39 @@ export class CLI {
   }
 
   private injectCommandOptions(handler: any, inputs: string[]) {
-    const parseWithVariadic = parse(this.rawArgs, {
-      array: Array.from(MustardRegistry.VariadicOptions),
-      configuration: {
-        "greedy-arrays": true,
-        "halt-at-non-option": false,
-      },
-    });
+    // 无需再单独处理 VariadicOptions
+    const handlerOptions = Reflect.ownKeys(handler) as string[];
 
-    this.parsedArgs = parseWithVariadic;
+    handlerOptions.forEach((fieldKey) => {
+      const initializer = Reflect.get(handler, fieldKey);
 
-    const handlerOptions = Reflect.ownKeys(handler);
-
-    const commonOptions: Array<{
-      key: string;
-      value:
-        | OptionInitializerPlaceHolder
-        | ContextInitializerPlaceHolder
-        | InputInitializerPlaceHolder
-        | UtilsInitializerPlaceHolder;
-    }> = [];
-    const variadicOptions: Array<{
-      key: string;
-      value: OptionInitializerPlaceHolder;
-    }> = [];
-
-    const variadicOptionsInjectKey: string[] = [];
-
-    handlerOptions.forEach((key: string) => {
-      const value: OptionInitializerPlaceHolder = Reflect.get(handler, key);
-
-      if (value.type === "VariadicOption") {
-        variadicOptions.push({
-          key,
-          value,
-        });
-        variadicOptionsInjectKey.push(value.optionName);
-      } else {
-        commonOptions.push({
-          key,
-          value,
-        });
-      }
-    });
-
-    // 需要将 variadic 从 parsed 中移除
-    // 这一步可以通过对 this.rawArgs 做处理，建议直接自己实现一个 parser
-
-    variadicOptions.forEach((opt) => {
-      const injectKey = opt.value.optionName;
-      Reflect.set(handler, opt.key, parseWithVariadic[injectKey]);
-    });
-
-    commonOptions.forEach(({ key: optionKey, value }) => {
-      const { type } = value;
+      const { type } = initializer;
 
       if (type === "Context") {
-        Reflect.set(handler, optionKey, {
+        Reflect.set(handler, fieldKey, {
           temp: "this is context...",
         });
         return;
       }
 
       if (type === "Utils") {
-        Reflect.set(handler, optionKey, MustardUtilsProvider.produce());
+        Reflect.set(handler, fieldKey, MustardUtilsProvider.produce());
         return;
       }
 
       if (type === "Input") {
-        Reflect.set(handler, optionKey, inputs ?? []);
+        Reflect.set(handler, fieldKey, inputs ?? []);
         return;
       }
+
+      // if (initializer instanceof OptionInitializerPlaceHolder) {}
 
       const {
         optionName: injectKey,
         initValue,
         schema,
         // todo: by XOR types
-      } = value as OptionInitializerPlaceHolder;
+      } = initializer as OptionInitializerPlaceHolder;
 
       // use value from parsed args
       if (injectKey in this.parsedArgs) {
@@ -155,27 +110,30 @@ export class CLI {
         // hijack zoderror for better error message
         const validatedValue = schema ? schema.safeParse(argValue) : argValue;
 
-        Reflect.set(handler, optionKey, validatedValue);
+        Reflect.set(handler, fieldKey, validatedValue);
 
         // validate for values from parsed args
       } else {
         // use default value or mark as undefined
         // null should also be converted to undefined
-        Reflect.set(handler, optionKey, initValue ?? undefined);
+        Reflect.set(handler, fieldKey, initValue ?? undefined);
       }
 
       if (type === "Options") {
-        Reflect.set(handler, optionKey, this.parsedArgs);
+        Reflect.set(handler, fieldKey, this.parsedArgs);
       }
     });
   }
 
-  private executeCommand(Command: any, inputs: string[], args: Dictionary) {
+  private executeCommand(command: any, inputs: string[]) {
     // 在这一步应当完成对所有内部选项值的填充
-    const handler = new Command();
+    const handler = command.instance;
 
     !this?.options?.allowUnknownOptions &&
-      DecoratedClassFieldsNormalizer.checkUnknownOptions(handler, args);
+      DecoratedClassFieldsNormalizer.checkUnknownOptions(
+        handler,
+        this.parsedArgs
+      );
 
     this.injectCommandOptions(handler, inputs);
 
@@ -183,13 +141,53 @@ export class CLI {
     handler.run();
   }
 
-  private getRealHandleCommand() {
-    const { _: input, ...args } = this.parsedArgs;
-    console.log("11-29 this.parsedArgs: ", this.parsedArgs);
-
-    console.log(MustardRegistry.provide());
+  private getRealHandleCommand(input: (string | number)[]) {
+    // input 长度必定>=1
+    // console.log("11-29 input: ", input);
+    // console.log(MustardRegistry.provide());
 
     // 处理 alias、child
+
+    const [matcher, ...rest] = input;
+    // console.log("11-29 rest: ", rest);
+
+    // ['run', 'sync', 'r', 'check']
+
+    if (input.length === 1) {
+      // alias 好像不用特别处理了
+      return {
+        command: MustardRegistry.provide(matcher as string),
+        inputs: [],
+      };
+    } else {
+      // 至少存在一个需要额外处理的输入
+      // 处理子命令
+
+      // FIXME: recursive
+      const command = MustardRegistry.provide(matcher as string);
+
+      if (command.childCommandList.length === 0) {
+        return {
+          command,
+          inputs: rest,
+        };
+      }
+
+      const childCommand = command.childCommandList.find((child) => {
+        return (
+          child.commandName === rest[0] ||
+          child.alias === rest[0] ||
+          child.alias === rest[1]
+        );
+      });
+
+      return {
+        command: childCommand,
+        inputs: rest.slice(1),
+      };
+    }
+
+    // run / r / run sync / r sync / r s
 
     // 输出
     // 实际负责的命令，传递给命令的 Input
@@ -222,9 +220,11 @@ export class CLI {
   }
 
   private dispatchCommand() {
-    this.getRealHandleCommand();
-    // const { Command, inputs } = this.getRealHandleCommand();
-    // this.executeCommand(Command, inputs, args);
+    const { _: input, ...args } = this.parsedArgs;
+
+    const { command, inputs: commandInput } = this.getRealHandleCommand(input);
+
+    this.executeCommand(command, commandInput as string[]);
   }
 
   private tryExecuteRootCommandOrPrintUsage() {

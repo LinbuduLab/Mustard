@@ -11,7 +11,7 @@ import {
 import { CLI, CommandStruct } from "./source/Exports/ComanndLine";
 import { Validator } from "./source/Exports/Validator";
 
-@Command("sync")
+@Command("sync", "s")
 class RunSyncCommand implements CommandStruct {
   @Option("dry")
   public dryOption;
