@@ -9,6 +9,8 @@ import { OptionInitializerPlaceHolder } from "../Types/Option.struct";
 import { ClassStruct, Dictionary } from "../Types/Shared.struct";
 import { MustardRegistry } from "../Core/Registry";
 import { MustardConstanst } from "../Components/Constants";
+import { UsageInfoGenerator } from "source/Components/UsageGenerator";
+import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedClassNormalizer";
 
 export class CLI {
   constructor(
@@ -60,89 +62,6 @@ export class CLI {
 
     // 注册命令
     this.internalRegisterCommand(Commands);
-  }
-
-  private collectCommandUsage() {
-    // 如何在这一步收集 options 的描述？
-    // 如果每个命令实例化一个肯定就可以了嗷
-    const rootUsage = [];
-    const commandNames = new Set();
-    const commonUsages = [];
-
-    const rootCommand = MustardRegistry.provideRootCommand();
-
-    if (rootCommand) {
-      const RootCommand = rootCommand.class;
-
-      const instance = new RootCommand();
-
-      const handlerOptions = Reflect.ownKeys(instance);
-
-      handlerOptions.forEach((optionKey) => {
-        const value = Reflect.get(instance, optionKey);
-
-        const { optionName: injectKey, description } = value;
-      });
-
-      const usage = RootCommand.usage?.();
-      rootUsage.push({
-        commandName: "root",
-        usage,
-      });
-    }
-
-    MustardRegistry.CommandRegistry.forEach((Command) => {
-      if (commandNames.has(Command)) return;
-
-      const collected = {
-        commandName: Command.commandName,
-        usage: Command.class.usage?.(),
-        instance: new Command.class(),
-      };
-
-      commonUsages.push(collected);
-
-      commandNames.add(Command.commandName);
-    });
-
-    // dedupe
-    const dedupedCommonUsages = commonUsages.reduce((prev, cur) => {
-      if (prev.find((item) => item.commandName === cur.commandName))
-        return prev;
-      return [...prev, cur];
-    }, []);
-
-    dedupedCommonUsages.forEach((item) => {
-      console.log(`[${item.commandName}]
-usage: ${item.usage}
-`);
-      const options = Reflect.ownKeys(item.instance);
-
-      options.forEach((optionKey) => {
-        const value = Reflect.get(item.instance, optionKey);
-
-        const { optionName: injectKey, description } = value;
-      });
-    });
-
-    rootUsage.forEach((item) => {
-      console.log(`[${item.commandName}] ${item.usage}`);
-    });
-  }
-
-  private checkUnknownOptions(handler: any, parsedArgs: Dictionary) {
-    const handlerDeclaredOptions = Reflect.ownKeys(handler);
-
-    const unknownOptions = Object.keys(parsedArgs).filter(
-      (key) => !handlerDeclaredOptions.includes(key)
-    );
-
-    if (unknownOptions.length > 0) {
-      // todo: UnknownOptionError
-      // throw new Error(
-      //   `Unknown options: ${unknownOptions.join(", ")}. See --help for usage.`
-      // );
-    }
   }
 
   private injectCommandOptions(
@@ -250,7 +169,7 @@ usage: ${item.usage}
     const handler = new Command();
 
     !this?.options?.allowUnknownOptions &&
-      this.checkUnknownOptions(handler, args);
+      DecoratedClassFieldsNormalizer.checkUnknownOptions(handler, args);
 
     this.injectCommandOptions(handler, inputs, args);
 
@@ -292,18 +211,20 @@ usage: ${item.usage}
     this.executeCommand(Command, inputs, args);
   }
 
-  private tryExecuteRootCommandOrPrintUsage(parsedArgs) {
+  private tryExecuteRootCommandOrPrintUsage() {
     // 如果指定了 RootCommand，则调用
     // 否则检查是否启用了 enableHelp
     // 如果都没有，NoRootHandlerError
-    // if (this.rootCommandRegistry.size > 0) {
-    //   const RootCommand = this.rootCommandRegistry.get("root").class;
-    //   this.executeCommand(RootCommand, parsedArgs);
-    // } else if (this.options.enableUsage) {
-    this.collectCommandUsage();
-    // } else {
-    //   // throws
-    // }
+    const root = MustardRegistry.provideRootCommand();
+
+    if (root) {
+      const RootCommand = root.class;
+      // this.executeCommand(RootCommand, parsedArgs);
+    } else if (this.options.enableUsage) {
+      UsageInfoGenerator.collectCommandUsage();
+    } else {
+      // throws
+    }
   }
 
   private rawArgs = process.argv.slice(2);
@@ -315,9 +236,6 @@ usage: ${item.usage}
     // 由于更希望按需实例化，即最终负责的那个 Command Class 才会被实例化
     // 因此无法在这里提前收集到所有 Command 内部选项的 alias
     const parsed = parse(this.rawArgs, {
-      // 这个目前还没法支持
-      // 或者说用一个专门的 VariadicOption ...
-      // 对于这个 VariadicOption 进行 parse 两次
       configuration: {
         "halt-at-non-option": false,
       },
@@ -328,7 +246,7 @@ usage: ${item.usage}
     const { _, ...parsedArgs } = parsed;
 
     if (_.length === 0) {
-      this.tryExecuteRootCommandOrPrintUsage(parsedArgs);
+      this.tryExecuteRootCommandOrPrintUsage();
       return;
     }
 
