@@ -68,65 +68,14 @@ export class CLI {
   }
 
   private injectCommandOptions(handler: any, inputs: string[]) {
-    // 无需再单独处理 VariadicOptions
-    const handlerOptions = Reflect.ownKeys(handler) as string[];
-
-    handlerOptions.forEach((fieldKey) => {
-      const initializer = Reflect.get(handler, fieldKey);
-
-      const { type } = initializer;
-
-      if (type === "Context") {
-        Reflect.set(handler, fieldKey, {
-          temp: "this is context...",
-        });
-        return;
-      }
-
-      if (type === "Utils") {
-        Reflect.set(handler, fieldKey, MustardUtilsProvider.produce());
-        return;
-      }
-
-      if (type === "Input") {
-        Reflect.set(handler, fieldKey, inputs ?? []);
-        return;
-      }
-
-      // if (initializer instanceof OptionInitializerPlaceHolder) {}
-
-      const {
-        optionName: injectKey,
-        initValue,
-        schema,
-        // todo: by XOR types
-      } = initializer as OptionInitializerPlaceHolder;
-
-      // use value from parsed args
-      if (injectKey in this.parsedArgs) {
-        const argValue = this.parsedArgs[injectKey];
-
-        // control parse / safeParse from options
-        // hijack zoderror for better error message
-        const validatedValue = schema ? schema.safeParse(argValue) : argValue;
-
-        Reflect.set(handler, fieldKey, validatedValue);
-
-        // validate for values from parsed args
-      } else {
-        // use default value or mark as undefined
-        // null should also be converted to undefined
-        Reflect.set(handler, fieldKey, initValue ?? undefined);
-      }
-
-      if (type === "Options") {
-        Reflect.set(handler, fieldKey, this.parsedArgs);
-      }
-    });
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      handler,
+      inputs,
+      this.parsedArgs
+    );
   }
 
   private executeCommand(command: any, inputs: string[]) {
-    // 在这一步应当完成对所有内部选项值的填充
     const handler = command.instance;
 
     !this?.options?.allowUnknownOptions &&

@@ -12,6 +12,7 @@ IoC &amp; native ecmascript decotator based command-line app builder.
 - nest commander 相关
 - start by decorators @App
 - root / RootCommand
+- custom provider
 - 需要进行进一步逻辑拆分
 
 ```typescript
@@ -44,48 +45,34 @@ app.start();
 ## Getting Started
 
 ```typescript
-import { CLI, BaseCommand } from "MustardJs/CommandLine";
-import { Command, RootCommand, Option, Options } from "MustardJs/Decorators";
+import { CLI } from "MustardJs/CommandLine";
+import { Command, RootCommand, Option, Options, VariadicOption } from "MustardJs/Decorators";
 import { Validator } from "MustardJs/Validator";
 
 @Command("update", "u", "update project dependencies")
-class UpdateCommand extends BaseCommand {
-  constructor() {
-    super();
-  }
-
-  static usage() {
-    // collected as usage info text:
-    // mm update --depth=1 --dry --all
-    return `update --depth=1 --dry --all`;
-  }
-
+class UpdateCommand {
+  
   @Option("depth", "depth of packages to update", Validator.Number().Min(1))
-  public depth;
+  public depth = 10;
 
   @Option(Validator.Boolean())
   public dry = false;
 
   @Option("all")
   public applyAll;
+  
+  @VariadicOption()
+  public packages: string[];
 
   public run(): void {
     this.logger.warn("DryRun Mode: ", this.dry);
     this.logger.info("Execution Depth", this.depth);
+    this.logger.info("Specified Packages", this.packages);
   }
 }
 
 @RootCommand()
 class RootCommandHandle extends BaseCommand {
-  constructor() {
-    super();
-  }
-
-  static usage() {
-    // collected as usage info text:
-    // mm [command] [options]
-    return `[command] [options]`;
-  }
 
   public run(): void {
     this.logger.info("Root Command");
@@ -93,11 +80,6 @@ class RootCommandHandle extends BaseCommand {
 }
 
 const cli = new CLI("mm", [RootCommandHandle, UpdateCommand]);
-
-// enable mm --help to show usage info
-cli.enableHelp();
-// enable mm --version to show version info
-cli.enableVersion();
 
 cli.start();
 ```
