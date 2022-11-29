@@ -22,9 +22,9 @@ class RunSyncCommand extends BaseCommand implements CommandStruct {
   @Input()
   public input;
 
-  static usage() {
-    return `run sync --dry`;
-  }
+  // static usage() {
+  //   return `run sync --dry`;
+  // }
 
   public run(): void {
     console.log("Nested! ", this.dryOption);

@@ -22,7 +22,7 @@ export class DecoratorImpl {
     aliasOrDescription?: string,
     description?: string,
     childCommandList: any[] = []
-  ): ClassDecoratorFunction {
+  ): ClassDecoratorFunction<{}, any> {
     if (typeof description === "string") {
       return DecoratorImpl.CommandImpl(
         commandName,
@@ -58,7 +58,7 @@ export class DecoratorImpl {
     alias: Nullable<string>,
     description: Nullable<string>,
     childCommandList?: any[]
-  ): ClassDecoratorFunction {
+  ): ClassDecoratorFunction<{}, any> {
     return (target, context) => {
       DecoratorImpl.commandRegistry.set(context.name, {
         commandName,
@@ -71,7 +71,7 @@ export class DecoratorImpl {
     };
   }
 
-  public static RootCommand(): ClassDecoratorFunction {
+  public static RootCommand(): ClassDecoratorFunction<{}, any> {
     return (target, context) => {
       DecoratorImpl.commandRegistry.set(context.name, {
         commandName: "root",
@@ -83,10 +83,26 @@ export class DecoratorImpl {
   }
 
   public static Option(
-    optionName?: string,
-    // description?: string,
+    optionName: string,
     validator?: Partial<ValidatorFactory>
-  ): ClassFieldDecoratorFunction {
+  ): ClassFieldDecoratorFunction<any, any, any>;
+  public static Option(
+    optionName: string,
+    aliasOrDescription?: string,
+    validator?: Partial<ValidatorFactory>
+  ): ClassFieldDecoratorFunction<any, any, any>;
+  public static Option(
+    optionName: string,
+    alias: string,
+    description: string,
+    validator?: Partial<ValidatorFactory>
+  ): ClassFieldDecoratorFunction<any, any, any>;
+  public static Option(
+    optionName?: string,
+    aliasOrDescription?: string | Partial<ValidatorFactory>,
+    description?: string | Partial<ValidatorFactory>,
+    validator?: Partial<ValidatorFactory>
+  ): ClassFieldDecoratorFunction<any, any, any> {
     return (_, { name }) =>
       (initValue) =>
         <OptionInitializerPlaceHolder>{
@@ -100,7 +116,7 @@ export class DecoratorImpl {
 
   public static VariadicOption(
     optionName?: string
-  ): ClassFieldDecoratorFunction {
+  ): ClassFieldDecoratorFunction<any, any, any> {
     return (_, { name }) =>
       (initValue) =>
         <OptionInitializerPlaceHolder>{
@@ -110,14 +126,14 @@ export class DecoratorImpl {
         };
   }
 
-  public static Input(): ClassFieldDecoratorFunction {
+  public static Input(): ClassFieldDecoratorFunction<any, any, any> {
     return (_, { name }) =>
       (initValue) => ({
         type: "Input",
       });
   }
 
-  public static Context(): ClassFieldDecoratorFunction {
+  public static Context(): ClassFieldDecoratorFunction<any, any, any> {
     return (_, { name }) =>
       (initValue) =>
         <ContextInitializerPlaceHolder>{
@@ -127,7 +143,7 @@ export class DecoratorImpl {
   }
 
   // @Options accept no args as it represents all options received
-  public static Options(): ClassFieldDecoratorFunction {
+  public static Options(): ClassFieldDecoratorFunction<any, any, any> {
     return (initValue) => () =>
       <OptionInitializerPlaceHolder>{
         type: "Options",

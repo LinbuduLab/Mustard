@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./mustard/index.ts"
+    "dev": "nodemon ./mustard/index.ts",
+    "build": "tsc"
   },
   "nodemonConfig": {
     "delay": 500,
