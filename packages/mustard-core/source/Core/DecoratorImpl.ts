@@ -1,4 +1,4 @@
-import { ValidatorFactory } from "../Validators/Validator";
+import { ValidatorFactory } from "../Validators";
 import type { OptionInitializerPlaceHolder } from "../Types/Option.struct";
 import {
   ContextInitializerPlaceHolder,
