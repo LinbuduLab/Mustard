@@ -7,9 +7,12 @@ import {
   Input,
   VariadicOption,
   Utils,
+  App,
 } from "./source/Exports/Decorators";
 import { CLI, CommandStruct } from "./source/Exports/ComanndLine";
 import { Validator } from "./source/Exports/Validator";
+import { MustardFactory } from "./source/Exports";
+import { IMustardLifeCycle } from "source/Components/MustardFactory";
 
 @Command("sync", "s")
 class RunSyncCommand implements CommandStruct {
@@ -95,10 +98,18 @@ class RootCommandHandle {
   }
 }
 
-const cli = new CLI("LinbuduLab CLI", [RootCommandHandle, RunCommand]);
+// const cli = new CLI("LinbuduLab CLI", [RootCommandHandle, RunCommand]);
 
-cli.registerCommand([CheckCommand]);
+// cli.registerCommand([CheckCommand]);
 
-cli.start();
+// cli.start();
 
-cli.configure({});
+// cli.configure({});
+
+@App({
+  name: "LinbuduLab CLI",
+  commands: [RootCommandHandle, RunCommand],
+})
+class Project implements IMustardLifeCycle {}
+
+MustardFactory.init(Project).start();
