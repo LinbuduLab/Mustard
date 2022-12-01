@@ -51,10 +51,7 @@ export class CLI {
   }
 
   private initialize(Commands: ClassStruct[]) {
-    // 拿到注册的所有命令
-    Commands.forEach((Command) => {
-      console.log(Command.name);
-    });
+    // 初始化配置
 
     // 注册命令
     this.internalRegisterCommand(Commands);
@@ -177,6 +174,7 @@ export class CLI {
 
     if (root) {
       this.executeCommand(root, []);
+      // enabled by default
     } else if (this.options.enableUsage) {
       UsageInfoGenerator.collectCommandUsage();
     } else {
