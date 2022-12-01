@@ -186,7 +186,7 @@ export class CLI {
 
   private parsedArgs: Arguments;
 
-  private completeParse() {
+  private instantiateWithParse() {
     const CommandMap = MustardRegistry.provide();
 
     CommandMap.forEach((Command, key) => {
@@ -216,7 +216,7 @@ export class CLI {
 
   // 调用此方法后，再修改配置和添加命令将不会生效
   public start() {
-    this.completeParse();
+    this.instantiateWithParse();
 
     const { _ } = this.parsedArgs;
 
