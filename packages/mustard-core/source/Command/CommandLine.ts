@@ -1,13 +1,11 @@
 import parse, { Arguments } from "yargs-parser";
 
 import { ICLIConfiguration } from "../Types/Configuration.struct";
-import { OptionInitializerPlaceHolder } from "../Types/Option.struct";
 import { ClassStruct, Dictionary } from "../Types/Shared.struct";
 import { MustardRegistry } from "../Core/Registry";
 import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "source/Components/UsageGenerator";
-import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedClassNormalizer";
-import { MustardUtilsProvider } from "source/Components/MustardUtilsProvider";
+import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 import { MustardUtils } from "source/Core/Utils";
 
 export class CLI {

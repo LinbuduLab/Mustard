@@ -7,24 +7,7 @@ IoC &amp; native ecmascript decotator based command-line app builder.
 ## Todos
 
 - https://github.com/tj/commander.js/blob/HEAD/Readme_zh-CN.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%AE%E5%8A%A9
-- events
-- nest commander 相关
-- start by decorators @App
-- root / RootCommand
-- custom provider
-- 需要进行进一步逻辑拆分
-
-```typescript
-@App({
-  commands: [],
-  config: {},
-})
-class AppModule {}
-
-const app = MustardFactory.init(AppModule);
-
-app.start();
-```
+- custom provider by @Provide @Inject
 
 - 两种模式？按需和全量？
 
@@ -44,15 +27,16 @@ app.start();
 ## Getting Started
 
 ```typescript
-import { CLI } from "MustardJs/CommandLine";
 import {
+  App,
   Command,
   RootCommand,
   Option,
   Options,
   VariadicOption,
-} from "MustardJs/Decorators";
-import { Validator } from "MustardJs/Validator";
+} from "mustard/decorators";
+import { Validator } from "mustard/validator";
+import { IMustardLifeCycle } from "mustard/core";
 
 @Command("update", "u", "update project dependencies")
 class UpdateCommand {
@@ -82,9 +66,17 @@ class RootCommandHandle {
   }
 }
 
-const cli = new CLI("mm", [RootCommandHandle, UpdateCommand]);
+@App({
+  name: "LinbuduLab CLI",
+  commands: [RootCommandHandle, UpdateCommand],
+})
+class Project implements IMustardLifeCycle {
+  onStart() {}
 
-cli.start();
+  onComplete() {}
+}
+
+MustardFactory.init(Project).start();
 ```
 
 ```bash
