@@ -1,19 +1,17 @@
 import { InjectInitializerPlaceHolder } from "source/Typings/Context.struct";
 import { OptionInitializerPlaceHolder } from "source/Typings/Option.struct";
 import { Dictionary } from "source/Typings/Shared.struct";
-import { MustardUtils } from "../Core/Utils";
+import { MustardUtils } from "./Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
-import { MustardRegistry } from "../Core/Registry";
+import { MustardRegistry } from "./Registry";
 import { InstanceFieldDecorationTypesUnion } from "./Constants";
+import { CommandStruct } from "../Typings/Command.struct";
 
 export class DecoratedClassFieldsNormalizer {
-  public static checkUnknownOptions(
-    target: Dictionary,
-    parsedArgs: Dictionary,
-    allowUnknown = true
+  public static throwOnUnknownOptions(
+    target: CommandStruct,
+    parsedArgs: Dictionary
   ) {
-    if (allowUnknown) return;
-
     const targetDeclaredOptions = MustardUtils.getInstanceFields(target);
 
     const unknownOptions = Object.keys(parsedArgs).filter(
@@ -28,7 +26,7 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeDecoratedFields(
-    target: Dictionary,
+    target: CommandStruct,
     inputs: string[],
     parsedArgs: Dictionary
   ) {
@@ -82,14 +80,14 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeInputField(
-    target: Dictionary,
+    target: CommandStruct,
     prop: string,
     inputs = []
   ) {
     MustardUtils.setInstanceFieldValue(target, prop, inputs);
   }
 
-  public static normalizeInjectField(target: Dictionary, prop: string) {
+  public static normalizeInjectField(target: CommandStruct, prop: string) {
     const injectValue = <InjectInitializerPlaceHolder>(
       MustardUtils.getInstanceFieldValue(target, prop)
     );
@@ -101,7 +99,7 @@ export class DecoratedClassFieldsNormalizer {
     );
   }
 
-  public static normalizeContextField(target: Dictionary, prop: string) {
+  public static normalizeContextField(target: CommandStruct, prop: string) {
     MustardUtils.setInstanceFieldValue(target, prop, {});
   }
 
@@ -113,7 +111,11 @@ export class DecoratedClassFieldsNormalizer {
     );
   }
 
-  public static normalizeOption(target, prop, parsedArgs: Dictionary) {
+  public static normalizeOption(
+    target: CommandStruct,
+    prop: string,
+    parsedArgs: Dictionary
+  ) {
     const initializer = Reflect.get(target, prop);
 
     const {
@@ -141,7 +143,11 @@ export class DecoratedClassFieldsNormalizer {
     }
   }
 
-  public static normalizeOptions(target, prop, parsedArgs: Dictionary) {
+  public static normalizeOptions(
+    target: CommandStruct,
+    prop: string,
+    parsedArgs: Dictionary
+  ) {
     MustardUtils.setInstanceFieldValue(target, prop, parsedArgs);
   }
 }

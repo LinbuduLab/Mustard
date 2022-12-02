@@ -1,4 +1,4 @@
-import { MustardRegistry } from "source/Core/Registry";
+import { MustardRegistry } from "source/Components/Registry";
 import { OptionInitializerPlaceHolder } from "source/Typings/Option.struct";
 import { AnyClassFieldDecoratorReturnType } from "source/Typings/Temp";
 import { ValidatorFactory } from "source/Validators/Factory";

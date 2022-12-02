@@ -1,11 +1,11 @@
-import parse, { Arguments } from "yargs-parser";
+import { Arguments } from "yargs-parser";
 
-import { ClassStruct, Dictionary } from "../Typings/Shared.struct";
-import { MustardRegistry } from "../Core/Registry";
+import { MustardRegistry } from "../Components/Registry";
 import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "source/Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
-import { MustardUtils } from "source/Core/Utils";
+import { MustardUtils } from "source/Components/Utils";
+import { CommandRegistryPayload } from "../Typings/Command.struct";
 import {
   CLIInstantiationConfiguration,
   CommandList,
@@ -80,117 +80,33 @@ export class CLI {
 
     const useRootHandle = _?.length === 0;
 
-    useRootHandle
-      ? this.tryExecuteRootCommandOrPrintUsage()
-      : this.dispatchCommand();
+    useRootHandle ? this.dispatchRootHandler() : this.dispatchCommand();
   }
 
   private dispatchCommand() {
-    const { _: input } = this.parsedArgs;
+    const { _: input } = <{ _: string[] }>this.parsedArgs;
 
-    const { command, inputs: commandInput } = this.getRealHandleCommand(input);
+    const { command, inputs: commandInput } =
+      MustardUtils.findHandlerCommandWithInputs(input);
 
-    this.executeCommand(command, commandInput as string[]);
+    this.executeCommand(command, commandInput);
   }
 
-  private getRealHandleCommand(input: (string | number)[]) {
-    // input 长度必定>=1
-    // console.log("11-29 input: ", input);
-    // console.log(MustardRegistry.provide());
+  private executeCommand(command: CommandRegistryPayload, inputs: string[]) {
+    const handler = command.instance;
 
-    // 处理 alias、child
+    this.options.allowUnknownOptions === false &&
+      DecoratedClassFieldsNormalizer.throwOnUnknownOptions(
+        handler,
+        this.parsedArgs
+      );
 
-    const [matcher, ...rest] = input;
-    // console.log("11-29 rest: ", rest);
-
-    // ['run', 'sync', 'r', 'check']
-
-    if (input.length === 1) {
-      // alias 好像不用特别处理了
-      return {
-        command: MustardRegistry.provide(matcher as string),
-        inputs: [],
-      };
-    } else {
-      // 至少存在一个需要额外处理的输入
-      // 处理子命令
-
-      // FIXME: recursive
-      const command = MustardRegistry.provide(matcher as string);
-
-      if (command.childCommandList.length === 0) {
-        return {
-          command,
-          inputs: rest,
-        };
-      }
-
-      const childCommand = command.childCommandList.find((child) => {
-        return (
-          child.commandName === rest[0] ||
-          child.alias === rest[0] ||
-          child.alias === rest[1]
-        );
-      });
-
-      return {
-        command: childCommand,
-        inputs: rest.slice(1),
-      };
-    }
-
-    // run / r / run sync / r sync / r s
-
-    // 输出
-    // 实际负责的命令，传递给命令的 Input
-
-    // 这里还是要处理下是否存在 sub-command 的情况
-    // 如果 command.length === 1
-    // 如果当前 command 没有 handler，则打印帮助信息
-    // 如果当前 command 有 handler，则执行 handler
-    // 如果 command.length > 1
-    // 尝试查找是否存在 sub-command
-    // 如果存在，则递归向下查找
-    // 否则，存为 Input
-    // 不太对，还需要处理 Root Command 的 Input 的情况...
-    // const [currentCommandNameMatch, ...inputs] = command;
-
-    // const CommandInfo = MustardRegistry.provide(currentCommandNameMatch);
-
-    // if (!CommandInfo) {
-    //   return null;
-    // }
-
-    // const fallback = { Command: CommandInfo.class, inputs };
-
-    // // 如果存在子命令且仍然存在可供匹配的项，才继续向下
-    // if (CommandInfo?.childCommandList?.length && command.length >= 1) {
-    //   return this.getRealHandleCommand(command.slice(1)) ?? fallback;
-    // }
-
-    // return fallback;
-  }
-
-  private injectCommandOptions(handler: any, inputs: string[]) {
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
       handler,
       inputs,
       this.parsedArgs
     );
-  }
 
-  private executeCommand(command: any, inputs: string[]) {
-    const handler = command.instance;
-
-    !this?.options?.allowUnknownOptions &&
-      DecoratedClassFieldsNormalizer.checkUnknownOptions(
-        handler,
-        this.parsedArgs
-      );
-
-    this.injectCommandOptions(handler, inputs);
-
-    // 执行命令
     handler.run();
   }
 
@@ -218,7 +134,7 @@ export class CLI {
     }
   }
 
-  private tryExecuteRootCommandOrPrintUsage() {
+  private dispatchRootHandler() {
     // 如果指定了 RootCommand，则调用
     // 否则检查是否启用了 enableHelp
     // 如果都没有，NoRootHandlerError
@@ -232,15 +148,5 @@ export class CLI {
     } else {
       // throws
     }
-  }
-
-  public registerProviders(provider: {
-    identifier: string;
-    value: unknown | ClassStruct;
-  }) {
-    MustardRegistry.ExternalProviderRegistry.set(
-      provider.identifier,
-      provider.value
-    );
   }
 }

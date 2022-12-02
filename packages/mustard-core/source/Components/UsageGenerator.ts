@@ -1,4 +1,4 @@
-import { MustardRegistry } from "source/Core/Registry";
+import { MustardRegistry } from "source/Components/Registry";
 
 export class UsageInfoGenerator {
   public static collectCommandUsage() {
@@ -23,11 +23,11 @@ export class UsageInfoGenerator {
         const { optionName: injectKey, description } = value;
       });
 
-      const usage = RootCommand.usage?.();
-      rootUsage.push({
-        commandName: "root",
-        usage,
-      });
+      // const usage = RootCommand.usage?.();
+      // rootUsage.push({
+      //   commandName: "root",
+      //   usage,
+      // });
     }
 
     MustardRegistry.CommandRegistry.forEach((Command) => {
@@ -35,7 +35,7 @@ export class UsageInfoGenerator {
 
       const collected = {
         commandName: Command.commandName,
-        usage: Command.Class.usage?.(),
+        // usage: Command.Class.usage?.(),
         instance: new Command.Class(),
       };
 

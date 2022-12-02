@@ -1,4 +1,4 @@
-import { MustardRegistry } from "source/Core/Registry";
+import { MustardRegistry } from "source/Components/Registry";
 import { Nullable } from "source/Typings/Shared.struct";
 
 export class CommandDecorators {
