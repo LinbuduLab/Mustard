@@ -1,4 +1,4 @@
-import { Dictionary } from "source/Types/Shared.struct";
+import { Dictionary } from "source/Typings/Shared.struct";
 import { ZodNativeEnum, z } from "zod";
 import { MaybeOptionalZodType } from "./Typings";
 

@@ -1,6 +1,6 @@
-import { InjectInitializerPlaceHolder } from "source/Types/Context.struct";
-import { OptionInitializerPlaceHolder } from "source/Types/Option.struct";
-import { Dictionary } from "source/Types/Shared.struct";
+import { InjectInitializerPlaceHolder } from "source/Typings/Context.struct";
+import { OptionInitializerPlaceHolder } from "source/Typings/Option.struct";
+import { Dictionary } from "source/Typings/Shared.struct";
 import { MustardUtils } from "../Core/Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
 import { MustardRegistry } from "../Core/Registry";

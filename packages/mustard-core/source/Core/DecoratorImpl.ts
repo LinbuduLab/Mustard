@@ -1,11 +1,11 @@
 import { ValidatorFactory } from "../Validators/Factory";
-import type { OptionInitializerPlaceHolder } from "../Types/Option.struct";
+import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
 import {
   ContextInitializerPlaceHolder,
   InjectInitializerPlaceHolder,
   UtilsInitializerPlaceHolder,
-} from "../Types/Context.struct";
-import { Nullable } from "../Types/Shared.struct";
+} from "../Typings/Context.struct";
+import { Nullable } from "../Typings/Shared.struct";
 import { MustardRegistry } from "./Registry";
 
 export class DecoratorImpl {

@@ -1,6 +1,6 @@
 import { MustardConstanst } from "source/Components/Constants";
-import { CommandRegistryPayload } from "source/Types/Command.struct";
-import { CommandRegistry } from "../Types/Instantiation.struct";
+import { CommandRegistryPayload } from "source/Typings/Command.struct";
+import { CommandRegistry } from "../Typings/Instantiation.struct";
 
 export class MustardRegistry {
   private static _CommandRegistry = new CommandRegistry();

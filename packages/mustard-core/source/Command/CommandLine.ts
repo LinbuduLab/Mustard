@@ -1,7 +1,7 @@
 import parse, { Arguments } from "yargs-parser";
 
-import { ICLIConfiguration } from "../Types/Configuration.struct";
-import { ClassStruct, Dictionary } from "../Types/Shared.struct";
+import { ICLIConfiguration } from "../Typings/Configuration.struct";
+import { ClassStruct, Dictionary } from "../Typings/Shared.struct";
 import { MustardRegistry } from "../Core/Registry";
 import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "source/Components/UsageGenerator";

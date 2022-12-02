@@ -1,4 +1,4 @@
-import { Dictionary } from "source/Types/Shared.struct";
+import { Dictionary } from "source/Typings/Shared.struct";
 import { ZodType } from "zod";
 import { NativeEnumValidator } from "./EnumValidators";
 import {

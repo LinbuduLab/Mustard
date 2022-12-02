@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ZodType, ZodBoolean, ZodNumber, ZodString } from "zod";
-import { Dictionary } from "../Types/Shared.struct";
+import { Dictionary } from "../Typings/Shared.struct";
 import { BaseValidator, MaybeOptionalZodType, ValidationItem } from "./Typings";
 
 export class StringValidator implements BaseValidator<ZodType<String>, string> {
