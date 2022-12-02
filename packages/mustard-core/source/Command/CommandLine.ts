@@ -5,7 +5,10 @@ import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "source/Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 import { MustardUtils } from "source/Components/Utils";
-import { CommandRegistryPayload } from "../Typings/Command.struct";
+import {
+  CommandRegistryPayload,
+  CommandStruct,
+} from "../Typings/Command.struct";
 import {
   CLIInstantiationConfiguration,
   CommandList,
@@ -32,12 +35,14 @@ export class CLI {
       enableUsage = true,
       allowUnknownOptions = true,
       enableVersion = true,
+      lifeCycles = {},
     } = this.options;
 
     this.options = {
       enableUsage,
       allowUnknownOptions,
       enableVersion,
+      lifeCycles,
     };
   }
 
@@ -74,6 +79,8 @@ export class CLI {
   }
 
   public start() {
+    this.options.lifeCycles?.onStart?.();
+
     this.instantiateWithParse();
 
     const { _ } = this.parsedArgs;
@@ -89,11 +96,16 @@ export class CLI {
     const { command, inputs: commandInput } =
       MustardUtils.findHandlerCommandWithInputs(input);
 
-    this.executeCommand(command, commandInput);
+    this.executeCommand(command, commandInput)
+      .then(this.options.lifeCycles?.onComplete ?? (() => {}))
+      .catch(this.options.lifeCycles?.onError ?? (() => {}));
   }
 
-  private executeCommand(command: CommandRegistryPayload, inputs: string[]) {
-    const handler = command.instance;
+  private async executeCommand(
+    command: CommandRegistryPayload,
+    inputs: string[]
+  ) {
+    const handler: CommandStruct = command.instance;
 
     this.options.allowUnknownOptions === false &&
       DecoratedClassFieldsNormalizer.throwOnUnknownOptions(
@@ -107,7 +119,7 @@ export class CLI {
       this.parsedArgs
     );
 
-    handler.run();
+    await handler.run();
   }
 
   private internalRegisterCommand(Commands: CommandList) {

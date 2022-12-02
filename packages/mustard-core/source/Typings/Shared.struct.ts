@@ -13,4 +13,6 @@ export type Nullable<T> = T | null;
 
 export type MaybeFactory<T> = T | (() => T);
 
+export type MaybePromise<T> = T | Promise<T>;
+
 export type Constructable<T> = new (...args: any[]) => T;

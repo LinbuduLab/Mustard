@@ -1,4 +1,4 @@
-import { ClassStruct } from "./Shared.struct";
+import { ClassStruct, MaybePromise } from "./Shared.struct";
 
 export type CommandRegistryPayload = {
   commandName: string;
@@ -15,5 +15,5 @@ export type CommandRegistryPayload = {
 export abstract class CommandStruct {
   abstract example?: () => string;
 
-  abstract run(): void;
+  abstract run(): MaybePromise<void>;
 }
