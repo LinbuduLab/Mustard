@@ -6,13 +6,15 @@ import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "source/Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 import { MustardUtils } from "source/Core/Utils";
-import { CLIInstantiationConfiguration } from "source/Typings/configuration.struct";
-import { CommandStruct } from "../Typings/Command.struct";
+import {
+  CLIInstantiationConfiguration,
+  CommandList,
+} from "source/Typings/configuration.struct";
 
 export class CLI {
   constructor(
     private readonly identifier: string,
-    Commands: CommandStruct[],
+    Commands: CommandList,
     private options?: CLIInstantiationConfiguration
   ) {
     this.initialize(Commands);
@@ -23,11 +25,11 @@ export class CLI {
     Object.assign(this.options ?? {}, overrides ?? {});
   }
 
-  public registerCommand(Commands: CommandStruct[]) {
+  public registerCommand(Commands: CommandList) {
     this.internalRegisterCommand(Commands);
   }
 
-  private internalRegisterCommand(Commands: CommandStruct[]) {
+  private internalRegisterCommand(Commands: CommandList) {
     const CommandToLoad = Commands.map((Command) =>
       MustardRegistry.provide(Command.name)
     );
@@ -50,7 +52,7 @@ export class CLI {
     });
   }
 
-  private initialize(Commands: CommandStruct[]) {
+  private initialize(Commands: CommandList) {
     // 初始化配置
 
     // 注册命令

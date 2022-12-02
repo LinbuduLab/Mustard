@@ -11,8 +11,10 @@ export interface Configurations {
 export interface CLIInstantiationConfiguration
   extends Partial<Configurations> {}
 
+export type CommandList = typeof CommandStruct[];
+
 export interface AppFactoryOptions {
   name?: string;
-  commands: CommandStruct[];
+  commands: CommandList;
   configurations?: Partial<Configurations>;
 }

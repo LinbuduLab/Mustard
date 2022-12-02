@@ -85,7 +85,7 @@ class CheckCommand {
 }
 
 @RootCommand()
-class RootCommandHandle {
+class RootCommandHandle implements CommandStruct {
   @Option("dry", "dry option")
   public dry = "default value of dry";
 
