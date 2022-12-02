@@ -17,10 +17,6 @@ export class DecoratorImpl {
         };
   }
 
-  public static App(): ClassDecoratorFunction<{}, any> {
-    return () => {};
-  }
-
   // public static Command(commandName: string): ClassDecoratorFunction;
   // public static Command(
   //   commandName: string,

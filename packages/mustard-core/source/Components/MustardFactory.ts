@@ -1,3 +1,4 @@
+import { AppFactoryOptions } from "source/Typings/configuration.struct";
 import { Dictionary } from "source/Typings/Shared.struct";
 import { CLI } from "../Command/CommandLine";
 
@@ -8,11 +9,13 @@ export abstract class IMustardLifeCycle {
 }
 
 export class MustardFactory {
-  private static infoCollection: Dictionary = {};
+  private static FactoryOptions: AppFactoryOptions;
 
-  public static App(info: Dictionary): ClassDecoratorFunction<{}, any> {
+  public static App(
+    configuration: AppFactoryOptions
+  ): ClassDecoratorFunction<{}, any> {
     return (target, context) => {
-      MustardFactory.infoCollection = info;
+      MustardFactory.FactoryOptions = configuration;
     };
   }
 
@@ -22,9 +25,13 @@ export class MustardFactory {
     ins.onStart?.();
 
     // 这个 Cls 肯定不能完全没作用，要不把生命周期放这里？
-    const { name, commands } = MustardFactory.infoCollection;
+    const {
+      name,
+      commands,
+      configurations = {},
+    } = MustardFactory.FactoryOptions;
 
-    const cli = new CLI(name as string, commands as any[]);
+    const cli = new CLI(name, commands, configurations);
 
     return cli;
   }

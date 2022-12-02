@@ -1,15 +1,13 @@
-import { DecoratorImpl } from "../Core/DecoratorImpl";
+import { BuiltInDecorators } from "../Decorators/BuiltIn";
+import { CommandDecorators } from "../Decorators/Command";
+import { InputDecorator } from "../Decorators/Input";
+import { OptionDecorators } from "../Decorators/Option";
+import { DIServiceDecorators } from "../Decorators/DIService";
 import { MustardFactory } from "../Components/MustardFactory";
 
 export const { App } = MustardFactory;
-
-export const {
-  Command,
-  RootCommand,
-  VariadicOption,
-  Option,
-  Options,
-  Context,
-  Input,
-  Utils,
-} = DecoratorImpl;
+export const { Command, RootCommand } = CommandDecorators;
+export const { Option, Options, VariadicOption } = OptionDecorators;
+export const { Input } = InputDecorator;
+export const { Service, Inject } = DIServiceDecorators;
+export const { Context, Utils } = BuiltInDecorators;

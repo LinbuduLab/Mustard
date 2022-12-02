@@ -10,3 +10,5 @@ export type ClassStruct<TInstanceType extends unknown = unknown> = new (
 ) => TInstanceType;
 
 export type Nullable<T> = T | null;
+
+export type MaybeFactory<T> = T | (() => T);

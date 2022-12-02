@@ -1,33 +1,33 @@
 import parse, { Arguments } from "yargs-parser";
 
-import { ICLIConfiguration } from "../Typings/Configuration.struct";
 import { ClassStruct, Dictionary } from "../Typings/Shared.struct";
 import { MustardRegistry } from "../Core/Registry";
 import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "source/Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 import { MustardUtils } from "source/Core/Utils";
+import { CLIInstantiationConfiguration } from "source/Typings/configuration.struct";
+import { CommandStruct } from "../Typings/Command.struct";
 
 export class CLI {
   constructor(
     private readonly identifier: string,
-    Commands: ClassStruct[],
-    private options?: ICLIConfiguration
+    Commands: CommandStruct[],
+    private options?: CLIInstantiationConfiguration
   ) {
     this.initialize(Commands);
-    // debug 模式
     console.log(`CLI for ${identifier} initialized`);
   }
 
-  public configure(overrides: Partial<ICLIConfiguration>) {
+  public configure(overrides: Partial<CLIInstantiationConfiguration>) {
     Object.assign(this.options ?? {}, overrides ?? {});
   }
 
-  public registerCommand(Commands: ClassStruct[]) {
+  public registerCommand(Commands: CommandStruct[]) {
     this.internalRegisterCommand(Commands);
   }
 
-  private internalRegisterCommand(Commands: ClassStruct[]) {
+  private internalRegisterCommand(Commands: CommandStruct[]) {
     const CommandToLoad = Commands.map((Command) =>
       MustardRegistry.provide(Command.name)
     );
@@ -50,7 +50,7 @@ export class CLI {
     });
   }
 
-  private initialize(Commands: ClassStruct[]) {
+  private initialize(Commands: CommandStruct[]) {
     // 初始化配置
 
     // 注册命令

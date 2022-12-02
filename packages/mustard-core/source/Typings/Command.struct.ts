@@ -13,6 +13,9 @@ export type CommandRegistryPayload = {
 };
 
 export abstract class CommandStruct {
+  // todo:
+  name: string;
+
   abstract example?: () => string;
 
   abstract run(): void;
