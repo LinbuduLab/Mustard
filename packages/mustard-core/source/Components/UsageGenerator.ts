@@ -11,7 +11,7 @@ export class UsageInfoGenerator {
     const rootCommand = MustardRegistry.provideRootCommand();
 
     if (rootCommand) {
-      const RootCommand = rootCommand.class;
+      const RootCommand = rootCommand.Class;
 
       const instance = new RootCommand();
 
@@ -35,8 +35,8 @@ export class UsageInfoGenerator {
 
       const collected = {
         commandName: Command.commandName,
-        usage: Command.class.usage?.(),
-        instance: new Command.class(),
+        usage: Command.Class.usage?.(),
+        instance: new Command.Class(),
       };
 
       commonUsages.push(collected);

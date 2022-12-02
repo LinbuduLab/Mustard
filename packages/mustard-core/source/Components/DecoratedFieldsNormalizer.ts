@@ -4,9 +4,16 @@ import { Dictionary } from "source/Typings/Shared.struct";
 import { MustardUtils } from "../Core/Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
 import { MustardRegistry } from "../Core/Registry";
+import { InstanceFieldDecorationTypesUnion } from "./Constants";
 
 export class DecoratedClassFieldsNormalizer {
-  public static checkUnknownOptions(target, parsedArgs: Dictionary) {
+  public static checkUnknownOptions(
+    target: Dictionary,
+    parsedArgs: Dictionary,
+    allowUnknown = true
+  ) {
+    if (allowUnknown) return;
+
     const targetDeclaredOptions = MustardUtils.getInstanceFields(target);
 
     const unknownOptions = Object.keys(parsedArgs).filter(
@@ -14,22 +21,27 @@ export class DecoratedClassFieldsNormalizer {
     );
 
     if (unknownOptions.length > 0) {
-      // todo: UnknownOptionError
       // throw new Error(
       //   `Unknown options: ${unknownOptions.join(", ")}. See --help for usage.`
       // );
     }
   }
 
-  public static groupOptions() {}
-
-  public static normalizeDecoratedFields(target, inputs, parsedArgs) {
-    const fields = Reflect.ownKeys(target) as string[];
+  public static normalizeDecoratedFields(
+    target: Dictionary,
+    inputs: string[],
+    parsedArgs: Dictionary
+  ) {
+    const fields = <string[]>Reflect.ownKeys(target);
 
     fields.forEach((fieldKey) => {
       const initializer = Reflect.get(target, fieldKey);
 
-      const { type } = initializer;
+      const { type } = <
+        {
+          type: InstanceFieldDecorationTypesUnion;
+        }
+      >initializer;
 
       switch (type) {
         case "Context":
@@ -38,7 +50,7 @@ export class DecoratedClassFieldsNormalizer {
             fieldKey
           );
           break;
-        case "Util":
+        case "Utils":
           DecoratedClassFieldsNormalizer.normalizeUtilField(target, fieldKey);
           break;
         case "Input":
@@ -69,13 +81,19 @@ export class DecoratedClassFieldsNormalizer {
     });
   }
 
-  public static normalizeInputField(target, prop, inputs = []) {
+  public static normalizeInputField(
+    target: Dictionary,
+    prop: string,
+    inputs = []
+  ) {
     MustardUtils.setInstanceFieldValue(target, prop, inputs);
   }
 
-  public static normalizeInjectField(target, prop) {
-    const injectValue: InjectInitializerPlaceHolder =
-      MustardUtils.getInstanceFieldValue(target, prop);
+  public static normalizeInjectField(target: Dictionary, prop: string) {
+    const injectValue = <InjectInitializerPlaceHolder>(
+      MustardUtils.getInstanceFieldValue(target, prop)
+    );
+
     MustardUtils.setInstanceFieldValue(
       target,
       prop,
@@ -83,7 +101,7 @@ export class DecoratedClassFieldsNormalizer {
     );
   }
 
-  public static normalizeContextField(target, prop) {
+  public static normalizeContextField(target: Dictionary, prop: string) {
     MustardUtils.setInstanceFieldValue(target, prop, {});
   }
 
@@ -103,7 +121,7 @@ export class DecoratedClassFieldsNormalizer {
       initValue,
       schema,
       // todo: by XOR types
-    } = initializer as OptionInitializerPlaceHolder;
+    } = <OptionInitializerPlaceHolder>initializer;
 
     // use value from parsed args
     if (injectKey in parsedArgs) {

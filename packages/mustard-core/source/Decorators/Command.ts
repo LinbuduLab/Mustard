@@ -57,7 +57,7 @@ export class CommandDecorators {
     return (target, context) => {
       MustardRegistry.register(context.name, {
         commandName: "root",
-        class: target,
+        Class: target,
         root: true,
         childCommandList: [],
       });
@@ -75,7 +75,7 @@ export class CommandDecorators {
         commandName,
         alias,
         description,
-        class: target,
+        Class: target,
         root: false,
         childCommandList,
       });

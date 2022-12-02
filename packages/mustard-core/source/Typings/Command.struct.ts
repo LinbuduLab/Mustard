@@ -5,7 +5,7 @@ export type CommandRegistryPayload = {
   alias?: string;
   description?: string;
   // todo: fix after typing fixed in #50820
-  class: any;
+  Class: ClassStruct<any>;
   root: boolean;
   childCommandList: any[];
   instance?: any;

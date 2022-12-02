@@ -5,7 +5,7 @@ export class ValidationErrorFormatter {
   public static format(argName: string, ageValue: unknown, error: z.ZodError) {
     const issue = error.issues[0];
 
-    const { expected, received } = issue as ZodInvalidTypeIssue;
+    const { expected, received } = <ZodInvalidTypeIssue>issue;
 
     return `Invalid input for argument ${argName}, expected: ${chalk.green(
       expected

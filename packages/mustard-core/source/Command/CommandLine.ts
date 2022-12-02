@@ -18,7 +18,27 @@ export class CLI {
     private options?: CLIInstantiationConfiguration
   ) {
     this.initialize(Commands);
-    console.log(`CLI for ${identifier} initialized`);
+  }
+
+  private parsedArgs: Arguments;
+
+  private initialize(Commands: CommandList) {
+    this.normalizeConfigurations();
+    this.internalRegisterCommand(Commands);
+  }
+
+  private normalizeConfigurations() {
+    const {
+      enableUsage = true,
+      allowUnknownOptions = true,
+      enableVersion = true,
+    } = this.options;
+
+    this.options = {
+      enableUsage,
+      allowUnknownOptions,
+      enableVersion,
+    };
   }
 
   public configure(overrides: Partial<CLIInstantiationConfiguration>) {
@@ -29,57 +49,48 @@ export class CLI {
     this.internalRegisterCommand(Commands);
   }
 
-  private internalRegisterCommand(Commands: CommandList) {
-    const CommandToLoad = Commands.map((Command) =>
-      MustardRegistry.provide(Command.name)
-    );
+  private instantiateWithParse() {
+    const commandMap = MustardRegistry.provide();
+    const variadicOptionKeys = new Set<string>();
 
-    // 然后将这些命令注册到命令注册表中
-    CommandToLoad.forEach((Command) => {
-      MustardRegistry.register(
-        Command.root
-          ? MustardConstanst.RootCommandRegistryKey
-          : Command.commandName,
-        Command
-      );
+    commandMap.forEach((commandRegistration, key) => {
+      const instance = new commandRegistration.Class();
 
-      Command.alias && MustardRegistry.register(Command.alias, Command);
+      const decoratedInstanceFields =
+        MustardUtils.filterDecoratedInstanceFields(instance);
 
-      if (Command.childCommandList.length > 0) {
-        // 如果希望将子命令的注册名更改为 run:update:sync 这种形式，那感觉最好把 alias 也统一
-        this.internalRegisterCommand(Command.childCommandList);
-      }
+      decoratedInstanceFields
+        .filter((v) => v.type === "VariadicOption")
+        .forEach((v) => {
+          variadicOptionKeys.add(v.key);
+        });
+
+      MustardRegistry.upsert(key, { instance });
     });
-  }
 
-  private initialize(Commands: CommandList) {
-    // 初始化配置
-
-    // 注册命令
-    this.internalRegisterCommand(Commands);
-  }
-
-  private injectCommandOptions(handler: any, inputs: string[]) {
-    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
-      handler,
-      inputs,
-      this.parsedArgs
+    this.parsedArgs = MustardUtils.parseFromProcessArgs(
+      Array.from(MustardRegistry.VariadicOptions)
     );
   }
 
-  private executeCommand(command: any, inputs: string[]) {
-    const handler = command.instance;
+  public start() {
+    this.instantiateWithParse();
 
-    !this?.options?.allowUnknownOptions &&
-      DecoratedClassFieldsNormalizer.checkUnknownOptions(
-        handler,
-        this.parsedArgs
-      );
+    const { _ } = this.parsedArgs;
 
-    this.injectCommandOptions(handler, inputs);
+    const useRootHandle = _?.length === 0;
 
-    // 执行命令
-    handler.run();
+    useRootHandle
+      ? this.tryExecuteRootCommandOrPrintUsage()
+      : this.dispatchCommand();
+  }
+
+  private dispatchCommand() {
+    const { _: input } = this.parsedArgs;
+
+    const { command, inputs: commandInput } = this.getRealHandleCommand(input);
+
+    this.executeCommand(command, commandInput as string[]);
   }
 
   private getRealHandleCommand(input: (string | number)[]) {
@@ -160,12 +171,51 @@ export class CLI {
     // return fallback;
   }
 
-  private dispatchCommand() {
-    const { _: input } = this.parsedArgs;
+  private injectCommandOptions(handler: any, inputs: string[]) {
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      handler,
+      inputs,
+      this.parsedArgs
+    );
+  }
 
-    const { command, inputs: commandInput } = this.getRealHandleCommand(input);
+  private executeCommand(command: any, inputs: string[]) {
+    const handler = command.instance;
 
-    this.executeCommand(command, commandInput as string[]);
+    !this?.options?.allowUnknownOptions &&
+      DecoratedClassFieldsNormalizer.checkUnknownOptions(
+        handler,
+        this.parsedArgs
+      );
+
+    this.injectCommandOptions(handler, inputs);
+
+    // 执行命令
+    handler.run();
+  }
+
+  private internalRegisterCommand(Commands: CommandList) {
+    for (const Command of Commands) {
+      const CommandRegistration = MustardRegistry.provide(Command.name);
+
+      MustardRegistry.register(
+        CommandRegistration.root
+          ? MustardConstanst.RootCommandRegistryKey
+          : CommandRegistration.commandName,
+
+        CommandRegistration
+      );
+
+      CommandRegistration.alias &&
+        MustardRegistry.register(
+          CommandRegistration.alias,
+          CommandRegistration
+        );
+
+      if (CommandRegistration.childCommandList.length > 0) {
+        this.internalRegisterCommand(CommandRegistration.childCommandList);
+      }
+    }
   }
 
   private tryExecuteRootCommandOrPrintUsage() {
@@ -182,52 +232,6 @@ export class CLI {
     } else {
       // throws
     }
-  }
-
-  private rawArgs = process.argv.slice(2);
-
-  private parsedArgs: Arguments;
-
-  private instantiateWithParse() {
-    const CommandMap = MustardRegistry.provide();
-
-    CommandMap.forEach((Command, key) => {
-      const instance = new Command.class();
-
-      const decoratedInstanceFields =
-        MustardUtils.filterDecoratedInstanceFields(instance);
-
-      decoratedInstanceFields
-        .filter((v) => v.type === "VariadicOption")
-        .forEach((v) => {
-          MustardRegistry.VariadicOptions.add(v.value.optionName);
-        });
-
-      MustardRegistry.upsert(key, { instance });
-    });
-
-    const parsed = parse(this.rawArgs, {
-      array: Array.from(MustardRegistry.VariadicOptions),
-      configuration: {
-        "greedy-arrays": true,
-      },
-    });
-
-    this.parsedArgs = parsed;
-  }
-
-  // 调用此方法后，再修改配置和添加命令将不会生效
-  public start() {
-    this.instantiateWithParse();
-
-    const { _ } = this.parsedArgs;
-
-    if (_.length === 0) {
-      this.tryExecuteRootCommandOrPrintUsage();
-      return;
-    }
-
-    this.dispatchCommand();
   }
 
   public registerProviders(provider: {

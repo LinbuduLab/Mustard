@@ -25,7 +25,7 @@ export class MustardRegistry {
         ...payload,
       });
     } else {
-      MustardRegistry.register(identifier, payload as CommandRegistryPayload);
+      MustardRegistry.register(identifier, <CommandRegistryPayload>payload);
     }
   }
 
