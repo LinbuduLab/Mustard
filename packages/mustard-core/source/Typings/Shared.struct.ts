@@ -12,3 +12,5 @@ export type ClassStruct<TInstanceType extends unknown = unknown> = new (
 export type Nullable<T> = T | null;
 
 export type MaybeFactory<T> = T | (() => T);
+
+export type Constructable<T> = new (...args: any[]) => T;

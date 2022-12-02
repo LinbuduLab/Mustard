@@ -6,6 +6,13 @@ export interface Configurations {
   debug: boolean;
   enableUsage: boolean | MaybeFactory<string>;
   enableVersion: boolean | MaybeFactory<string>;
+  lifeCycles?: Partial<LifeCycles>;
+}
+
+export interface LifeCycles {
+  onStart: () => void;
+  onError: () => void;
+  onComplete: () => void;
 }
 
 export interface CLIInstantiationConfiguration

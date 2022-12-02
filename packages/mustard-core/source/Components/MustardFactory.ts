@@ -1,30 +1,23 @@
 import { AppFactoryOptions } from "source/Typings/configuration.struct";
-import { Dictionary } from "source/Typings/Shared.struct";
+import { MustardLifeCycle } from "source/Typings/Factory.struct";
+import { Constructable, Dictionary } from "source/Typings/Shared.struct";
+import { AnyClassDecoratorReturnType } from "source/Typings/Temp";
 import { CLI } from "../Command/CommandLine";
-
-export abstract class IMustardLifeCycle {
-  abstract onStart?(): void;
-  abstract onError?(): void;
-  abstract onComplete?(): void;
-}
 
 export class MustardFactory {
   private static FactoryOptions: AppFactoryOptions;
 
   public static App(
     configuration: AppFactoryOptions
-  ): ClassDecoratorFunction<{}, any> {
+  ): AnyClassDecoratorReturnType {
     return (target, context) => {
       MustardFactory.FactoryOptions = configuration;
     };
   }
 
-  public static init(Cls: new () => IMustardLifeCycle): CLI {
+  public static init(Cls: Constructable<MustardLifeCycle>): CLI {
     const ins = new Cls();
 
-    ins.onStart?.();
-
-    // 这个 Cls 肯定不能完全没作用，要不把生命周期放这里？
     const {
       name,
       commands,
@@ -32,6 +25,14 @@ export class MustardFactory {
     } = MustardFactory.FactoryOptions;
 
     const cli = new CLI(name, commands, configurations);
+
+    cli.configure({
+      lifeCycles: {
+        onStart: ins.onStart,
+        onError: ins.onError,
+        onComplete: ins.onComplete,
+      },
+    });
 
     return cli;
   }
