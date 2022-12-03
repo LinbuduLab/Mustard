@@ -1,7 +1,8 @@
-import { MustardRegistry } from "source/Components/Registry";
-import { OptionInitializerPlaceHolder } from "source/Typings/Option.struct";
-import { AnyClassFieldDecoratorReturnType } from "source/Typings/Temp";
-import { ValidatorFactory } from "source/Validators/Factory";
+import { MustardRegistry } from "../Components/Registry";
+import { ValidatorFactory } from "../Validators/Factory";
+
+import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
+import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
 
 export class OptionDecorators {
   public static Option(

@@ -1,4 +1,4 @@
-import { AnyClassFieldDecoratorReturnType } from "source/Typings/Temp";
+import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
 
 export class InputDecorator {
   public static Input(): AnyClassFieldDecoratorReturnType {

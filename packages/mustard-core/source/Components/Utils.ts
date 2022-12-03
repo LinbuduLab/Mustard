@@ -1,12 +1,12 @@
-import {
+import parse from "yargs-parser";
+import { MustardRegistry } from "./Registry";
+import { MustardConstanst } from "../Components/Constants";
+
+import type {
   CommandRegistryPayload,
   CommandStruct,
-} from "source/Typings/Command.struct";
-import { TaggedDecoratedInstanceFields } from "source/Typings/Utils.struct";
-import parse from "yargs-parser";
-import { MustardConstanst } from "../Components/Constants";
-import { Dictionary } from "../Typings/Shared.struct";
-import { MustardRegistry } from "./Registry";
+} from "../Typings/Command.struct";
+import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
 
 export class MustardUtils {
   public static getInstanceFields(target: CommandStruct): string[] {
@@ -45,20 +45,25 @@ export class MustardUtils {
     target: CommandStruct
   ): TaggedDecoratedInstanceFields[] {
     const fields = <string[]>MustardUtils.getInstanceFields(target);
+    return <TaggedDecoratedInstanceFields[]>fields
+      .map((field: string) => {
+        const value = <TaggedDecoratedInstanceFields>(
+          MustardUtils.getInstanceFieldValue(target, field)
+        );
 
-    return fields.map((field: string) => {
-      const value = <TaggedDecoratedInstanceFields>(
-        MustardUtils.getInstanceFieldValue(target, field)
-      );
+        if (
+          MustardConstanst.InstanceFieldDecorationTypes.includes(value.type)
+        ) {
+          return {
+            key: field,
+            type: value.type,
+            value,
+          };
+        }
 
-      if (MustardConstanst.InstanceFieldDecorationTypes.includes(value.type)) {
-        return {
-          key: field,
-          type: value.type,
-          value,
-        };
-      }
-    });
+        return null;
+      })
+      .filter(Boolean);
   }
 
   public static findHandlerCommandWithInputs(input: string[]): {

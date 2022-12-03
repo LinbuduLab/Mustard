@@ -1,8 +1,8 @@
-import { InjectInitializerPlaceHolder } from "source/Typings/Context.struct";
-import {
+import type { InjectInitializerPlaceHolder } from "../Typings/Context.struct";
+import type {
   AnyClassDecoratorReturnType,
   AnyClassFieldDecoratorReturnType,
-} from "source/Typings/Temp";
+} from "../Typings/Temp";
 
 export class DIServiceDecorators {
   public static Inject(identifier: string): AnyClassFieldDecoratorReturnType {

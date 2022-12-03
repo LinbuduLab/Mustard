@@ -1,6 +1,8 @@
-import { MustardConstanst } from "source/Components/Constants";
-import { CommandRegistryPayload } from "source/Typings/Command.struct";
-import { CommandRegistry } from "../Typings/Instantiation.struct";
+import { MustardConstanst } from "../Components/Constants";
+
+import type { CommandRegistryPayload } from "../Typings/Command.struct";
+
+const CommandRegistry = Map<string, CommandRegistryPayload>;
 
 export class MustardRegistry {
   private static _CommandRegistry = new CommandRegistry();

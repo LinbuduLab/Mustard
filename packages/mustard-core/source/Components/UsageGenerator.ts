@@ -1,4 +1,4 @@
-import { MustardRegistry } from "source/Components/Registry";
+import { MustardRegistry } from "../Components/Registry";
 
 export class UsageInfoGenerator {
   public static collectCommandUsage() {

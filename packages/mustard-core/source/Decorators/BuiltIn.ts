@@ -1,8 +1,8 @@
-import {
+import type {
   ContextInitializerPlaceHolder,
   UtilsInitializerPlaceHolder,
-} from "source/Typings/Context.struct";
-import { AnyClassFieldDecoratorReturnType } from "source/Typings/Temp";
+} from "../Typings/Context.struct";
+import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
 
 export class BuiltInDecorators {
   public static Utils(): AnyClassFieldDecoratorReturnType {

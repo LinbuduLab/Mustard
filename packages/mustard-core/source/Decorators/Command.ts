@@ -1,6 +1,7 @@
-import { MustardRegistry } from "source/Components/Registry";
-import { Nullable } from "source/Typings/Shared.struct";
-import { AnyClassDecoratorReturnType } from "source/Typings/Temp";
+import { MustardRegistry } from "../Components/Registry";
+
+import type { Nullable } from "../Typings/Shared.struct";
+import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
 
 export class CommandDecorators {
   // public static Command(commandName: string): ClassDecoratorFunction;

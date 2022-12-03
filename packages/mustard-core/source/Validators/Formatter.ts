@@ -1,5 +1,7 @@
+import { z } from "zod";
 import chalk from "chalk";
-import { z, ZodInvalidTypeIssue } from "zod";
+
+import type { ZodInvalidTypeIssue } from "zod";
 
 export class ValidationErrorFormatter {
   public static format(argName: string, ageValue: unknown, error: z.ZodError) {

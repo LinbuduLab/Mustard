@@ -1,18 +1,18 @@
-import { Arguments } from "yargs-parser";
-
 import { MustardRegistry } from "../Components/Registry";
 import { MustardConstanst } from "../Components/Constants";
-import { UsageInfoGenerator } from "source/Components/UsageGenerator";
+import { UsageInfoGenerator } from "../Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
-import { MustardUtils } from "source/Components/Utils";
-import {
+import { MustardUtils } from "../Components/Utils";
+
+import type { Arguments } from "yargs-parser";
+import type {
   CommandRegistryPayload,
   CommandStruct,
 } from "../Typings/Command.struct";
-import {
+import type {
   CLIInstantiationConfiguration,
   CommandList,
-} from "source/Typings/configuration.struct";
+} from "../Typings/configuration.struct";
 
 export class CLI {
   constructor(

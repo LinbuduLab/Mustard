@@ -1,11 +1,12 @@
-import { InjectInitializerPlaceHolder } from "source/Typings/Context.struct";
-import { OptionInitializerPlaceHolder } from "source/Typings/Option.struct";
-import { Dictionary } from "source/Typings/Shared.struct";
+import { MustardRegistry } from "./Registry";
 import { MustardUtils } from "./Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
-import { MustardRegistry } from "./Registry";
-import { InstanceFieldDecorationTypesUnion } from "./Constants";
-import { CommandStruct } from "../Typings/Command.struct";
+
+import type { InstanceFieldDecorationTypesUnion } from "./Constants";
+import type { InjectInitializerPlaceHolder } from "../Typings/Context.struct";
+import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
+import type { Dictionary } from "../Typings/Shared.struct";
+import type { CommandStruct } from "../Typings/Command.struct";
 
 export class DecoratedClassFieldsNormalizer {
   public static throwOnUnknownOptions(

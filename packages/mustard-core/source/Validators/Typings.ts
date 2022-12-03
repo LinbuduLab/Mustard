@@ -1,5 +1,4 @@
-import { Dictionary, ValidationTypes } from "source/Typings/Shared.struct";
-import {
+import type {
   z,
   ZodString,
   ZodNumber,
@@ -8,6 +7,7 @@ import {
   ZodType,
   ZodOptional,
 } from "zod";
+import type { Dictionary, ValidationTypes } from "../Typings/Shared.struct";
 
 export type AvaliableSchemaValidations =
   | keyof typeof z
