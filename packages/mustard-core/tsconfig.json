@@ -22,7 +22,7 @@
     "noUnusedParameters": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "keyofStringsOnly": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

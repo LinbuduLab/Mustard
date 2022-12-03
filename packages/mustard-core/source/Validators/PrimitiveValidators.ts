@@ -21,6 +21,7 @@ export class StringValidator implements BaseValidator<ZodType<String>, string> {
       args,
     };
 
+    // @ts-expect-error
     this._schema = this._schema[validation.type]?.(...validation.args);
   }
 
@@ -62,6 +63,7 @@ export class BooleanValidator
       args,
     };
 
+    // @ts-expect-error
     this._schema = this._schema[validation.type]?.(...validation.args);
   }
 
@@ -87,6 +89,7 @@ export class NumberValidator implements BaseValidator<ZodType<Number>, number> {
       args,
     };
 
+    // @ts-expect-error
     this._schema = this._schema[validation.type]?.(...validation.args);
   }
 

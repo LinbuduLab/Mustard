@@ -3,24 +3,23 @@ import {
   RootCommand,
   Option,
   Options,
-  Context,
   Input,
   VariadicOption,
   Utils,
   App,
 } from "./source/Exports/Decorators";
-import { CLI, CommandStruct } from "./source/Exports/ComanndLine";
+import { CommandStruct } from "./source/Exports/ComanndLine";
 import { Validator } from "./source/Exports/Validator";
-import { MustardFactory } from "./source/Exports";
-import { IMustardLifeCycle } from "source/Components/MustardFactory";
+import { MustardFactory, MustardUtils } from "./source/Exports";
+import { MustardLifeCycle } from "./source/Typings/Factory.struct";
 
 @Command("sync", "s")
 class RunSyncCommand implements CommandStruct {
   @Option("dry")
-  public dryOption;
+  public dryOption: boolean;
 
   @Input()
-  public input;
+  public input: string[];
 
   static usage() {
     return `run sync --dry`;
@@ -40,31 +39,27 @@ class RunCommand implements CommandStruct {
 
   // @Option("dry", "d")
   @Option("dry", Validator.Boolean())
-  public dryOption;
+  public dryOption: boolean;
 
   @VariadicOption("arr")
-  public arrayOption;
+  public arrayOption: unknown[];
 
   @VariadicOption()
-  public variadic;
+  public variadic: unknown[];
 
   @Options()
-  public allOptions;
-
-  @Context()
-  public context;
+  public allOptions: unknown[];
 
   @Input()
-  public input;
+  public input: unknown[];
 
   @Utils()
-  public utils;
+  public utils: MustardUtils;
 
   public run(): void {
     console.log("this.arrayOption: ", this.arrayOption);
     console.log("this.input: ", this.input);
     // console.log("this.utils: ", this.utils);
-    console.log("this.context: ", this.context);
     console.log("Hello World! ", this.dryOption);
     console.log("All Options! ", this.allOptions);
   }
@@ -73,7 +68,7 @@ class RunCommand implements CommandStruct {
 @Command("check")
 class CheckCommand {
   @Option("dry")
-  public dry;
+  public dry: boolean;
 
   static usage() {
     return `check --dry`;
@@ -110,6 +105,6 @@ class RootCommandHandle implements CommandStruct {
   name: "LinbuduLab CLI",
   commands: [RootCommandHandle, RunCommand],
 })
-class Project implements IMustardLifeCycle {}
+class Project implements MustardLifeCycle {}
 
 MustardFactory.init(Project).start();
