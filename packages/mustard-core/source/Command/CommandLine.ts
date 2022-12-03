@@ -116,6 +116,7 @@ export class CLI {
         <CommandInput>this.parsedArgs._
       );
 
+    // should only throw when no matched command found
     if (!commandRegistration) {
       // throw
     }

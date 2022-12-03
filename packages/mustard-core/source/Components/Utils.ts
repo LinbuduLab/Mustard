@@ -84,22 +84,23 @@ export class MustardUtils {
     // ['run', 'sync', 'r', 'check']
 
     if (
-      // first fragment does not match any registered command
-      // use root command as handler
+      // if first fragment does not match any registered command
+      // try use root command as handler
       !Array.from(MustardRegistry.provide().values())
         .map((c) => c.commandName)
         .includes(matcher)
     ) {
       return {
+        // the CommandLine will handle case of no root command
         command: MustardRegistry.provideRootCommand(),
         inputs,
       };
     }
 
     if (inputs.length === 1) {
-      // alias 好像不用特别处理了
       return {
-        command: MustardRegistry.provide(matcher as string),
+        // the CommandLine will handle case of no root command
+        command: MustardRegistry.provide(matcher),
         inputs: [],
       };
     } else {
@@ -107,7 +108,7 @@ export class MustardUtils {
       // 处理子命令
 
       // FIXME: recursive
-      const command = MustardRegistry.provide(matcher as string);
+      const command = MustardRegistry.provide(matcher);
 
       if (command.childCommandList.length === 0) {
         return {
