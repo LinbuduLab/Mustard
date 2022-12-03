@@ -6,6 +6,7 @@ import { MustardUtils } from "../Components/Utils";
 
 import type { Arguments } from "yargs-parser";
 import type {
+  CommandInput,
   CommandRegistryPayload,
   CommandStruct,
 } from "../Typings/Command.struct";
@@ -111,7 +112,13 @@ export class CLI {
 
   private dispatchCommand() {
     const { command: commandRegistration, inputs: commandInput } =
-      MustardUtils.findHandlerCommandWithInputs(<string[]>this.parsedArgs._);
+      MustardUtils.findHandlerCommandWithInputs(
+        <CommandInput>this.parsedArgs._
+      );
+
+    if (!commandRegistration) {
+      // throw
+    }
 
     this.executeCommandFromRegistration(commandRegistration, commandInput)
       .then(this.options?.lifeCycles?.onComplete ?? (() => {}))

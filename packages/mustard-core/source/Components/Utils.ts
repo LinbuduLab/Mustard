@@ -3,10 +3,12 @@ import { MustardRegistry } from "./Registry";
 import { MustardConstanst } from "../Components/Constants";
 
 import type {
+  CommandInput,
   CommandRegistryPayload,
   CommandStruct,
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
+import type { Nullable } from "../Typings/Shared.struct";
 
 export class MustardUtils {
   public static getInstanceFields(target: CommandStruct): string[] {
@@ -66,7 +68,7 @@ export class MustardUtils {
       .filter(Boolean);
   }
 
-  public static findHandlerCommandWithInputs(input: string[]): {
+  public static findHandlerCommandWithInputs(inputs: CommandInput): {
     command: CommandRegistryPayload;
     inputs: string[];
   } {
@@ -76,12 +78,25 @@ export class MustardUtils {
 
     // 处理 alias、child
 
-    const [matcher, ...rest] = input;
+    const [matcher, ...rest] = inputs;
     // console.log("11-29 rest: ", rest);
 
     // ['run', 'sync', 'r', 'check']
 
-    if (input.length === 1) {
+    if (
+      // first fragment does not match any registered command
+      // use root command as handler
+      !Array.from(MustardRegistry.provide().values())
+        .map((c) => c.commandName)
+        .includes(matcher)
+    ) {
+      return {
+        command: MustardRegistry.provideRootCommand(),
+        inputs,
+      };
+    }
+
+    if (inputs.length === 1) {
       // alias 好像不用特别处理了
       return {
         command: MustardRegistry.provide(matcher as string),

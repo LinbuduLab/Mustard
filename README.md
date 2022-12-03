@@ -6,16 +6,16 @@ IoC &amp; native ecmascript decotator based command-line app builder.
 
 ## Todos
 
-- [ ] 完善类型定义
-
-
+- [x] 完善类型定义
+- [ ] 自定义错误处理
+- [ ] Logger
+- [x] 生命周期
+- [ ] Usage
 
 - https://github.com/tj/commander.js/blob/HEAD/Readme_zh-CN.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%AE%E5%8A%A9
 - custom provider by @Provide @Inject
 
 - 两种模式？按需和全量？
-
-
 
 ## Notes
 

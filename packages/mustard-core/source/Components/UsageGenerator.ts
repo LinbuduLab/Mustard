@@ -1,6 +1,7 @@
 import { MustardRegistry } from "../Components/Registry";
 
 export class UsageInfoGenerator {
+  // 收集
   public static collectCommandUsage() {
     // 如何在这一步收集 options 的描述？
     // 如果每个命令实例化一个肯定就可以了嗷

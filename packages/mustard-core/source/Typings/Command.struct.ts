@@ -17,3 +17,5 @@ export abstract class CommandStruct {
 
   abstract run(): MaybePromise<void>;
 }
+
+export type CommandInput = [string, ...string[]];
