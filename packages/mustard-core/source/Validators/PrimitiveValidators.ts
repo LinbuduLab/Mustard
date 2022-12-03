@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ZodType, ZodBoolean, ZodNumber, ZodString } from "zod";
-import { Dictionary } from "../Typings/Shared.struct";
+import { ValidationTypes } from "../Typings/Shared.struct";
 import { BaseValidator, MaybeOptionalZodType, ValidationItem } from "./Typings";
 
 export class StringValidator implements BaseValidator<ZodType<String>, string> {
@@ -14,13 +14,13 @@ export class StringValidator implements BaseValidator<ZodType<String>, string> {
     return this.required ? this._schema : this._schema.optional();
   }
 
-  public addValidation(type: keyof ZodString, args?: unknown[]) {
-    const validation: ValidationItem = {
+  public addValidation(type: ValidationTypes<ZodString>, args: unknown[] = []) {
+    const validation = {
       type,
       args,
     };
 
-    this._schema = this._schema[validation.type](...validation.args);
+    this._schema = this._schema[validation.type]?.(...validation.args);
   }
 
   public validate(value: unknown) {
@@ -48,17 +48,20 @@ export class BooleanValidator
     this._schema = z.boolean();
   }
 
-  public get schema(): MaybeOptionalZodType<ZodBoolean> {
+  public get schema() {
     return this.required ? this._schema : this._schema.optional();
   }
 
-  public addValidation(type: keyof ZodBoolean, args?: unknown[]) {
-    const validation: ValidationItem = {
+  public addValidation(
+    type: ValidationTypes<ZodBoolean>,
+    args: unknown[] = []
+  ) {
+    const validation = {
       type,
       args,
     };
 
-    this._schema = this._schema[validation.type](...validation.args);
+    this._schema = this._schema[validation.type]?.(...validation.args);
   }
 
   public validate(value: unknown) {
@@ -77,13 +80,13 @@ export class NumberValidator implements BaseValidator<ZodType<Number>, number> {
     return this.required ? this._schema : this._schema.optional();
   }
 
-  public addValidation(type: keyof ZodNumber, args?: unknown[]) {
-    const validation: ValidationItem = {
+  public addValidation(type: ValidationTypes<ZodNumber>, args: unknown[] = []) {
+    const validation = {
       type,
       args,
     };
 
-    this._schema = this._schema[validation.type](...validation.args);
+    this._schema = this._schema[validation.type]?.(...validation.args);
   }
 
   public validate(value: unknown) {

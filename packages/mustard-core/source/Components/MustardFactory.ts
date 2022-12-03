@@ -24,7 +24,7 @@ export class MustardFactory {
       configurations = {},
     } = MustardFactory.FactoryOptions;
 
-    const cli = new CLI(name, commands, configurations);
+    const cli = new CLI(name ?? "", commands, configurations);
 
     cli.configure({
       lifeCycles: {

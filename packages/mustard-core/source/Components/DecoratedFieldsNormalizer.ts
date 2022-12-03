@@ -82,7 +82,7 @@ export class DecoratedClassFieldsNormalizer {
   public static normalizeInputField(
     target: CommandStruct,
     prop: string,
-    inputs = []
+    inputs: string[] = []
   ) {
     MustardUtils.setInstanceFieldValue(target, prop, inputs);
   }
@@ -103,7 +103,7 @@ export class DecoratedClassFieldsNormalizer {
     MustardUtils.setInstanceFieldValue(target, prop, {});
   }
 
-  public static normalizeUtilField(target, prop) {
+  public static normalizeUtilField(target: CommandStruct, prop: string) {
     MustardUtils.setInstanceFieldValue(
       target,
       prop,
@@ -123,7 +123,7 @@ export class DecoratedClassFieldsNormalizer {
       initValue,
       schema,
       // todo: by XOR types
-    } = <OptionInitializerPlaceHolder>initializer;
+    } = <Required<OptionInitializerPlaceHolder>>initializer;
 
     // use value from parsed args
     if (injectKey in parsedArgs) {

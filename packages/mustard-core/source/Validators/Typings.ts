@@ -1,4 +1,4 @@
-import { Dictionary } from "source/Typings/Shared.struct";
+import { Dictionary, ValidationTypes } from "source/Typings/Shared.struct";
 import {
   z,
   ZodString,
@@ -16,9 +16,11 @@ export type AvaliableSchemaValidations =
   | keyof ZodBoolean
   | keyof ZodNativeEnum<Dictionary<string>>;
 
-export type ValidationItem = {
-  type: AvaliableSchemaValidations;
-  args?: unknown[];
+export type ValidationItem<
+  TTypes extends AvaliableSchemaValidations = AvaliableSchemaValidations
+> = {
+  type: TTypes;
+  args: unknown[];
 };
 
 export type MaybeOptionalZodType<T extends ZodType<unknown>> =
@@ -29,13 +31,16 @@ export abstract class BaseValidator<
   TValidationType extends ZodType,
   TParsedType extends unknown
 > {
-  _schema: TValidationType;
+  _schema!: TValidationType;
 
   constructor(required: boolean) {}
 
-  abstract get schema(): TValidationType;
+  abstract get schema(): MaybeOptionalZodType<TValidationType>;
 
   abstract validate(value: unknown): TParsedType;
 
-  abstract addValidation(type: keyof TValidationType, args?: unknown[]): void;
+  abstract addValidation(
+    type: ValidationTypes<TValidationType>,
+    args?: unknown[]
+  ): void;
 }

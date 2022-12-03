@@ -1,4 +1,4 @@
-import { Dictionary } from "source/Typings/Shared.struct";
+import { Dictionary, Nullable } from "source/Typings/Shared.struct";
 import { ZodType } from "zod";
 import { NativeEnumValidator } from "./EnumValidators";
 import {
@@ -8,7 +8,7 @@ import {
 } from "./PrimitiveValidators";
 
 export class ValidatorFactory {
-  public schema: ZodType = null;
+  public schema: Nullable<ZodType> = null;
 
   constructor(private required: boolean = false) {}
 

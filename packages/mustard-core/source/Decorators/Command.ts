@@ -1,5 +1,6 @@
 import { MustardRegistry } from "source/Components/Registry";
 import { Nullable } from "source/Typings/Shared.struct";
+import { AnyClassDecoratorReturnType } from "source/Typings/Temp";
 
 export class CommandDecorators {
   // public static Command(commandName: string): ClassDecoratorFunction;
@@ -55,6 +56,7 @@ export class CommandDecorators {
 
   public static RootCommand(): ClassDecoratorFunction<{}, any> {
     return (target, context) => {
+      // @ts-expect-error
       MustardRegistry.register(context.name, {
         commandName: "root",
         Class: target,
@@ -66,11 +68,12 @@ export class CommandDecorators {
 
   private static registerCommandImpl(
     commandName: string,
-    alias: Nullable<string>,
-    description: Nullable<string>,
+    alias?: Nullable<string>,
+    description?: Nullable<string>,
     childCommandList?: any[]
-  ): ClassDecoratorFunction<{}, any> {
+  ): AnyClassDecoratorReturnType {
     return (target, context) => {
+      // @ts-expect-error
       MustardRegistry.register(context.name, {
         commandName,
         alias,

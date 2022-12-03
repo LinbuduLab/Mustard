@@ -16,18 +16,18 @@ import {
 
 export class CLI {
   constructor(
-    private readonly identifier: string,
+    readonly identifier: string,
     Commands: CommandList,
     private options?: CLIInstantiationConfiguration
   ) {
     this.initialize(Commands);
   }
 
-  private parsedArgs: Arguments;
+  private parsedArgs!: Arguments;
 
   private initialize(Commands: CommandList) {
     this.normalizeConfigurations();
-    this.internalRegisterCommand(Commands);
+    this.registerCommand(Commands);
   }
 
   private normalizeConfigurations() {
@@ -36,7 +36,7 @@ export class CLI {
       allowUnknownOptions = true,
       enableVersion = true,
       lifeCycles = {},
-    } = this.options;
+    } = this.options ?? {};
 
     this.options = {
       enableUsage,
@@ -51,7 +51,28 @@ export class CLI {
   }
 
   public registerCommand(Commands: CommandList) {
-    this.internalRegisterCommand(Commands);
+    for (const Command of Commands) {
+      const CommandRegistration = MustardRegistry.provide(Command.name);
+
+      MustardRegistry.register(
+        CommandRegistration.root
+          ? MustardConstanst.RootCommandRegistryKey
+          : CommandRegistration.commandName,
+
+        CommandRegistration
+      );
+
+      CommandRegistration.alias
+        ? MustardRegistry.register(
+            CommandRegistration.alias,
+            CommandRegistration
+          )
+        : void 0;
+
+      if (CommandRegistration.childCommandList.length > 0) {
+        this.registerCommand(CommandRegistration.childCommandList);
+      }
+    }
   }
 
   private instantiateWithParse() {
@@ -79,39 +100,36 @@ export class CLI {
   }
 
   public start() {
-    this.options.lifeCycles?.onStart?.();
+    this.options?.lifeCycles?.onStart?.();
 
     this.instantiateWithParse();
 
-    const { _ } = this.parsedArgs;
-
-    const useRootHandle = _?.length === 0;
+    const useRootHandle = this.parsedArgs._?.length === 0;
 
     useRootHandle ? this.dispatchRootHandler() : this.dispatchCommand();
   }
 
   private dispatchCommand() {
-    const { _: input } = <{ _: string[] }>this.parsedArgs;
+    const { command: commandRegistration, inputs: commandInput } =
+      MustardUtils.findHandlerCommandWithInputs(<string[]>this.parsedArgs._);
 
-    const { command, inputs: commandInput } =
-      MustardUtils.findHandlerCommandWithInputs(input);
-
-    this.executeCommand(command, commandInput)
-      .then(this.options.lifeCycles?.onComplete ?? (() => {}))
-      .catch(this.options.lifeCycles?.onError ?? (() => {}));
+    this.executeCommandFromRegistration(commandRegistration, commandInput)
+      .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
+      .catch(this.options?.lifeCycles?.onError ?? (() => {}));
   }
 
-  private async executeCommand(
+  private async executeCommandFromRegistration(
     command: CommandRegistryPayload,
-    inputs: string[]
+    inputs: string[] = []
   ) {
     const handler: CommandStruct = command.instance;
 
-    this.options.allowUnknownOptions === false &&
-      DecoratedClassFieldsNormalizer.throwOnUnknownOptions(
-        handler,
-        this.parsedArgs
-      );
+    this.options?.allowUnknownOptions === false
+      ? DecoratedClassFieldsNormalizer.throwOnUnknownOptions(
+          handler,
+          this.parsedArgs
+        )
+      : void 0;
 
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
       handler,
@@ -122,40 +140,12 @@ export class CLI {
     await handler.run();
   }
 
-  private internalRegisterCommand(Commands: CommandList) {
-    for (const Command of Commands) {
-      const CommandRegistration = MustardRegistry.provide(Command.name);
-
-      MustardRegistry.register(
-        CommandRegistration.root
-          ? MustardConstanst.RootCommandRegistryKey
-          : CommandRegistration.commandName,
-
-        CommandRegistration
-      );
-
-      CommandRegistration.alias &&
-        MustardRegistry.register(
-          CommandRegistration.alias,
-          CommandRegistration
-        );
-
-      if (CommandRegistration.childCommandList.length > 0) {
-        this.internalRegisterCommand(CommandRegistration.childCommandList);
-      }
-    }
-  }
-
   private dispatchRootHandler() {
-    // 如果指定了 RootCommand，则调用
-    // 否则检查是否启用了 enableHelp
-    // 如果都没有，NoRootHandlerError
-    const root = MustardRegistry.provideRootCommand();
+    const rootCommandRegistation = MustardRegistry.provideRootCommand();
 
-    if (root) {
-      this.executeCommand(root, []);
-      // enabled by default
-    } else if (this.options.enableUsage) {
+    if (rootCommandRegistation) {
+      this.executeCommandFromRegistration(rootCommandRegistation);
+    } else if (this.options?.enableUsage) {
       UsageInfoGenerator.collectCommandUsage();
     } else {
       // throws
