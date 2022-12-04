@@ -1,15 +1,14 @@
-import { ClassStruct, MaybePromise } from "./Shared.struct";
+import { ClassStruct, MaybePromise, Constructable } from "./Shared.struct";
+import { CommandList } from "./Configuration.struct";
 
 export type CommandRegistryPayload = {
   commandName: string;
   alias?: string;
   description?: string;
-  // todo: fix after typing fixed in #50820
-  Class: new () => CommandStruct;
+  Class: Constructable<CommandStruct>;
   root: boolean;
-  childCommandList: any[];
-  instance?: any;
-  decoratedInstanceFields?: any;
+  childCommandList: CommandList;
+  instance?: CommandStruct;
 };
 
 export abstract class CommandStruct {

@@ -71,6 +71,7 @@ export class CLI {
         : void 0;
 
       if (CommandRegistration.childCommandList.length > 0) {
+        // 注册为 update:dep:xx 这样的形式？
         this.registerCommand(CommandRegistration.childCommandList);
       }
     }
@@ -113,12 +114,15 @@ export class CLI {
   private dispatchCommand() {
     const { command: commandRegistration, inputs: commandInput } =
       MustardUtils.findHandlerCommandWithInputs(
-        <CommandInput>this.parsedArgs._
+        Array.from(MustardRegistry.provide().values()),
+        <CommandInput>this.parsedArgs._,
+        MustardRegistry.provideRootCommand()
       );
 
     // should only throw when no matched command found
     if (!commandRegistration) {
       // throw
+      return;
     }
 
     this.executeCommandFromRegistration(commandRegistration, commandInput)
@@ -130,7 +134,7 @@ export class CLI {
     command: CommandRegistryPayload,
     inputs: string[] = []
   ) {
-    const handler: CommandStruct = command.instance;
+    const handler: CommandStruct = command.instance!;
 
     this.options?.allowUnknownOptions === false
       ? DecoratedClassFieldsNormalizer.throwOnUnknownOptions(

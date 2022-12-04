@@ -8,7 +8,6 @@ import type {
   CommandStruct,
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
-import type { Nullable } from "../Typings/Shared.struct";
 
 export class MustardUtils {
   public static getInstanceFields(target: CommandStruct): string[] {
@@ -68,10 +67,32 @@ export class MustardUtils {
       .filter(Boolean);
   }
 
-  public static findHandlerCommandWithInputs(inputs: CommandInput): {
-    command: CommandRegistryPayload;
+  public static iterateRegistryToMatchCommand(
+    commands: CommandRegistryPayload[],
+    matcher: string
+  ) {
+    return Array.from(MustardRegistry.provide().values())
+      .map((c) => c.commandName)
+      .includes(matcher);
+  }
+
+  public static findHandlerCommandWithInputs(
+    commands: CommandRegistryPayload[],
+    inputs: CommandInput | string[],
+    fallback: CommandRegistryPayload
+  ): {
+    command: CommandRegistryPayload | undefined;
     inputs: string[];
   } {
+    // 完全没有 input 的情况已经被处理了，这里要处理的主要是这些情况
+    // input length 为 1 时
+    // 如果没有找到对应的 command，使用 rootCommand
+    // input length > 1 时
+    // 不断递归找到最后一个拥有注册的命令
+    // 返回这个命令，并将 剩余的 input 传入
+
+    // 只管返回，如果实际没有注册那是上一级的事情
+
     // input 长度必定>=1
     // console.log("11-29 input: ", input);
     // console.log(MustardRegistry.provide());
@@ -79,23 +100,27 @@ export class MustardUtils {
     // 处理 alias、child
 
     const [matcher, ...rest] = inputs;
-    // console.log("11-29 rest: ", rest);
 
-    // ['run', 'sync', 'r', 'check']
+    const matchFromFirstInput = MustardRegistry.provide().get(matcher);
 
-    if (
-      // if first fragment does not match any registered command
-      // try use root command as handler
-      !Array.from(MustardRegistry.provide().values())
-        .map((c) => c.commandName)
-        .includes(matcher)
-    ) {
+    // 如果只有一个 input，那么就直接返回这个命令
+    if (inputs.length === 1) {
       return {
-        // the CommandLine will handle case of no root command
-        command: MustardRegistry.provideRootCommand(),
-        inputs,
+        // 优先查找正常命令，如果没有找到就返回根命令
+        // cli-cmd project-a --dry
+        // cli-cmd update --dry
+        command: matchFromFirstInput ?? fallback,
+        inputs: [],
       };
     }
+
+    // 否则，进行递归查找
+    // const res = this.findHandlerCommandWithInputs(
+    //   [],
+    //   // matchFromFirstInput?.childCommandList ?? [],
+    //   rest,
+    //   matchFromFirstInput
+    // );
 
     if (inputs.length === 1) {
       return {
@@ -110,25 +135,25 @@ export class MustardUtils {
       // FIXME: recursive
       const command = MustardRegistry.provide(matcher);
 
-      if (command.childCommandList.length === 0) {
-        return {
-          command,
-          inputs: rest,
-        };
-      }
+      // if (command.childCommandList.length === 0) {
+      //   return {
+      //     command,
+      //     inputs: rest,
+      //   };
+      // }
 
-      const childCommand = command.childCommandList.find((child) => {
-        return (
-          child.commandName === rest[0] ||
-          child.alias === rest[0] ||
-          child.alias === rest[1]
-        );
-      });
+      // const childCommand = command.childCommandList.find((child) => {
+      //   return (
+      //     child.commandName === rest[0] ||
+      //     child.alias === rest[0] ||
+      //     child.alias === rest[1]
+      //   );
+      // });
 
-      return {
-        command: childCommand,
-        inputs: rest.slice(1),
-      };
+      // return {
+      //   command: childCommand,
+      //   inputs: rest.slice(1),
+      // };
     }
   }
 

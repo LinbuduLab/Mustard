@@ -1,3 +1,4 @@
+import { CommandList } from "source/Typings/Configuration.struct";
 import { MustardRegistry } from "../Components/Registry";
 
 import type { Nullable } from "../Typings/Shared.struct";
@@ -18,7 +19,7 @@ export class CommandDecorators {
     commandName: string,
     aliasOrDescription?: string,
     description?: string,
-    childCommandList: any[] = []
+    childCommandList: CommandList = []
   ): ClassDecoratorFunction<{}, any> {
     if (typeof description === "string") {
       return CommandDecorators.registerCommandImpl(
@@ -71,7 +72,7 @@ export class CommandDecorators {
     commandName: string,
     alias?: Nullable<string>,
     description?: Nullable<string>,
-    childCommandList?: any[]
+    childCommandList?: CommandList
   ): AnyClassDecoratorReturnType {
     return (target, context) => {
       // @ts-expect-error
