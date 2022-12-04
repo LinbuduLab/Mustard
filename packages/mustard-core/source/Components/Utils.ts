@@ -8,7 +8,7 @@ import type {
   CommandStruct,
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
-
+import type { Nullable } from "../Typings/Shared.struct";
 export class MustardUtils {
   public static getInstanceFields(target: CommandStruct): string[] {
     return <string[]>Reflect.ownKeys(target);
@@ -76,6 +76,7 @@ export class MustardUtils {
       .includes(matcher);
   }
 
+  // todo: support nested commands better
   public static findHandlerCommandWithInputs(
     commands: CommandRegistryPayload[],
     inputs: CommandInput | string[],
@@ -84,21 +85,6 @@ export class MustardUtils {
     command: CommandRegistryPayload | undefined;
     inputs: string[];
   } {
-    // 完全没有 input 的情况已经被处理了，这里要处理的主要是这些情况
-    // input length 为 1 时
-    // 如果没有找到对应的 command，使用 rootCommand
-    // input length > 1 时
-    // 不断递归找到最后一个拥有注册的命令
-    // 返回这个命令，并将 剩余的 input 传入
-
-    // 只管返回，如果实际没有注册那是上一级的事情
-
-    // input 长度必定>=1
-    // console.log("11-29 input: ", input);
-    // console.log(MustardRegistry.provide());
-
-    // 处理 alias、child
-
     const [matcher, ...rest] = inputs;
 
     const matchFromFirstInput = MustardRegistry.provide().get(matcher);
@@ -114,47 +100,13 @@ export class MustardUtils {
       };
     }
 
-    // 否则，进行递归查找
-    // const res = this.findHandlerCommandWithInputs(
-    //   [],
-    //   // matchFromFirstInput?.childCommandList ?? [],
-    //   rest,
-    //   matchFromFirstInput
-    // );
-
-    if (inputs.length === 1) {
-      return {
-        // the CommandLine will handle case of no root command
-        command: MustardRegistry.provide(matcher),
-        inputs: [],
-      };
-    } else {
-      // 至少存在一个需要额外处理的输入
-      // 处理子命令
-
-      // FIXME: recursive
-      const command = MustardRegistry.provide(matcher);
-
-      // if (command.childCommandList.length === 0) {
-      //   return {
-      //     command,
-      //     inputs: rest,
-      //   };
-      // }
-
-      // const childCommand = command.childCommandList.find((child) => {
-      //   return (
-      //     child.commandName === rest[0] ||
-      //     child.alias === rest[0] ||
-      //     child.alias === rest[1]
-      //   );
-      // });
-
-      // return {
-      //   command: childCommand,
-      //   inputs: rest.slice(1),
-      // };
-    }
+    return {
+      // 优先查找正常命令，如果没有找到就返回根命令
+      // cli-cmd project-a --dry
+      // cli-cmd update --dry
+      command: matchFromFirstInput ?? fallback,
+      inputs: [],
+    };
   }
 
   public static uniq() {}

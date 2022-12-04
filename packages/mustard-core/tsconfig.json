@@ -12,6 +12,7 @@
     "outDir": "dist",
     "skipLibCheck": true,
     "strictNullChecks": true,
+    "declaration": true,
     "strict": true,
     "noImplicitAny": true,
     "noEmitOnError": true,

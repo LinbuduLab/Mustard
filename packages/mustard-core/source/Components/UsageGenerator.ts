@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { MustardRegistry } from "../Components/Registry";
 
 export class UsageInfoGenerator {
