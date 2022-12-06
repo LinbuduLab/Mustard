@@ -53,7 +53,7 @@ export class CLI {
 
   public registerCommand(Commands: CommandList) {
     for (const Command of Commands) {
-      const CommandRegistration = MustardRegistry.provide(Command.name);
+      const CommandRegistration = MustardRegistry.provideInit(Command.name);
 
       MustardRegistry.register(
         CommandRegistration.root
@@ -71,7 +71,6 @@ export class CLI {
         : void 0;
 
       if (CommandRegistration.childCommandList.length > 0) {
-        // 注册为 update:dep:xx 这样的形式？
         this.registerCommand(CommandRegistration.childCommandList);
       }
     }
@@ -79,6 +78,7 @@ export class CLI {
 
   private instantiateWithParse() {
     const commandMap = MustardRegistry.provide();
+
     const variadicOptionKeys = new Set<string>();
 
     commandMap.forEach((commandRegistration, key) => {
@@ -114,20 +114,18 @@ export class CLI {
   private dispatchCommand() {
     const { command: commandRegistration, inputs: commandInput } =
       MustardUtils.findHandlerCommandWithInputs(
-        Array.from(MustardRegistry.provide().values()),
-        <CommandInput>this.parsedArgs._,
-        MustardRegistry.provideRootCommand()
+        <CommandInput>this.parsedArgs._
       );
 
+    // console.log(commandRegistration?.Class, commandInput);
     // should only throw when no matched command found
-    if (!commandRegistration) {
-      // throw
-      return;
-    }
-
-    this.executeCommandFromRegistration(commandRegistration, commandInput)
-      .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
-      .catch(this.options?.lifeCycles?.onError ?? (() => {}));
+    // if (!commandRegistration) {
+    //   // throw
+    //   return;
+    // }
+    // this.executeCommandFromRegistration(commandRegistration, commandInput)
+    //   .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
+    //   .catch(this.options?.lifeCycles?.onError ?? (() => {}));
   }
 
   private async executeCommandFromRegistration(

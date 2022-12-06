@@ -9,6 +9,7 @@ import type {
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
 import type { Nullable } from "../Typings/Shared.struct";
+
 export class MustardUtils {
   public static getInstanceFields(target: CommandStruct): string[] {
     return <string[]>Reflect.ownKeys(target);
@@ -78,35 +79,61 @@ export class MustardUtils {
 
   // todo: support nested commands better
   public static findHandlerCommandWithInputs(
-    commands: CommandRegistryPayload[],
     inputs: CommandInput | string[],
-    fallback: CommandRegistryPayload
+    commands: CommandRegistryPayload[] = Array.from(
+      MustardRegistry.provide().values()
+    ),
+    fallback: CommandRegistryPayload = MustardRegistry.provideRootCommand()
   ): {
     command: CommandRegistryPayload | undefined;
     inputs: string[];
   } {
     const [matcher, ...rest] = inputs;
 
+    // match command from first input
     const matchFromFirstInput = MustardRegistry.provide().get(matcher);
 
-    // 如果只有一个 input，那么就直接返回这个命令
+    // if only one input is provided, use it directly
     if (inputs.length === 1) {
       return {
-        // 优先查找正常命令，如果没有找到就返回根命令
-        // cli-cmd project-a --dry
-        // cli-cmd update --dry
+        // lookup common commands first, or return fallback(will be RootCommand at first)
         command: matchFromFirstInput ?? fallback,
-        inputs: [],
+        inputs: matchFromFirstInput ? [] : inputs,
       };
     }
 
-    return {
-      // 优先查找正常命令，如果没有找到就返回根命令
-      // cli-cmd project-a --dry
-      // cli-cmd update --dry
-      command: matchFromFirstInput ?? fallback,
-      inputs: [],
-    };
+    // 如果有多个 input，但第一个都没匹配到，返回 fallback
+
+    // if more than 1 inputs provided but no matched for first input, return fallback
+    if (!matchFromFirstInput) {
+      return {
+        command: fallback,
+        inputs: inputs,
+      };
+    }
+
+    // map to get ChildCommand registration
+    const childCommands = <CommandRegistryPayload[]>(
+      (matchFromFirstInput?.childCommandList ?? [])
+        .map((C) => commands.find((registered) => registered.Class === C))
+        .filter(Boolean)
+    );
+
+    // if no child commands registered, use first matched
+    if (!childCommands.length) {
+      return {
+        command: matchFromFirstInput ?? fallback,
+        // use rest inputs if matched first input successfully
+        inputs: matchFromFirstInput ? rest : inputs,
+      };
+    }
+
+    // do this recursively
+    return MustardUtils.findHandlerCommandWithInputs(
+      rest,
+      childCommands,
+      matchFromFirstInput
+    );
   }
 
   public static uniq() {}

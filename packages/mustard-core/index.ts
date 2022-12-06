@@ -13,7 +13,25 @@ import { Validator } from "./source/Exports/Validator";
 import { MustardFactory, MustardUtils } from "./source/Exports";
 import { MustardLifeCycle } from "./source/Typings/Factory.struct";
 
-@Command("sync", "s")
+@Command("git")
+class RunSyncGitCommand implements CommandStruct {
+  @Option("dry")
+  public dryOption: boolean;
+
+  @Input()
+  public input: string[];
+
+  static usage() {
+    return `run sync --dry`;
+  }
+
+  public run(): void {
+    console.log("Nested! ", this.dryOption);
+    console.log("this.input: ", this.input);
+  }
+}
+
+@Command("sync", "s", "run sync command", [RunSyncGitCommand])
 class RunSyncCommand implements CommandStruct {
   @Option("dry")
   public dryOption: boolean;

@@ -20,7 +20,7 @@ export class CommandDecorators {
     aliasOrDescription?: string,
     description?: string,
     childCommandList: CommandList = []
-  ): ClassDecoratorFunction<{}, any> {
+  ): AnyClassDecoratorReturnType {
     if (typeof description === "string") {
       return CommandDecorators.registerCommandImpl(
         commandName,
@@ -59,7 +59,7 @@ export class CommandDecorators {
   public static RootCommand(): ClassDecoratorFunction<{}, any> {
     return (target, context) => {
       // @ts-expect-error
-      MustardRegistry.register(context.name, {
+      MustardRegistry.registerInit(context.name, {
         commandName: "root",
         Class: target,
         root: true,
@@ -76,7 +76,7 @@ export class CommandDecorators {
   ): AnyClassDecoratorReturnType {
     return (target, context) => {
       // @ts-expect-error
-      MustardRegistry.register(context.name, {
+      MustardRegistry.registerInit(context.name, {
         commandName,
         alias,
         description,

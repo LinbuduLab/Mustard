@@ -5,14 +5,19 @@ import type { CommandRegistryPayload } from "../Typings/Command.struct";
 const CommandRegistry = Map<string, CommandRegistryPayload>;
 
 export class MustardRegistry {
-  private static _CommandRegistry = new CommandRegistry();
+  private static InitCommandRegistry = new CommandRegistry();
 
-  public static get CommandRegistry() {
-    return MustardRegistry._CommandRegistry;
+  private static CommandRegistry = new CommandRegistry();
+
+  public static registerInit(
+    identifier: string,
+    payload: CommandRegistryPayload
+  ) {
+    MustardRegistry.InitCommandRegistry.set(identifier, payload);
   }
 
   public static register(identifier: string, payload: CommandRegistryPayload) {
-    MustardRegistry._CommandRegistry.set(identifier, payload);
+    MustardRegistry.CommandRegistry.set(identifier, payload);
   }
 
   public static upsert(
@@ -31,12 +36,20 @@ export class MustardRegistry {
     }
   }
 
+  public static provideInit(): Map<string, CommandRegistryPayload>;
+  public static provideInit(identifier: string): CommandRegistryPayload;
+  public static provideInit(identifier?: string) {
+    return identifier
+      ? MustardRegistry.InitCommandRegistry.get(identifier)
+      : MustardRegistry.InitCommandRegistry;
+  }
+
   public static provide(): Map<string, CommandRegistryPayload>;
   public static provide(identifier: string): CommandRegistryPayload;
   public static provide(identifier?: string) {
     return identifier
-      ? MustardRegistry._CommandRegistry.get(identifier)
-      : MustardRegistry._CommandRegistry;
+      ? MustardRegistry.CommandRegistry.get(identifier)
+      : MustardRegistry.CommandRegistry;
   }
 
   public static provideRootCommand(): CommandRegistryPayload {
