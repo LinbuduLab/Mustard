@@ -77,15 +77,12 @@ export class MustardUtils {
       .includes(matcher);
   }
 
-  // todo: support nested commands better
   public static findHandlerCommandWithInputs(
     inputs: CommandInput | string[],
-    commands: CommandRegistryPayload[] = Array.from(
-      MustardRegistry.provide().values()
-    ),
+    commands: string[] = Array.from(MustardRegistry.provide().keys()),
     fallback: CommandRegistryPayload = MustardRegistry.provideRootCommand()
   ): {
-    command: CommandRegistryPayload | undefined;
+    command?: CommandRegistryPayload;
     inputs: string[];
   } {
     const [matcher, ...rest] = inputs;
@@ -102,8 +99,6 @@ export class MustardUtils {
       };
     }
 
-    // 如果有多个 input，但第一个都没匹配到，返回 fallback
-
     // if more than 1 inputs provided but no matched for first input, return fallback
     if (!matchFromFirstInput) {
       return {
@@ -113,11 +108,19 @@ export class MustardUtils {
     }
 
     // map to get ChildCommand registration
-    const childCommands = <CommandRegistryPayload[]>(
-      (matchFromFirstInput?.childCommandList ?? [])
-        .map((C) => commands.find((registered) => registered.Class === C))
-        .filter(Boolean)
-    );
+    const childCommands = <string[]>(
+      matchFromFirstInput?.childCommandList ?? []
+    )
+      .map((C) => {
+        const matched = commands.find((commandIdentifier) => {
+          const registered = MustardRegistry.provide(commandIdentifier)?.Class;
+
+          return typeof registered !== "undefined" && registered === C;
+        });
+
+        return matched;
+      })
+      .filter(Boolean);
 
     // if no child commands registered, use first matched
     if (!childCommands.length) {
@@ -131,7 +134,7 @@ export class MustardUtils {
     // do this recursively
     return MustardUtils.findHandlerCommandWithInputs(
       rest,
-      childCommands,
+      childCommands.concat([...rest]),
       matchFromFirstInput
     );
   }

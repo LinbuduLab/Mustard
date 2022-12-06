@@ -117,15 +117,14 @@ export class CLI {
         <CommandInput>this.parsedArgs._
       );
 
-    // console.log(commandRegistration?.Class, commandInput);
     // should only throw when no matched command found
-    // if (!commandRegistration) {
-    //   // throw
-    //   return;
-    // }
-    // this.executeCommandFromRegistration(commandRegistration, commandInput)
-    //   .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
-    //   .catch(this.options?.lifeCycles?.onError ?? (() => {}));
+    if (!commandRegistration) {
+      // throw
+      return;
+    }
+    this.executeCommandFromRegistration(commandRegistration, commandInput)
+      .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
+      .catch(this.options?.lifeCycles?.onError ?? (() => {}));
   }
 
   private async executeCommandFromRegistration(
