@@ -1,13 +1,14 @@
-import { ClassStruct, MaybePromise, Constructable } from "./Shared.struct";
+import { MaybePromise, Constructable, Nullable } from "./Shared.struct";
 import { CommandList } from "./Configuration.struct";
 
 export type CommandRegistryPayload = {
-  commandName: string;
-  alias?: string;
-  description?: string;
+  commandInvokeName: string;
   Class: Constructable<CommandStruct>;
   root: boolean;
   childCommandList: CommandList;
+
+  commandAlias?: Nullable<string>;
+  description?: Nullable<string>;
   instance?: CommandStruct;
 };
 

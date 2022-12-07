@@ -111,14 +111,6 @@ class RootCommandHandle implements CommandStruct {
   }
 }
 
-// const cli = new CLI("LinbuduLab CLI", [RootCommandHandle, RunCommand]);
-
-// cli.registerCommand([CheckCommand]);
-
-// cli.start();
-
-// cli.configure({});
-
 @App({
   name: "LinbuduLab CLI",
   commands: [RootCommandHandle, RunCommand],

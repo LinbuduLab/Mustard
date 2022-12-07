@@ -1,4 +1,5 @@
 import parse from "yargs-parser";
+import mri from "mri";
 import { MustardRegistry } from "./Registry";
 import { MustardConstanst } from "../Components/Constants";
 
@@ -33,12 +34,14 @@ export class MustardUtils {
   }
 
   public static parseFromProcessArgs(withVariadic: string[] = []) {
-    const parsed = parse(process.argv.slice(2), {
-      array: Array.from(withVariadic),
-      configuration: {
-        "greedy-arrays": true,
-      },
-    });
+    const parsed = withVariadic.length
+      ? parse(process.argv.slice(2), {
+          array: Array.from(withVariadic),
+          configuration: {
+            "greedy-arrays": true,
+          },
+        })
+      : mri(process.argv.slice(2));
 
     return parsed;
   }
@@ -66,15 +69,6 @@ export class MustardUtils {
         return null;
       })
       .filter(Boolean);
-  }
-
-  public static iterateRegistryToMatchCommand(
-    commands: CommandRegistryPayload[],
-    matcher: string
-  ) {
-    return Array.from(MustardRegistry.provide().values())
-      .map((c) => c.commandName)
-      .includes(matcher);
   }
 
   public static findHandlerCommandWithInputs(

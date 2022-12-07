@@ -19,7 +19,12 @@ export type BuiltInUtils = {
   json: JSONUtils;
 };
 
-export type ExecutionContext = {};
+export type ExecutionContext = {
+  cwd: string;
+  argv: string[];
+  inputArgv: string[];
+  env: NodeJS.ProcessEnv;
+};
 
 export type ContextInitializerPlaceHolder = {
   type: "Context";

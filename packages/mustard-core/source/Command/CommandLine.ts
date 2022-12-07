@@ -58,14 +58,14 @@ export class CLI {
       MustardRegistry.register(
         CommandRegistration.root
           ? MustardConstanst.RootCommandRegistryKey
-          : CommandRegistration.commandName,
+          : CommandRegistration.commandInvokeName,
 
         CommandRegistration
       );
 
-      CommandRegistration.alias
+      CommandRegistration.commandAlias
         ? MustardRegistry.register(
-            CommandRegistration.alias,
+            CommandRegistration.commandAlias,
             CommandRegistration
           )
         : void 0;

@@ -58,9 +58,8 @@ export class CommandDecorators {
 
   public static RootCommand(): ClassDecoratorFunction<{}, any> {
     return (target, context) => {
-      // @ts-expect-error
-      MustardRegistry.registerInit(context.name, {
-        commandName: "root",
+      MustardRegistry.registerInit(<string>context.name, {
+        commandInvokeName: "root",
         Class: target,
         root: true,
         childCommandList: [],
@@ -69,16 +68,15 @@ export class CommandDecorators {
   }
 
   private static registerCommandImpl(
-    commandName: string,
-    alias?: Nullable<string>,
+    commandInvokeName: string,
+    commandAlias?: Nullable<string>,
     description?: Nullable<string>,
-    childCommandList?: CommandList
+    childCommandList: CommandList = []
   ): AnyClassDecoratorReturnType {
     return (target, context) => {
-      // @ts-expect-error
-      MustardRegistry.registerInit(context.name, {
-        commandName,
-        alias,
+      MustardRegistry.registerInit(<string>context.name, {
+        commandInvokeName,
+        commandAlias,
         description,
         Class: target,
         root: false,

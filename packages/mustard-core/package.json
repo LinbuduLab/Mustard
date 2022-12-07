@@ -27,6 +27,7 @@
     ]
   },
   "dependencies": {
+    "mri": "^1.2.0",
     "yargs-parser": "^21.1.1",
     "zod": "^3.19.1"
   },
