@@ -145,6 +145,6 @@ export class MustardUtils {
   public static uniq() {}
 
   public static containsHelpEnable(parsedArgs: Arguments) {
-    return parsedArgs["help1"] || parsedArgs["h"];
+    return parsedArgs["help"] || parsedArgs["h"];
   }
 }

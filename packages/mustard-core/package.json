@@ -2,8 +2,12 @@
   "name": "mustard-core",
   "version": "1.0.0",
   "private": true,
+  "bin": {
+    "m": "dist/index.js"
+  },
   "scripts": {
-    "dev": "nodemon index.ts run sync --dry",
+    "local": "nodemon index.ts run sync --dry",
+    "dev": "tsc --watch",
     "build": "tsc"
   },
   "nodemonConfig": {

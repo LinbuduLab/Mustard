@@ -38,5 +38,5 @@
     }
   },
   "include": ["./**/*.ts"],
-  "exclude": ["_samples", "advanced"]
+  "exclude": ["_samples", "advanced", "dist"]
 }
