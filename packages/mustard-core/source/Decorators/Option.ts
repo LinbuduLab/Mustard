@@ -3,27 +3,34 @@ import { ValidatorFactory } from "../Validators/Factory";
 
 import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
 import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
+import { Nullable } from "source/Typings/Shared.struct";
 
 export class OptionDecorators {
+  public static Option(): AnyClassFieldDecoratorReturnType;
+  public static Option(optionName: string): AnyClassFieldDecoratorReturnType;
   public static Option(
     optionName: string,
-    validator?: Partial<ValidatorFactory>
+    aliasOrDescription: string
   ): AnyClassFieldDecoratorReturnType;
   public static Option(
     optionName: string,
-    aliasOrDescription?: string,
-    validator?: Partial<ValidatorFactory>
+    validator: Partial<ValidatorFactory>
+  ): AnyClassFieldDecoratorReturnType;
+  public static Option(
+    optionName: string,
+    aliasOrDescription: string,
+    validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
   public static Option(
     optionName: string,
     alias: string,
     description: string,
-    validator?: Partial<ValidatorFactory>
+    validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
   public static Option(
     optionName?: string,
-    aliasOrDescription?: string | Partial<ValidatorFactory>,
-    description?: string | Partial<ValidatorFactory>,
+    aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
+    descriptionOrValidator?: string | Partial<ValidatorFactory>,
     validator?: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType {
     return (_, { name }) =>
@@ -34,6 +41,24 @@ export class OptionDecorators {
           initValue,
           schema: validator?.schema,
           // description,
+        };
+  }
+
+  private static OptionImpl(
+    optionName?: string,
+    alias?: Nullable<string>,
+    description?: Nullable<string>,
+    validator?: Nullable<Partial<ValidatorFactory>>
+  ): AnyClassFieldDecoratorReturnType {
+    return (_, { name }) =>
+      (initValue) =>
+        <OptionInitializerPlaceHolder>{
+          type: "Option",
+          optionName: optionName ?? String(name),
+          optionAlias: alias,
+          initValue,
+          schema: validator?.schema,
+          description,
         };
   }
 

@@ -13,7 +13,6 @@ export type JSONUtils = {
   write: () => Promise<void>;
 };
 
-// todo: rename to context
 export type BuiltInUtils = {
   pm: PackageManagerUtils;
   json: JSONUtils;
