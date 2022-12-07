@@ -1,7 +1,7 @@
 import parse, { Arguments } from "yargs-parser";
 import mri from "mri";
 import { MustardRegistry } from "./Registry";
-import { MustardConstanst } from "../Components/Constants";
+import { MustardConstanst } from "./Constants";
 
 import type {
   CommandInput,

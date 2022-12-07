@@ -1,4 +1,4 @@
-import { MustardRegistry } from "../Components/Registry";
+import { MustardRegistry } from "./Registry";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 

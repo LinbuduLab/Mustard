@@ -10,7 +10,7 @@
     "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31"
   },
   "scripts": {
-    "dev": "pnpm --filter mustard-core dev",
+    "dev": "pnpm --filter mustard-cli dev",
     "build": "pnpm --filter mustard-* build"
   },
   "nodemonConfig": {

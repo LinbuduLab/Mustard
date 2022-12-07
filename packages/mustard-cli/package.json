@@ -1,6 +1,6 @@
 {
-  "name": "mustard-core",
-  "version": "1.0.0",
+  "name": "mustard-cli",
+  "version": "0.1.0",
   "private": true,
   "bin": {
     "m": "dist/index.js"
