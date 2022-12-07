@@ -4,6 +4,9 @@ import { UsageInfoGenerator } from "../Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 import { MustardUtils } from "../Components/Utils";
 
+import { CommandNotFoundError } from "../Errors/CommandNotFoundError";
+import { NoRootHandlerError } from "../Errors/NoRootHandlerError";
+
 import type { Arguments } from "yargs-parser";
 import type {
   CommandInput,
@@ -133,8 +136,7 @@ export class CLI {
 
     // should only throw when no matched command found
     if (!commandRegistration) {
-      // throw
-      return;
+      throw new CommandNotFoundError(this.parsedArgs);
     }
 
     MustardUtils.containsHelpEnable(this.parsedArgs)
@@ -172,7 +174,7 @@ export class CLI {
     } else if (this.options?.enableUsage) {
       UsageInfoGenerator.collectCommandUsage(rootCommandRegistation);
     } else {
-      // throws
+      throw new NoRootHandlerError();
     }
   }
 }

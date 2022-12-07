@@ -1,1 +1,0 @@
-class BaseError extends Error {}

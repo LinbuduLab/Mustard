@@ -1,6 +1,8 @@
 import { MustardRegistry } from "./Registry";
 import { MustardUtils } from "./Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
+import { UnknownOptionsError } from "../Errors/UnknownOptionsError";
+import { ValidationError } from "../Errors/ValidationError";
 
 import type { InstanceFieldDecorationTypesUnion } from "./Constants";
 import type {
@@ -23,9 +25,7 @@ export class DecoratedClassFieldsNormalizer {
     );
 
     if (unknownOptions.length > 0) {
-      // throw new Error(
-      //   `Unknown options: ${unknownOptions.join(", ")}. See --help for usage.`
-      // );
+      throw new UnknownOptionsError(unknownOptions);
     }
   }
 
@@ -151,9 +151,20 @@ export class DecoratedClassFieldsNormalizer {
     if (injectKey in parsedArgs) {
       const argValue = parsedArgs[injectKey];
 
+      let validatedValue = null;
+
       // control parse / safeParse from options
       // hijack zoderror for better error message
-      const validatedValue = schema ? schema.safeParse(argValue) : argValue;
+
+      if (schema) {
+        validatedValue = schema.safeParse(argValue);
+
+        if (!validatedValue.success) {
+          throw new ValidationError(injectKey, argValue, validatedValue.error);
+        }
+      } else {
+        validatedValue = argValue;
+      }
 
       MustardUtils.setInstanceFieldValue(
         instance,

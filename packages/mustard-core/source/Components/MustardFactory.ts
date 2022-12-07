@@ -1,7 +1,6 @@
 import { CLI } from "../Command/CommandLine";
 
 import type { MustardLifeCycle } from "../Typings/Factory.struct";
-
 import type { AppFactoryOptions } from "../Typings/configuration.struct";
 import type { Constructable } from "../Typings/Shared.struct";
 import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
