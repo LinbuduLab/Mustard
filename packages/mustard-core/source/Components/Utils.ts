@@ -1,4 +1,4 @@
-import parse from "yargs-parser";
+import parse, { Arguments } from "yargs-parser";
 import mri from "mri";
 import { MustardRegistry } from "./Registry";
 import { MustardConstanst } from "../Components/Constants";
@@ -37,7 +37,11 @@ export class MustardUtils {
     withVariadic: string[] = [],
     aliasMap: Dictionary<string> = {}
   ) {
-    const parsed = withVariadic.length
+    const useCompleteParse = Boolean(
+      withVariadic.length || Object.keys(aliasMap).length
+    );
+
+    const parsed = useCompleteParse
       ? parse(process.argv.slice(2), {
           array: Array.from(withVariadic),
           alias: aliasMap,
@@ -139,4 +143,8 @@ export class MustardUtils {
   }
 
   public static uniq() {}
+
+  public static containsHelpEnable(parsedArgs: Arguments) {
+    return parsedArgs["help1"] || parsedArgs["h"];
+  }
 }

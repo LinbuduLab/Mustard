@@ -112,6 +112,19 @@ export class CLI {
     useRootHandle ? this.dispatchRootHandler() : this.dispatchCommand();
   }
 
+  private handleSingleCommandHelp(commandRegistration: CommandRegistryPayload) {
+    UsageInfoGenerator.collectCommandUsage(commandRegistration);
+  }
+
+  private handleCommandExecution(
+    commandRegistration: CommandRegistryPayload,
+    commandInput: string[]
+  ) {
+    this.executeCommandFromRegistration(commandRegistration, commandInput)
+      .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
+      .catch(this.options?.lifeCycles?.onError ?? (() => {}));
+  }
+
   private dispatchCommand() {
     const { command: commandRegistration, inputs: commandInput } =
       MustardUtils.findHandlerCommandWithInputs(
@@ -123,9 +136,10 @@ export class CLI {
       // throw
       return;
     }
-    this.executeCommandFromRegistration(commandRegistration, commandInput)
-      .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
-      .catch(this.options?.lifeCycles?.onError ?? (() => {}));
+
+    MustardUtils.containsHelpEnable(this.parsedArgs)
+      ? this.handleSingleCommandHelp(commandRegistration)
+      : this.handleCommandExecution(commandRegistration, commandInput);
   }
 
   private async executeCommandFromRegistration(
@@ -156,7 +170,7 @@ export class CLI {
     if (rootCommandRegistation) {
       this.executeCommandFromRegistration(rootCommandRegistation);
     } else if (this.options?.enableUsage) {
-      UsageInfoGenerator.collectCommandUsage();
+      UsageInfoGenerator.collectCommandUsage(rootCommandRegistation);
     } else {
       // throws
     }
