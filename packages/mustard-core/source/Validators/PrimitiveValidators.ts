@@ -1,8 +1,9 @@
 import { z } from "zod";
 
 import type { ZodType, ZodBoolean, ZodNumber, ZodString } from "zod";
-import type { ValidationTypes } from "../Typings/Shared.struct";
+
 import type { BaseValidator, MaybeOptionalZodType } from "./Typings";
+import type { ValidationTypes } from "../Typings/Shared.struct";
 
 export class StringValidator implements BaseValidator<ZodType<String>, string> {
   _schema: ZodString;
@@ -37,6 +38,26 @@ export class StringValidator implements BaseValidator<ZodType<String>, string> {
 
   public MaxLength(len: number): Omit<this, "MaxLength"> {
     this.addValidation("max", [len]);
+    return this;
+  }
+
+  public Length(len: number): Omit<this, "Length"> {
+    this.addValidation("length", [len]);
+    return this;
+  }
+
+  public Email(): Omit<this, "Email"> {
+    this.addValidation("email", []);
+    return this;
+  }
+
+  public StartsWith(): Omit<this, "StartsWith"> {
+    this.addValidation("startsWith", []);
+    return this;
+  }
+
+  public EndsWith(): Omit<this, "EndsWith"> {
+    this.addValidation("endsWith", []);
     return this;
   }
 }
@@ -95,5 +116,50 @@ export class NumberValidator implements BaseValidator<ZodType<Number>, number> {
 
   public validate(value: unknown) {
     return this._schema.parse(value);
+  }
+
+  public Gt(compare: number): Omit<this, "Gt"> {
+    this.addValidation("gt", [compare]);
+    return this;
+  }
+
+  public Gte(compare: number): Omit<this, "Gte"> {
+    this.addValidation("gte", [compare]);
+    return this;
+  }
+
+  public Lt(compare: number): Omit<this, "Lt"> {
+    this.addValidation("lt", [compare]);
+    return this;
+  }
+
+  public Lte(compare: number): Omit<this, "Lte"> {
+    this.addValidation("lte", [compare]);
+    return this;
+  }
+
+  public Int(): Omit<this, "Int"> {
+    this.addValidation("int", []);
+    return this;
+  }
+
+  public Positive(): Omit<this, "Positive"> {
+    this.addValidation("positive", []);
+    return this;
+  }
+
+  public NonPositive(): Omit<this, "NonPositive"> {
+    this.addValidation("nonpositive", []);
+    return this;
+  }
+
+  public Negative(): Omit<this, "Negative"> {
+    this.addValidation("negative", []);
+    return this;
+  }
+
+  public NonNegative(): Omit<this, "NonNegative"> {
+    this.addValidation("nonnegative", []);
+    return this;
   }
 }
