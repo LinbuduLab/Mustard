@@ -9,7 +9,7 @@ import type {
   CommandStruct,
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
-import type { Nullable } from "../Typings/Shared.struct";
+import type { Dictionary, Nullable } from "../Typings/Shared.struct";
 
 export class MustardUtils {
   public static getInstanceFields(target: CommandStruct): string[] {
@@ -33,13 +33,14 @@ export class MustardUtils {
     return MustardUtils.getInstanceFieldValue<T>(target, prop);
   }
 
-  public static parseFromProcessArgs(withVariadic: string[] = []) {
+  public static parseFromProcessArgs(
+    withVariadic: string[] = [],
+    aliasMap: Dictionary<string> = {}
+  ) {
     const parsed = withVariadic.length
       ? parse(process.argv.slice(2), {
           array: Array.from(withVariadic),
-          alias: {
-            dddd: "d",
-          },
+          alias: aliasMap,
           configuration: {
             "greedy-arrays": true,
             "strip-aliased": true,

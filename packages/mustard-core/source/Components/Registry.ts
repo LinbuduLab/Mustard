@@ -1,6 +1,7 @@
 import { MustardConstanst } from "../Components/Constants";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
+import type { Dictionary } from "../Typings/Shared.struct";
 
 const CommandRegistry = Map<string, CommandRegistryPayload>;
 
@@ -57,6 +58,9 @@ export class MustardRegistry {
   }
 
   public static VariadicOptions = new Set<string>();
+
+  // raw - alias
+  public static OptionAliasMap: Dictionary<string> = {};
 
   public static ExternalProviderRegistry = new Map<string, unknown>();
 }

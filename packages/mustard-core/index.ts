@@ -56,7 +56,7 @@ class RunCommand implements CommandStruct {
   }
 
   // @Option("dry", "d")
-  @Option("dry", Validator.Boolean())
+  @Option("dry", "d", Validator.Boolean())
   public dryOption: boolean;
 
   @VariadicOption("arr")

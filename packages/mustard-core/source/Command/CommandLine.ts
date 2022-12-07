@@ -97,7 +97,8 @@ export class CLI {
     });
 
     this.parsedArgs = MustardUtils.parseFromProcessArgs(
-      Array.from(MustardRegistry.VariadicOptions)
+      Array.from(MustardRegistry.VariadicOptions),
+      MustardRegistry.OptionAliasMap
     );
   }
 

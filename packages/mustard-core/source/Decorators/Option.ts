@@ -115,15 +115,22 @@ export class OptionDecorators {
     validator?: Nullable<Partial<ValidatorFactory>>
   ): AnyClassFieldDecoratorReturnType {
     return (_, { name }) =>
-      (initValue) =>
-        <OptionInitializerPlaceHolder>{
+      (initValue) => {
+        const applyOptionName = optionName ?? String(name);
+
+        alias
+          ? (MustardRegistry.OptionAliasMap[applyOptionName] = alias)
+          : void 0;
+
+        return <OptionInitializerPlaceHolder>{
           type: "Option",
-          optionName: optionName ?? String(name),
+          optionName: applyOptionName,
           optionAlias: alias,
           initValue,
           schema: validator?.schema,
           description,
         };
+      };
   }
 
   public static VariadicOption(
