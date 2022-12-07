@@ -37,8 +37,12 @@ export class MustardUtils {
     const parsed = withVariadic.length
       ? parse(process.argv.slice(2), {
           array: Array.from(withVariadic),
+          alias: {
+            dddd: "d",
+          },
           configuration: {
             "greedy-arrays": true,
+            "strip-aliased": true,
           },
         })
       : mri(process.argv.slice(2));
