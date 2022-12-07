@@ -1,14 +1,18 @@
 {
   "name": "mustard-cli",
   "version": "0.1.0",
-  "private": true,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "bin": {
     "m": "dist/index.js"
   },
   "scripts": {
     "local": "nodemon index.ts run sync --dry",
     "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "pnpm run build"
   },
   "nodemonConfig": {
     "delay": 500,
