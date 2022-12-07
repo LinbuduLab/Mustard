@@ -80,11 +80,9 @@ export class CLI {
   }
 
   private instantiateWithParse() {
-    const commandMap = MustardRegistry.provide();
-
     const variadicOptionKeys = new Set<string>();
 
-    commandMap.forEach((commandRegistration, key) => {
+    MustardRegistry.provide().forEach((commandRegistration, key) => {
       const instance = new commandRegistration.Class();
 
       const decoratedInstanceFields =
@@ -139,7 +137,7 @@ export class CLI {
       throw new CommandNotFoundError(this.parsedArgs);
     }
 
-    MustardUtils.containsHelpEnable(this.parsedArgs)
+    MustardUtils.containsHelpFlag(this.parsedArgs)
       ? this.handleSingleCommandHelp(commandRegistration)
       : this.handleCommandExecution(commandRegistration, commandInput);
   }

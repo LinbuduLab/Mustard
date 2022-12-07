@@ -6,9 +6,7 @@ IoC &amp; native ecmascript decotator based command-line app builder.
 
 ## Todos
 
-- [ ] Custom Error
 - [ ] Parse enhancement form CAC
-- [ ] Logger
 - [ ] Usage
 
 - https://github.com/tj/commander.js/blob/HEAD/Readme_zh-CN.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%AE%E5%8A%A9

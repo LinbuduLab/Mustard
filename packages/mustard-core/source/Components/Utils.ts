@@ -9,28 +9,28 @@ import type {
   CommandStruct,
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
-import type { Dictionary, Nullable } from "../Typings/Shared.struct";
+import type { Dictionary } from "../Typings/Shared.struct";
 
 export class MustardUtils {
-  public static getInstanceFields(target: CommandStruct): string[] {
-    return <string[]>Reflect.ownKeys(target);
+  public static getInstanceFields(instance: CommandStruct): string[] {
+    return <string[]>Reflect.ownKeys(instance);
   }
 
   public static getInstanceFieldValue<TExpected>(
-    target: CommandStruct,
-    prop: string
+    instance: CommandStruct,
+    field: string
   ): TExpected {
-    return <TExpected>Reflect.get(target, prop);
+    return <TExpected>Reflect.get(instance, field);
   }
 
   public static setInstanceFieldValue<T>(
-    target: CommandStruct,
-    prop: string,
+    instance: CommandStruct,
+    field: string,
     value: T
   ) {
-    Reflect.set(target, prop, value);
+    Reflect.set(instance, field, value);
 
-    return MustardUtils.getInstanceFieldValue<T>(target, prop);
+    return MustardUtils.getInstanceFieldValue<T>(instance, field);
   }
 
   public static parseFromProcessArgs(
@@ -56,13 +56,13 @@ export class MustardUtils {
   }
 
   public static filterDecoratedInstanceFields(
-    target: CommandStruct
+    instance: CommandStruct
   ): TaggedDecoratedInstanceFields[] {
-    const fields = <string[]>MustardUtils.getInstanceFields(target);
+    const fields = <string[]>MustardUtils.getInstanceFields(instance);
     return <TaggedDecoratedInstanceFields[]>fields
       .map((field: string) => {
         const value = <TaggedDecoratedInstanceFields>(
-          MustardUtils.getInstanceFieldValue(target, field)
+          MustardUtils.getInstanceFieldValue(instance, field)
         );
 
         if (
@@ -134,7 +134,7 @@ export class MustardUtils {
       };
     }
 
-    // do this recursively
+    // do this recursively till no more inputs
     return MustardUtils.findHandlerCommandWithInputs(
       rest,
       childCommands.concat([...rest]),
@@ -144,7 +144,7 @@ export class MustardUtils {
 
   public static uniq() {}
 
-  public static containsHelpEnable(parsedArgs: Arguments) {
+  public static containsHelpFlag(parsedArgs: Arguments) {
     return parsedArgs["help"] || parsedArgs["h"];
   }
 }
