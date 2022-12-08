@@ -17,6 +17,8 @@ import type {
   CLIInstantiationConfiguration,
   CommandList,
 } from "../Typings/configuration.struct";
+import type { Provider } from "../Typings/DIService.struct";
+import type { MaybeArray } from "../Typings/Shared.struct";
 
 export class CLI {
   constructor(
@@ -32,6 +34,18 @@ export class CLI {
   private initialize(Commands: CommandList) {
     this.normalizeConfigurations();
     this.registerCommand(Commands);
+    this.registerProvider(this.options?.providers ?? []);
+  }
+
+  private registerProvider(providers: MaybeArray<Provider>) {
+    const providerList = Array.isArray(providers) ? providers : [providers];
+
+    providerList.forEach((provider) => {
+      MustardRegistry.ExternalProviderRegistry.set(
+        provider.identifier,
+        provider.value
+      );
+    });
   }
 
   private normalizeConfigurations() {

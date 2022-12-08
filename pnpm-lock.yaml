@@ -16,7 +16,7 @@ importers:
       tsconfig-paths: 4.1.0
       typescript: /@typescript-deploys/pr-build/5.0.0-pr-50820-31
 
-  packages/mustard-core:
+  packages/mustard-cli:
     specifiers:
       '@types/node': ^18.11.7
       '@types/yargs-parser': ^21.0.0

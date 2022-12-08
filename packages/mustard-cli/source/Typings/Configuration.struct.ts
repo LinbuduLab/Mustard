@@ -1,4 +1,5 @@
 import { CommandStruct } from "./Command.struct";
+import { Provider } from "./DIService.struct";
 import { MaybeFactory } from "./Shared.struct";
 
 export interface Configurations {
@@ -7,6 +8,7 @@ export interface Configurations {
   enableUsage: boolean | MaybeFactory<string>;
   enableVersion: boolean | MaybeFactory<string>;
   lifeCycles?: Partial<LifeCycles>;
+  providers?: Provider[];
 }
 
 export interface LifeCycles {
@@ -24,4 +26,5 @@ export interface AppFactoryOptions {
   name?: string;
   commands: CommandList;
   configurations?: Partial<Configurations>;
+  providers?: Provider[];
 }

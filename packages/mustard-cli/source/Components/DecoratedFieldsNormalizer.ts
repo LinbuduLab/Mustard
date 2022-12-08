@@ -52,6 +52,12 @@ export class DecoratedClassFieldsNormalizer {
             instanceField
           );
           break;
+        case "Inject":
+          DecoratedClassFieldsNormalizer.normalizeInjectField(
+            instance,
+            instanceField
+          );
+          break;
         case "Utils":
           DecoratedClassFieldsNormalizer.normalizeUtilField(
             instance,
@@ -103,11 +109,16 @@ export class DecoratedClassFieldsNormalizer {
       MustardUtils.getInstanceFieldValue(instance, instanceField)
     );
 
-    MustardUtils.setInstanceFieldValue(
-      instance,
-      instanceField,
-      MustardRegistry.ExternalProviderRegistry.get(injectValue.identifier)
+    const providerFactory = MustardRegistry.ExternalProviderRegistry.get(
+      injectValue.identifier
     );
+
+    const provideValue =
+      typeof providerFactory === "function"
+        ? providerFactory()
+        : providerFactory;
+
+    MustardUtils.setInstanceFieldValue(instance, instanceField, provideValue);
   }
 
   public static normalizeContextField(

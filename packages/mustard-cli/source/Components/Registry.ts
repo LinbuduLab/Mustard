@@ -62,5 +62,5 @@ export class MustardRegistry {
   // raw - alias
   public static OptionAliasMap: Dictionary<string> = {};
 
-  public static ExternalProviderRegistry = new Map<string, unknown>();
+  public static ExternalProviderRegistry = new Map<unknown, unknown>();
 }

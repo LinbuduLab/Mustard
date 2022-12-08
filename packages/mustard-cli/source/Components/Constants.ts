@@ -9,6 +9,7 @@ export class MustardConstanst {
     "Input",
     "Context",
     "Utils",
+    "Inject",
   ];
 
   public static RootCommandRegistryKey = "root";
