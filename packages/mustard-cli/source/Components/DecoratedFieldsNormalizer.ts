@@ -118,6 +118,20 @@ export class DecoratedClassFieldsNormalizer {
         ? providerFactory()
         : providerFactory;
 
+    MustardUtils.isPromise(provideValue)
+      ? provideValue.then((resolvedValue) => {
+          MustardUtils.setInstanceFieldValue(
+            instance,
+            instanceField,
+            resolvedValue
+          );
+        })
+      : MustardUtils.setInstanceFieldValue(
+          instance,
+          instanceField,
+          provideValue
+        );
+
     MustardUtils.setInstanceFieldValue(instance, instanceField, provideValue);
   }
 

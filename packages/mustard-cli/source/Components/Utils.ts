@@ -142,10 +142,17 @@ export class MustardUtils {
     );
   }
 
-  public static ensureArray<T>(providers:T|T[]):T[] {
+  public static ensureArray<T>(providers: T | T[]): T[] {
     return Array.isArray(providers) ? providers : [providers];
   }
 
+  public static isPromise(obj: any): obj is Promise<any> {
+    return (
+      !!obj &&
+      (typeof obj === "object" || typeof obj === "function") &&
+      typeof obj.then === "function"
+    );
+  }
 
   public static uniq() {}
 
