@@ -3,7 +3,7 @@ import { ValidatorFactory } from "../Validators/Factory";
 
 import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
 import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
-import type { Nullable } from "source/Typings/Shared.struct";
+import type { Nullable } from "../Typings/Shared.struct";
 
 export class OptionDecorators {
   public static Option(): AnyClassFieldDecoratorReturnType;

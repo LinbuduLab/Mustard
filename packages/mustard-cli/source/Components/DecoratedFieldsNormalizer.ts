@@ -149,7 +149,10 @@ export class DecoratedClassFieldsNormalizer {
     instanceField: string,
     parsedArgs: Dictionary
   ) {
-    const initializer = Reflect.get(instance, instanceField);
+    const initializer = MustardUtils.getInstanceFieldValue(
+      instance,
+      instanceField
+    );
 
     const {
       optionName: injectKey,

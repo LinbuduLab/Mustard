@@ -142,6 +142,11 @@ export class MustardUtils {
     );
   }
 
+  public static ensureArray<T>(providers:T|T[]):T[] {
+    return Array.isArray(providers) ? providers : [providers];
+  }
+
+
   public static uniq() {}
 
   public static containsHelpFlag(parsedArgs: Arguments) {

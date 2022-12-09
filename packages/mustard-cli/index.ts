@@ -9,10 +9,9 @@ import {
   Utils,
   App,
 } from "./source/Exports/Decorators";
-import { CommandStruct } from "./source/Exports/ComanndLine";
+import { CommandStruct, MustardApp } from "./source/Exports/ComanndLine";
 import { Validator } from "./source/Exports/Validator";
 import { MustardFactory, MustardUtils } from "./source/Exports";
-import { MustardLifeCycle } from "./source/Typings/Factory.struct";
 
 @Command("git")
 class RunSyncGitCommand implements CommandStruct {
@@ -57,23 +56,23 @@ class RunCommand implements CommandStruct {
   }
 
   // @Option("dry", "d")
-  @Option("dry", "d", Validator.Boolean())
+  @Option("dry", "d", Validator.Number())
   public dryOption: boolean;
 
-  @VariadicOption("arr")
-  public arrayOption: unknown[];
+  // @VariadicOption("arr")
+  // public arrayOption: unknown[];
 
-  @VariadicOption()
-  public variadic: unknown[];
+  // @VariadicOption()
+  // public variadic: unknown[];
 
-  @Options()
-  public allOptions: unknown[];
+  // @Options()
+  // public allOptions: unknown[];
 
-  @Input()
-  public input: unknown[];
+  // @Input()
+  // public input: unknown[];
 
-  @Utils()
-  public utils: MustardUtils;
+  // @Utils()
+  // public utils: MustardUtils;
 
   public run(): void {
     console.log("this.arrayOption: ", this.arrayOption);
@@ -116,6 +115,6 @@ class RootCommandHandle implements CommandStruct {
   name: "LinbuduLab CLI",
   commands: [RootCommandHandle, RunCommand],
 })
-class Project implements MustardLifeCycle {}
+class Project implements MustardApp {}
 
 MustardFactory.init(Project).start();

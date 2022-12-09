@@ -37,8 +37,10 @@ export class CLI {
     this.registerProvider(this.options?.providers ?? []);
   }
 
-  private registerProvider(providers: MaybeArray<Provider>) {
-    const providerList = Array.isArray(providers) ? providers : [providers];
+  public registerProvider(providers: MaybeArray<Provider>) {
+    const providerList = MustardUtils.ensureArray(providers);
+
+    if (!providerList.length) return;
 
     providerList.forEach((provider) => {
       MustardRegistry.ExternalProviderRegistry.set(

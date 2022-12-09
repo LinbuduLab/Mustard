@@ -6,7 +6,7 @@ import type {
 
 export class DIServiceDecorators {
   public static Inject(identifier: string): AnyClassFieldDecoratorReturnType {
-    return () => () =>
+    return (_, context) => () =>
       <InjectInitializerPlaceHolder>{
         type: "Inject",
         identifier,

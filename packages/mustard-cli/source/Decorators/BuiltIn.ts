@@ -6,19 +6,17 @@ import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
 
 export class BuiltInDecorators {
   public static Utils(): AnyClassFieldDecoratorReturnType {
-    return (_, { name }) =>
-      (initValue) =>
+    return (_, context) =>
+      () =>
         <UtilsInitializerPlaceHolder>{
           type: "Utils",
         };
   }
 
   public static Context(): AnyClassFieldDecoratorReturnType {
-    return (_, { name }) =>
-      (initValue) =>
-        <ContextInitializerPlaceHolder>{
-          type: "Context",
-          // description,
-        };
+    return (_, context) => () =>
+      <ContextInitializerPlaceHolder>{
+        type: "Context",
+      };
   }
 }
