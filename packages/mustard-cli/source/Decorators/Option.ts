@@ -99,7 +99,23 @@ export class OptionDecorators {
       );
     }
 
-    // overload 6 & 7
+    // overload 6
+    if (
+      typeof optionNameOrValidator === "string" &&
+      typeof aliasOrDescriptionOrValidator === "string" &&
+      typeof descriptionOrValidator !== "string"
+    ) {
+      const asAlias = aliasOrDescriptionOrValidator.length <= 2;
+
+      return OptionDecorators.OptionImpl(
+        <string>optionNameOrValidator,
+        asAlias ? aliasOrDescriptionOrValidator : null,
+        asAlias ? null : aliasOrDescriptionOrValidator,
+        <Partial<ValidatorFactory>>validator
+      );
+    }
+
+    // overload 7
     return OptionDecorators.OptionImpl(
       <string>optionNameOrValidator,
       <string>aliasOrDescriptionOrValidator,

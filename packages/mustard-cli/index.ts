@@ -65,8 +65,8 @@ class RunCommand implements CommandStruct {
   // @VariadicOption()
   // public variadic: unknown[];
 
-  // @Options()
-  // public allOptions: unknown[];
+  @Options()
+  public allOptions: unknown[];
 
   // @Input()
   // public input: unknown[];
@@ -75,8 +75,8 @@ class RunCommand implements CommandStruct {
   // public utils: MustardUtils;
 
   public run(): void {
-    console.log("this.arrayOption: ", this.arrayOption);
-    console.log("this.input: ", this.input);
+    // console.log("this.arrayOption: ", this.arrayOption);
+    // console.log("this.input: ", this.input);
     // console.log("this.utils: ", this.utils);
     console.log("Hello World! ", this.dryOption);
     console.log("All Options! ", this.allOptions);
