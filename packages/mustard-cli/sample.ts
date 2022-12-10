@@ -13,7 +13,7 @@ import { CommandStruct, MustardApp } from "mustard-cli/ComanndLine";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option()
+  @Option("d")
   public msg = "default value of msg";
 
   public run(): void {

@@ -1,4 +1,5 @@
 import { ZodType } from "zod";
+
 export type Dictionary<T = unknown> = Record<string, T>;
 
 export type FuncStruct<

@@ -130,7 +130,7 @@ export class CLI {
   }
 
   private handleSingleCommandHelp(commandRegistration: CommandRegistryPayload) {
-    UsageInfoGenerator.collectCommandUsage(commandRegistration);
+    UsageInfoGenerator.collectSpecificCommandUsage(commandRegistration);
   }
 
   private handleCommandExecution(
@@ -187,11 +187,14 @@ export class CLI {
 
   private dispatchRootHandler() {
     const rootCommandRegistation = MustardRegistry.provideRootCommand();
+    const printHelp = MustardUtils.containsHelpFlag(this.parsedArgs);
 
     if (rootCommandRegistation) {
-      this.executeCommandFromRegistration(rootCommandRegistation);
+      printHelp
+        ? UsageInfoGenerator.printHelp(rootCommandRegistation)
+        : this.executeCommandFromRegistration(rootCommandRegistation);
     } else if (this.options?.enableUsage) {
-      UsageInfoGenerator.collectCommandUsage(rootCommandRegistation);
+      UsageInfoGenerator.collectCompleteAppUsage();
     } else {
       throw new NoRootHandlerError();
     }

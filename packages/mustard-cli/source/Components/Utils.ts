@@ -1,5 +1,6 @@
 import parse, { Arguments } from "yargs-parser";
 import mri from "mri";
+import { distance, closest } from "fastest-levenshtein";
 import { MustardRegistry } from "./Registry";
 import { MustardConstanst } from "./Constants";
 
@@ -157,6 +158,17 @@ export class MustardUtils {
   public static uniq() {}
 
   public static containsHelpFlag(parsedArgs: Arguments) {
-    return parsedArgs["help"] || parsedArgs["h"];
+    return (
+      parsedArgs["help"] ||
+      parsedArgs["h"] ||
+      parsedArgs["MUSTARD_SPECIFIED_HELP_FLAG"]
+    );
+  }
+
+  public static levenshtein(
+    unknownOption: string,
+    avaliableOptions: string[] = []
+  ): string {
+    return closest(unknownOption, avaliableOptions);
   }
 }
