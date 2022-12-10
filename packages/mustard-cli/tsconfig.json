@@ -30,11 +30,8 @@
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
-      "core": ["./ioc/Impls/Core"],
-      "container": ["./ioc/Impls/Container"],
-      "decorators": ["./ioc/Impls/Decorators"],
-      "server-utils": ["./ioc/Impls/Utils"],
-      "create-server": ["./ioc/Impls/CreateServer"]
+      "mustard-cli": ["./source/Exports/index.ts"],
+      "mustard-cli/*": ["./source/Exports/*"]
     }
   },
   "include": ["./**/*.ts"],

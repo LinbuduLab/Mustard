@@ -10,4 +10,4 @@ export const { Command, RootCommand } = CommandDecorators;
 export const { Option, Options, VariadicOption } = OptionDecorators;
 export const { Input } = InputDecorator;
 export const { Service, Inject } = DIServiceDecorators;
-export const { Context, Utils } = BuiltInDecorators;
+export const { Ctx, Utils } = BuiltInDecorators;

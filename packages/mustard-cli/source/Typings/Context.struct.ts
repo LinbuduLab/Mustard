@@ -18,7 +18,7 @@ export type BuiltInUtils = {
   json: JSONUtils;
 };
 
-export type ExecutionContext = {
+export type Context = {
   cwd: string;
   argv: string[];
   inputArgv: string[];

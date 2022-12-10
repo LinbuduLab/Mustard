@@ -1,12 +1,11 @@
 {
   "name": "mustard-cli",
-  "version": "0.1.0",
+  "version": "0.1.2",
+  "main": "./dist/source/Exports/index.js",
+  "types": "./dist/source/Exports/index.d.ts",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "bin": {
-    "m": "dist/index.js"
   },
   "scripts": {
     "local": "nodemon index.ts run sync --dry",

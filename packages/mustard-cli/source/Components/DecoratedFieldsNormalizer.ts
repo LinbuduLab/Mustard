@@ -6,7 +6,7 @@ import { ValidationError } from "../Errors/ValidationError";
 
 import type { InstanceFieldDecorationTypesUnion } from "./Constants";
 import type {
-  ExecutionContext,
+  Context,
   InjectInitializerPlaceHolder,
 } from "../Typings/Context.struct";
 import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
@@ -144,7 +144,7 @@ export class DecoratedClassFieldsNormalizer {
       argv: process.argv,
       inputArgv: process.argv.slice(2),
       env: process.env,
-    } satisfies ExecutionContext);
+    } satisfies Context);
   }
 
   public static normalizeUtilField(

@@ -7,4 +7,4 @@ export { MustardFactory } from "../Components/MustardFactory";
 
 export type MustardUtils = Omit<typeof MustardUtilsProvider, "produce">;
 
-export type { ExecutionContext } from "../Typings/Context.struct";
+export type { Context } from "../Typings/Context.struct";
