@@ -26,19 +26,19 @@ class UpdateCommand implements CommandStruct {
   @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
   public depth = 10;
 
-  // @Option(Validator.Boolean())
-  // public dry = false;
+  @Option(Validator.Boolean())
+  public dry = false;
 
-  // @Option("all")
-  // public applyAll: boolean;
+  @Option("all")
+  public applyAll: boolean;
 
-  // @VariadicOption()
-  // public packages: string[];
+  @VariadicOption()
+  public packages: string[];
 
   public run(): void {
-    // console.warn("DryRun Mode: ", this.dry);
-    // console.info("Execution Depth", this.depth);
-    // console.info("Specified Packages", this.packages);
+    console.warn("DryRun Mode: ", this.dry);
+    console.info("Execution Depth", this.depth);
+    console.info("Specified Packages", this.packages);
   }
 }
 

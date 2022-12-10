@@ -183,10 +183,11 @@ export class DecoratedClassFieldsNormalizer {
       let validatedValue = null;
 
       if (schema) {
-        validatedValue = schema.safeParse(argValue);
-        if (!validatedValue.success) {
-          throw new ValidationError(injectKey, argValue, validatedValue.error);
+        const validation = schema.safeParse(argValue);
+        if (!validation.success) {
+          throw new ValidationError(injectKey, argValue, validation.error);
         }
+        validatedValue = validation.data;
       } else {
         validatedValue = argValue;
       }
