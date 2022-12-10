@@ -172,6 +172,7 @@ export class DecoratedClassFieldsNormalizer {
       optionName: injectKey,
       initValue,
       schema,
+
       // todo: by XOR types
     } = <Required<OptionInitializerPlaceHolder>>initializer;
 
@@ -181,12 +182,8 @@ export class DecoratedClassFieldsNormalizer {
 
       let validatedValue = null;
 
-      // control parse / safeParse from options
-      // hijack zoderror for better error message
-
       if (schema) {
         validatedValue = schema.safeParse(argValue);
-
         if (!validatedValue.success) {
           throw new ValidationError(injectKey, argValue, validatedValue.error);
         }

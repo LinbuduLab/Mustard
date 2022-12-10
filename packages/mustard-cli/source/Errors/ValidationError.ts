@@ -21,10 +21,14 @@ export class ValidationError extends Error {
   public static format(argName: string, ageValue: unknown, error: z.ZodError) {
     const issue = error.issues[0];
 
-    const { expected, received } = <ZodInvalidTypeIssue>issue;
+    const { expected, received, message } = <ZodInvalidTypeIssue>issue;
 
-    return `Invalid input for argument ${argName}, expected: ${chalk.green(
-      expected
-    )}, received: ${chalk.yellow(received)}`;
+    if (expected && received) {
+      return `Invalid input for argument '${argName}', expected: ${chalk.green(
+        expected
+      )}, received: ${chalk.yellow(received)}`;
+    } else {
+      return message ?? `Invalid input for argument '${argName}`;
+    }
   }
 }

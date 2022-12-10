@@ -129,7 +129,7 @@ export class OptionDecorators {
         <string>optionNameOrValidatorOrCompleteConfig,
         asAlias ? aliasOrDescriptionOrValidator : null,
         asAlias ? null : aliasOrDescriptionOrValidator,
-        <Partial<ValidatorFactory>>validator
+        <Partial<ValidatorFactory>>descriptionOrValidator
       );
     }
 

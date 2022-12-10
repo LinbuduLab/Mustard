@@ -139,7 +139,12 @@ export class CLI {
   ) {
     this.executeCommandFromRegistration(commandRegistration, commandInput)
       .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
-      .catch(this.options?.lifeCycles?.onError ?? (() => {}));
+      .catch(
+        this.options?.lifeCycles?.onError ??
+          ((err) => {
+            throw err;
+          })
+      );
   }
 
   private dispatchCommand() {
