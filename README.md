@@ -59,7 +59,7 @@ class RootCommandHandle implements CommandStruct {
 }
 
 @Command("update", "u", "update project dependencies")
-class UpdateCommand {
+class UpdateCommand implements CommandStruct {
   @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
   public depth = 10;
 
