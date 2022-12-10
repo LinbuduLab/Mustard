@@ -53,9 +53,10 @@ export class CLI {
   private normalizeConfigurations() {
     const {
       enableUsage = true,
-      allowUnknownOptions = true,
+      allowUnknownOptions = false,
       enableVersion = true,
       lifeCycles = {},
+      didYouMean = true,
     } = this.options ?? {};
 
     this.options = {
@@ -63,6 +64,7 @@ export class CLI {
       allowUnknownOptions,
       enableVersion,
       lifeCycles,
+      didYouMean,
     };
   }
 
@@ -172,7 +174,8 @@ export class CLI {
     this.options?.allowUnknownOptions === false
       ? DecoratedClassFieldsNormalizer.throwOnUnknownOptions(
           handler,
-          this.parsedArgs
+          this.parsedArgs,
+          this.options?.didYouMean ?? true
         )
       : void 0;
 

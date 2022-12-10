@@ -21,6 +21,7 @@ importers:
       '@types/node': ^18.11.7
       '@types/yargs-parser': ^21.0.0
       chalk: 4.0.0
+      fastest-levenshtein: ^1.0.16
       lodash: ^4.17.21
       mri: ^1.2.0
       nodemon: ^2.0.20
@@ -30,6 +31,7 @@ importers:
       yargs-parser: ^21.1.1
       zod: ^3.19.1
     dependencies:
+      fastest-levenshtein: 1.0.16
       mri: 1.2.0
       yargs-parser: 21.1.1
       zod: 3.19.1
@@ -213,6 +215,11 @@ packages:
     resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
     engines: {node: '>=0.3.1'}
     dev: true
+
+  /fastest-levenshtein/1.0.16:
+    resolution: {integrity: sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==}
+    engines: {node: '>= 4.9.1'}
+    dev: false
 
   /fill-range/7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}

@@ -3,11 +3,12 @@ import { Provider } from "./DIService.struct";
 import { MaybeFactory } from "./Shared.struct";
 
 export interface Configurations {
-  allowUnknownOptions: boolean;
+  allowUnknownOptions?: boolean;
   debug: boolean;
   enableUsage: boolean | MaybeFactory<string>;
   enableVersion: boolean | MaybeFactory<string>;
   lifeCycles?: Partial<LifeCycles>;
+  didYouMean?: boolean;
   providers?: Provider[];
 }
 

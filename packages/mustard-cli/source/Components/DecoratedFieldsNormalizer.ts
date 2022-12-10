@@ -1,7 +1,10 @@
 import { MustardRegistry } from "./Registry";
 import { MustardUtils } from "./Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
-import { UnknownOptionsError } from "../Errors/UnknownOptionsError";
+import {
+  DidYouMeanError,
+  UnknownOptionsError,
+} from "../Errors/UnknownOptionsError";
 import { ValidationError } from "../Errors/ValidationError";
 
 import type { InstanceFieldDecorationTypesUnion } from "./Constants";
@@ -16,15 +19,24 @@ import type { CommandStruct } from "../Typings/Command.struct";
 export class DecoratedClassFieldsNormalizer {
   public static throwOnUnknownOptions(
     instance: CommandStruct,
-    parsedArgs: Dictionary
+    parsedArgs: Dictionary,
+    useDidYouMean: boolean
   ) {
     const instanceDeclaredOptions = MustardUtils.getInstanceFields(instance);
 
     const unknownOptions = Object.keys(parsedArgs).filter(
-      (key) => !instanceDeclaredOptions.includes(key)
+      (key) => !instanceDeclaredOptions.includes(key) && key !== "_"
     );
 
     if (unknownOptions.length > 0) {
+      const firstUnknownOption = unknownOptions[0]!;
+      if (useDidYouMean) {
+        throw new DidYouMeanError(
+          firstUnknownOption,
+          MustardUtils.levenshtein(firstUnknownOption, instanceDeclaredOptions)
+        );
+      }
+
       throw new UnknownOptionsError(unknownOptions);
     }
   }

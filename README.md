@@ -7,9 +7,12 @@ IoC & [Native ECMAScript Decotator](https://github.com/tc39/proposal-decorators)
 ## WIP
 
 - Object type configurations
+- Version info
 - Usage info generation
+- Usage info for nested commands...
 - Parse enhancement
 - Publish related
+- Levenshtein
 
 ## Features
 
