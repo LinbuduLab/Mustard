@@ -4,9 +4,13 @@ import { MustardConstanst } from "../Components/Constants";
 
 import type { Nullable } from "../Typings/Shared.struct";
 import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
+import type { CommandConfiguration } from "../Typings/Command.struct";
 
 export class CommandDecorators {
   public static Command(commandName: string): AnyClassDecoratorReturnType;
+  public static Command(
+    config: CommandConfiguration
+  ): AnyClassDecoratorReturnType;
   public static Command(
     commandName: string,
     aliasOrDescription: string
@@ -32,21 +36,35 @@ export class CommandDecorators {
     childCommandList: CommandList
   ): AnyClassDecoratorReturnType;
   public static Command(
-    commandName: string,
+    commandNameOrConfig: string | CommandConfiguration,
     aliasOrDescriptionOrChildComnandList?: string | CommandList,
     descriptionOrChildComnandList?: string | CommandList,
     childCommandList: CommandList = []
   ): AnyClassDecoratorReturnType {
-    // overload1
+    if (typeof commandNameOrConfig === "object") {
+      const { name, alias, description, childCommandList } =
+        commandNameOrConfig;
+      return CommandDecorators.registerCommandImpl(
+        name,
+        alias,
+        description,
+        childCommandList
+      );
+    }
+
     if (
       !aliasOrDescriptionOrChildComnandList &&
       !descriptionOrChildComnandList &&
       !childCommandList
     ) {
-      return CommandDecorators.registerCommandImpl(commandName, null, null, []);
+      return CommandDecorators.registerCommandImpl(
+        commandNameOrConfig,
+        null,
+        null,
+        []
+      );
     }
 
-    // overload 2 & 3
     if (
       !descriptionOrChildComnandList &&
       !childCommandList &&
@@ -56,14 +74,14 @@ export class CommandDecorators {
         const asAlias = aliasOrDescriptionOrChildComnandList.length <= 2;
 
         return CommandDecorators.registerCommandImpl(
-          commandName,
+          commandNameOrConfig,
           asAlias ? aliasOrDescriptionOrChildComnandList : null,
           asAlias ? null : aliasOrDescriptionOrChildComnandList,
           []
         );
       } else {
         return CommandDecorators.registerCommandImpl(
-          commandName,
+          commandNameOrConfig,
           null,
           null,
           aliasOrDescriptionOrChildComnandList
@@ -76,18 +94,16 @@ export class CommandDecorators {
       descriptionOrChildComnandList &&
       aliasOrDescriptionOrChildComnandList
     ) {
-      // overload 4
       if (typeof descriptionOrChildComnandList === "string") {
         return CommandDecorators.registerCommandImpl(
-          commandName,
+          commandNameOrConfig,
           <string>aliasOrDescriptionOrChildComnandList,
           descriptionOrChildComnandList,
           []
         );
       } else {
-        // overload 5
         return CommandDecorators.registerCommandImpl(
-          commandName,
+          commandNameOrConfig,
           <string>aliasOrDescriptionOrChildComnandList,
           null,
           descriptionOrChildComnandList
@@ -95,10 +111,9 @@ export class CommandDecorators {
       }
     }
 
-    // overload 6
     if (Array.isArray(childCommandList)) {
       return CommandDecorators.registerCommandImpl(
-        commandName,
+        commandNameOrConfig,
         <string>aliasOrDescriptionOrChildComnandList,
         <string>descriptionOrChildComnandList,
         childCommandList
@@ -106,7 +121,7 @@ export class CommandDecorators {
     }
 
     return CommandDecorators.registerCommandImpl(
-      commandName,
+      commandNameOrConfig,
       null,
       null,
       childCommandList

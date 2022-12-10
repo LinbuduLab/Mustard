@@ -1,12 +1,19 @@
 import { MustardRegistry } from "../Components/Registry";
 import { ValidatorFactory } from "../Validators/Factory";
 
-import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
+import type {
+  OptionInitializerPlaceHolder,
+  OptionConfiguration,
+  VariadicOptionConfiguration,
+} from "../Typings/Option.struct";
 import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
 import type { Nullable } from "../Typings/Shared.struct";
 
 export class OptionDecorators {
   public static Option(): AnyClassFieldDecoratorReturnType;
+  public static Option(
+    optionName: OptionConfiguration
+  ): AnyClassFieldDecoratorReturnType;
   public static Option(optionName: string): AnyClassFieldDecoratorReturnType;
   public static Option(
     validator: Partial<ValidatorFactory>
@@ -31,33 +38,47 @@ export class OptionDecorators {
     validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
   public static Option(
-    optionNameOrValidator?: string | Partial<ValidatorFactory>,
+    optionNameOrValidatorOrCompleteConfig?:
+      | string
+      | Partial<ValidatorFactory>
+      | OptionConfiguration,
     aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
     descriptionOrValidator?: string | Partial<ValidatorFactory>,
     validator?: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType {
-    // overload 1
     if (
-      !optionNameOrValidator &&
+      !optionNameOrValidatorOrCompleteConfig &&
       !aliasOrDescriptionOrValidator &&
       !descriptionOrValidator &&
       !validator
     ) {
       return OptionDecorators.OptionImpl(null, null, null, null);
     }
-    // overload 2 & 3
+
     if (
-      optionNameOrValidator &&
+      optionNameOrValidatorOrCompleteConfig &&
       !aliasOrDescriptionOrValidator &&
       !descriptionOrValidator &&
       !validator
     ) {
-      if (typeof optionNameOrValidator === "string") {
+      if (typeof optionNameOrValidatorOrCompleteConfig === "string") {
         return OptionDecorators.OptionImpl(
-          optionNameOrValidator,
+          optionNameOrValidatorOrCompleteConfig,
           null,
           null,
           null
+        );
+      }
+
+      if (
+        typeof optionNameOrValidatorOrCompleteConfig === "object" &&
+        "name" in optionNameOrValidatorOrCompleteConfig
+      ) {
+        return OptionDecorators.OptionImpl(
+          optionNameOrValidatorOrCompleteConfig.name,
+          optionNameOrValidatorOrCompleteConfig.alias,
+          optionNameOrValidatorOrCompleteConfig.description,
+          optionNameOrValidatorOrCompleteConfig.validator
         );
       }
 
@@ -65,59 +86,55 @@ export class OptionDecorators {
         null,
         null,
         null,
-        optionNameOrValidator
+        <Partial<ValidatorFactory>>optionNameOrValidatorOrCompleteConfig
       );
     }
-    // overload 4 & 5
+
     if (
-      optionNameOrValidator &&
+      optionNameOrValidatorOrCompleteConfig &&
       aliasOrDescriptionOrValidator &&
       !descriptionOrValidator &&
       !validator
     ) {
-      // overlad 4
       if (
-        typeof optionNameOrValidator === "string" &&
+        typeof optionNameOrValidatorOrCompleteConfig === "string" &&
         typeof aliasOrDescriptionOrValidator === "string"
       ) {
         const asAlias = aliasOrDescriptionOrValidator.length <= 2;
 
         return OptionDecorators.OptionImpl(
-          optionNameOrValidator,
+          optionNameOrValidatorOrCompleteConfig,
           asAlias ? aliasOrDescriptionOrValidator : null,
           asAlias ? null : aliasOrDescriptionOrValidator,
           null
         );
       }
 
-      // overlad 5
       return OptionDecorators.OptionImpl(
-        <string>optionNameOrValidator,
+        <string>optionNameOrValidatorOrCompleteConfig,
         null,
         null,
         <Partial<ValidatorFactory>>aliasOrDescriptionOrValidator
       );
     }
 
-    // overload 6
     if (
-      typeof optionNameOrValidator === "string" &&
+      typeof optionNameOrValidatorOrCompleteConfig === "string" &&
       typeof aliasOrDescriptionOrValidator === "string" &&
       typeof descriptionOrValidator !== "string"
     ) {
       const asAlias = aliasOrDescriptionOrValidator.length <= 2;
 
       return OptionDecorators.OptionImpl(
-        <string>optionNameOrValidator,
+        <string>optionNameOrValidatorOrCompleteConfig,
         asAlias ? aliasOrDescriptionOrValidator : null,
         asAlias ? null : aliasOrDescriptionOrValidator,
         <Partial<ValidatorFactory>>validator
       );
     }
 
-    // overload 7
     return OptionDecorators.OptionImpl(
-      <string>optionNameOrValidator,
+      <string>optionNameOrValidatorOrCompleteConfig,
       <string>aliasOrDescriptionOrValidator,
       <string>descriptionOrValidator,
       <Partial<ValidatorFactory>>validator

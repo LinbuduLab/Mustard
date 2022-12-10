@@ -19,3 +19,10 @@ export abstract class CommandStruct {
 }
 
 export type CommandInput = [string, ...string[]];
+
+export type CommandConfiguration = {
+  name: string;
+  alias?: string;
+  description?: string;
+  childCommandList?: CommandList;
+};
