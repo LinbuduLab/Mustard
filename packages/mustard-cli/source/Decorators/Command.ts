@@ -7,28 +7,79 @@ import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
 import type { CommandConfiguration } from "../Typings/Command.struct";
 
 export class CommandDecorators {
+  /**
+   * @example
+   * \@Command('run')
+   * class RunCommand {}
+   */
   public static Command(commandName: string): AnyClassDecoratorReturnType;
+  /**
+   * @example
+   * \@Command({ name: 'run', alias: 'r' })
+   * class RunCommand {}
+   */
   public static Command(
     config: CommandConfiguration
   ): AnyClassDecoratorReturnType;
+  /**
+   * @example
+   * \@Command('run', 'r')
+   * class RunCommand {}
+   *
+   * \@Command('run', 'run command handle')
+   * class RunCommand {}
+   */
   public static Command(
     commandName: string,
     aliasOrDescription: string
   ): AnyClassDecoratorReturnType;
+  /**
+   * @example
+   *  \@Command('task')
+   * class RunTaskCommand {}
+   *
+   * \@Command('run', [RunTaskCommand])
+   * class RunCommand {}
+   */
   public static Command(
     commandName: string,
     childCommandList: CommandList
   ): AnyClassDecoratorReturnType;
+  /**
+   * @example
+
+   * \@Command('run', 'r', 'run command handle')
+   * class RunCommand {}
+   */
   public static Command(
     commandName: string,
     alias: string,
     description: string
   ): AnyClassDecoratorReturnType;
+  /**
+   * @example
+   *  \@Command('task')
+   * class RunTaskCommand {}
+   *
+   * \@Command('run', 'r', [RunTaskCommand])
+   * class RunCommand {}
+   *
+   * \@Command('run', 'run command handle', [RunTaskCommand])
+   * class RunCommand {}
+   */
   public static Command(
     commandName: string,
     aliasOrDescription: string,
     childCommandList: CommandList
   ): AnyClassDecoratorReturnType;
+  /**
+   * @example
+   *  \@Command('task')
+   * class RunTaskCommand {}
+   *
+   * \@Command('run', 'r', 'run command handle', [RunTaskCommand])
+   * class RunCommand {}
+   */
   public static Command(
     commandName: string,
     alias: string,
@@ -41,6 +92,7 @@ export class CommandDecorators {
     descriptionOrChildComnandList?: string | CommandList,
     childCommandList: CommandList = []
   ): AnyClassDecoratorReturnType {
+    //  @Command(config: CommandConfiguration)
     if (typeof commandNameOrConfig === "object") {
       const { name, alias, description, childCommandList } =
         commandNameOrConfig;
@@ -52,7 +104,9 @@ export class CommandDecorators {
       );
     }
 
+    // @Command(commandName: string)
     if (
+      typeof commandNameOrConfig === "string" &&
       !aliasOrDescriptionOrChildComnandList &&
       !descriptionOrChildComnandList &&
       !childCommandList
@@ -66,10 +120,12 @@ export class CommandDecorators {
     }
 
     if (
+      typeof commandNameOrConfig === "string" &&
+      aliasOrDescriptionOrChildComnandList &&
       !descriptionOrChildComnandList &&
-      !childCommandList &&
-      aliasOrDescriptionOrChildComnandList
+      !childCommandList
     ) {
+      // @Command(commandName: string, aliasOrDescription: string)
       if (typeof aliasOrDescriptionOrChildComnandList === "string") {
         const asAlias = aliasOrDescriptionOrChildComnandList.length <= 2;
 
@@ -80,6 +136,7 @@ export class CommandDecorators {
           []
         );
       } else {
+        // @Command(commandName: string, childCommandList: CommandList)
         return CommandDecorators.registerCommandImpl(
           commandNameOrConfig,
           null,
@@ -90,10 +147,12 @@ export class CommandDecorators {
     }
 
     if (
-      !childCommandList &&
+      typeof commandNameOrConfig === "string" &&
+      aliasOrDescriptionOrChildComnandList &&
       descriptionOrChildComnandList &&
-      aliasOrDescriptionOrChildComnandList
+      !childCommandList
     ) {
+      // @Command(commandName: string, alias: string, description: string)
       if (typeof descriptionOrChildComnandList === "string") {
         return CommandDecorators.registerCommandImpl(
           commandNameOrConfig,
@@ -102,6 +161,7 @@ export class CommandDecorators {
           []
         );
       } else {
+        // @Command(commandName: string, aliasOrDescription: string, childCommandList: CommandList)
         return CommandDecorators.registerCommandImpl(
           commandNameOrConfig,
           <string>aliasOrDescriptionOrChildComnandList,
@@ -111,6 +171,7 @@ export class CommandDecorators {
       }
     }
 
+    // @Command(commandName: string, alias: string, description: string, childCommandList: CommandList)
     if (Array.isArray(childCommandList)) {
       return CommandDecorators.registerCommandImpl(
         commandNameOrConfig,

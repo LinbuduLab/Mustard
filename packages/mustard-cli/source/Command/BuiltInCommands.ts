@@ -1,5 +1,7 @@
-import { UsageInfoGenerator } from "../Components/UsageGenerator";
 import chalk from "chalk";
+
+import { UsageInfoGenerator } from "../Components/UsageGenerator";
+import { MustardConstanst } from "../Components/Constants";
 
 import type { Configurations } from "../Typings/Configuration.struct";
 import type { Arguments } from "yargs-parser";
@@ -10,7 +12,7 @@ export class BuiltInCommands {
     return (
       parsedArgs["help"] ||
       parsedArgs["h"] ||
-      parsedArgs["MUSTARD_SPECIFIED_HELP_FLAG"]
+      parsedArgs[MustardConstanst.InternalHelpFlag]
     );
   }
 
@@ -18,7 +20,7 @@ export class BuiltInCommands {
     return (
       parsedArgs["version"] ||
       parsedArgs["v"] ||
-      parsedArgs["MUSTARD_SPECIFIED_VERSION_FLAG"]
+      parsedArgs[MustardConstanst.InternalVersionFlag]
     );
   }
 

@@ -13,4 +13,8 @@ export class MustardConstanst {
   ];
 
   public static RootCommandRegistryKey = "root";
+
+  public static InternalHelpFlag = "MUSTARD_SPECIFIED_HELP_FLAG";
+
+  public static InternalVersionFlag = "MUSTARD_SPECIFIED_VERSION_FLAG";
 }

@@ -5,6 +5,9 @@ import type {
 import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
 
 export class BuiltInDecorators {
+  /**
+   * Inject utils
+   */
   public static Utils(): AnyClassFieldDecoratorReturnType {
     return (_, context) => () =>
       <UtilsInitializerPlaceHolder>{
@@ -12,6 +15,9 @@ export class BuiltInDecorators {
       };
   }
 
+  /**
+   * Inject context info
+   */
   public static Ctx(): AnyClassFieldDecoratorReturnType {
     return (_, context) => () =>
       <ContextInitializerPlaceHolder>{
