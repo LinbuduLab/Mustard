@@ -157,22 +157,6 @@ export class MustardUtils {
 
   public static uniq() {}
 
-  public static containsHelpFlag(parsedArgs: Arguments) {
-    return (
-      parsedArgs["help"] ||
-      parsedArgs["h"] ||
-      parsedArgs["MUSTARD_SPECIFIED_HELP_FLAG"]
-    );
-  }
-
-  public static containsVersionFlag(parsedArgs: Arguments) {
-    return (
-      parsedArgs["version"] ||
-      parsedArgs["v"] ||
-      parsedArgs["MUSTARD_SPECIFIED_VERSION_FLAG"]
-    );
-  }
-
   public static levenshtein(
     unknownOption: string,
     avaliableOptions: string[] = []

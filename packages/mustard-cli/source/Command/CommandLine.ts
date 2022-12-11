@@ -1,8 +1,8 @@
 import { MustardRegistry } from "../Components/Registry";
 import { MustardConstanst } from "../Components/Constants";
-import { UsageInfoGenerator } from "../Components/UsageGenerator";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 import { MustardUtils } from "../Components/Utils";
+import { BuiltInCommands } from "./BuiltInCommands";
 
 import { CommandNotFoundError } from "../Errors/CommandNotFoundError";
 import { NoRootHandlerError } from "../Errors/NoRootHandlerError";
@@ -54,7 +54,7 @@ export class CLI {
     const {
       enableUsage = true,
       allowUnknownOptions = false,
-      enableVersion = true,
+      enableVersion = false,
       lifeCycles = {},
       didYouMean = true,
     } = this.options ?? {};
@@ -126,13 +126,11 @@ export class CLI {
 
     this.instantiateWithParse();
 
+    BuiltInCommands.useVersionCommand(this.options?.enableVersion);
+
     const useRootHandle = this.parsedArgs._?.length === 0;
 
     useRootHandle ? this.dispatchRootHandler() : this.dispatchCommand();
-  }
-
-  private handleSingleCommandHelp(commandRegistration: CommandRegistryPayload) {
-    UsageInfoGenerator.collectSpecificCommandUsage(commandRegistration);
   }
 
   private handleCommandExecution(
@@ -160,9 +158,9 @@ export class CLI {
       throw new CommandNotFoundError(this.parsedArgs);
     }
 
-    MustardUtils.containsHelpFlag(this.parsedArgs)
-      ? this.handleSingleCommandHelp(commandRegistration)
-      : this.handleCommandExecution(commandRegistration, commandInput);
+    BuiltInCommands.useHelpCommand(this.parsedArgs, commandRegistration);
+
+    this.handleCommandExecution(commandRegistration, commandInput);
   }
 
   private async executeCommandFromRegistration(
@@ -189,15 +187,14 @@ export class CLI {
   }
 
   private dispatchRootHandler() {
-    const rootCommandRegistation = MustardRegistry.provideRootCommand();
-    const printHelp = MustardUtils.containsHelpFlag(this.parsedArgs);
+    const rootCommandRegistration = MustardRegistry.provideRootCommand();
 
-    if (rootCommandRegistation) {
-      printHelp
-        ? UsageInfoGenerator.printHelp(rootCommandRegistation)
-        : this.executeCommandFromRegistration(rootCommandRegistation);
+    if (rootCommandRegistration) {
+      BuiltInCommands.useHelpCommand(this.parsedArgs, rootCommandRegistration);
+
+      this.executeCommandFromRegistration(rootCommandRegistration);
     } else if (this.options?.enableUsage) {
-      UsageInfoGenerator.collectCompleteAppUsage();
+      BuiltInCommands.useHelpCommand(true);
     } else {
       throw new NoRootHandlerError();
     }

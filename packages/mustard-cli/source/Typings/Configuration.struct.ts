@@ -6,7 +6,7 @@ export interface Configurations {
   allowUnknownOptions?: boolean;
   debug: boolean;
   enableUsage: boolean | MaybeFactory<string>;
-  enableVersion: boolean | MaybeFactory<string>;
+  enableVersion: false | MaybeFactory<string>;
   lifeCycles?: Partial<LifeCycles>;
   didYouMean?: boolean;
   providers?: Provider[];

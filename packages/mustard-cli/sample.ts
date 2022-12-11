@@ -45,6 +45,9 @@ class UpdateCommand implements CommandStruct {
 @App({
   name: "LinbuduLab CLI",
   commands: [RootCommandHandle, UpdateCommand],
+  configurations: {
+    enableVersion: require("./package.json").version,
+  },
 })
 class Project implements MustardApp {
   onStart() {}
