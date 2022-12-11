@@ -1,0 +1,36 @@
+{
+  "ts-node": {
+    "swc": false,
+    "pretty": true,
+    "transpileOnly": true,
+    "require": ["tsconfig-paths/register"]
+  },
+  "compilerOptions": {
+    "lib": [],
+    "target": "ES6",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "declaration": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedParameters": false,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "strictPropertyInitialization": false,
+    "keyofStringsOnly": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {}
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["dist"]
+}
