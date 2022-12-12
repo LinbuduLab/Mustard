@@ -10,27 +10,89 @@ import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
 import type { Nullable } from "../Typings/Shared.struct";
 
 export class OptionDecorators {
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option()
+   *   public dry: boolean;
+   * }
+   */
   public static Option(): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option({ name: 'dryRun' })
+   *   public dry: boolean;
+   * }
+   */
   public static Option(
-    optionName: OptionConfiguration
+    optionConfig: OptionConfiguration
   ): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option('dryRun')
+   *   public dry: boolean;
+   * }
+   */
   public static Option(optionName: string): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option(Validator.Boolean())
+   *   public dry: boolean;
+   * }
+   */
   public static Option(
     validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option('dryRun', 'dry run mode')
+   *   public dry: boolean;
+   *
+   * \@Option('sync', 's')
+   *   public sync: boolean;
+   * }
+   */
   public static Option(
     optionName: string,
     aliasOrDescription: string
   ): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option('dryRun', Validator.Boolean())
+   *   public dry: boolean;
+   * }
+   */
   public static Option(
     optionName: string,
     validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option('dryRun', 'dry run mode', Validator.Boolean())
+   *   public dry: boolean;
+   *
+   * \@Option('sync', 's', Validator.Boolean())
+   *   public sync: boolean;
+   * }
+   */
   public static Option(
     optionName: string,
     aliasOrDescription: string,
     validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option('dryRun', 'd', 'dry run mode', Validator.Boolean())
+   *   public dry: boolean;
+   * }
+   */
   public static Option(
     optionName: string,
     alias: string,
@@ -44,7 +106,8 @@ export class OptionDecorators {
       | OptionConfiguration,
     aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
     descriptionOrValidator?: string | Partial<ValidatorFactory>,
-    validator?: Partial<ValidatorFactory>
+    validator?: Partial<ValidatorFactory>,
+    type?: "Option" | "VariadicOption"
   ): AnyClassFieldDecoratorReturnType {
     if (
       !optionNameOrValidatorOrCompleteConfig &&
@@ -53,6 +116,22 @@ export class OptionDecorators {
       !validator
     ) {
       return OptionDecorators.OptionImpl(null, null, null, null);
+    }
+
+    if (typeof optionNameOrValidatorOrCompleteConfig === "object") {
+      if ("schema" in optionNameOrValidatorOrCompleteConfig) {
+        return OptionDecorators.OptionImpl(
+          null,
+          null,
+          null,
+          optionNameOrValidatorOrCompleteConfig
+        );
+      } else {
+        const { name, alias, description, validator } = <OptionConfiguration>(
+          optionNameOrValidatorOrCompleteConfig
+        );
+        return OptionDecorators.OptionImpl(name, alias, description, validator);
+      }
     }
 
     if (
@@ -67,18 +146,6 @@ export class OptionDecorators {
           null,
           null,
           null
-        );
-      }
-
-      if (
-        typeof optionNameOrValidatorOrCompleteConfig === "object" &&
-        "name" in optionNameOrValidatorOrCompleteConfig
-      ) {
-        return OptionDecorators.OptionImpl(
-          optionNameOrValidatorOrCompleteConfig.name,
-          optionNameOrValidatorOrCompleteConfig.alias,
-          optionNameOrValidatorOrCompleteConfig.description,
-          optionNameOrValidatorOrCompleteConfig.validator
         );
       }
 
@@ -145,7 +212,8 @@ export class OptionDecorators {
     optionName?: Nullable<string>,
     alias?: Nullable<string>,
     description?: Nullable<string>,
-    validator?: Nullable<Partial<ValidatorFactory>>
+    validator?: Nullable<Partial<ValidatorFactory>>,
+    type: "Option" | "VariadicOption" = "Option"
   ): AnyClassFieldDecoratorReturnType {
     return (_, { name }) =>
       (initValue) => {
@@ -156,7 +224,7 @@ export class OptionDecorators {
           : void 0;
 
         return <OptionInitializerPlaceHolder>{
-          type: "Option",
+          type,
           optionName: applyOptionName,
           optionAlias: alias,
           initValue,
@@ -167,19 +235,32 @@ export class OptionDecorators {
   }
 
   public static VariadicOption(
-    optionName?: string
+    optionNameOrValidatorOrCompleteConfig?:
+      | string
+      | Partial<ValidatorFactory>
+      | OptionConfiguration,
+    aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
+    descriptionOrValidator?: string | Partial<ValidatorFactory>,
+    validator?: Partial<ValidatorFactory>
   ): ClassFieldDecoratorFunction<any, any, any> {
     return (_, { name }) =>
       (initValue) => {
-        const optionNameValue = optionName ?? String(name);
-
+        const optionNameValue =
+          typeof optionNameOrValidatorOrCompleteConfig === "string"
+            ? optionNameOrValidatorOrCompleteConfig
+            : typeof optionNameOrValidatorOrCompleteConfig === "object"
+            ? "name" in optionNameOrValidatorOrCompleteConfig
+              ? optionNameOrValidatorOrCompleteConfig.name
+              : String(name)
+            : String(name);
         MustardRegistry.VariadicOptions.add(optionNameValue);
 
-        return <OptionInitializerPlaceHolder>{
-          type: "VariadicOption",
-          optionName: optionNameValue,
-          initValue,
-        };
+        return OptionDecorators.Option(
+          optionNameOrValidatorOrCompleteConfig,
+          aliasOrDescriptionOrValidator,
+          descriptionOrValidator,
+          validator
+        );
       };
   }
 
