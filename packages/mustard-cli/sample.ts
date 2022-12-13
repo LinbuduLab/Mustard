@@ -8,6 +8,8 @@ import {
   VariadicOption,
   App,
   Ctx,
+  Input,
+  Inject,
 } from "mustard-cli/Decorators";
 import { Validator } from "mustard-cli/Validator";
 import { CommandStruct, MustardApp } from "mustard-cli/ComanndLine";
@@ -36,6 +38,12 @@ class UpdateCommand implements CommandStruct {
   @Ctx()
   public context: Context;
 
+  @Input()
+  public input: string[];
+
+  @Inject("DataService")
+  public data: DataService;
+
   @VariadicOption()
   public packages: string[] = [];
 
@@ -43,7 +51,15 @@ class UpdateCommand implements CommandStruct {
     console.warn("DryRun Mode: ", this.dry);
     console.info("Execution Depth", this.depth);
     console.info("Specified Packages", this.packages);
+    console.info("Additional Input", this.input);
+    console.info("Injected Service", this.data.fetch());
     // console.info("Context", this.context);
+  }
+}
+
+class DataService {
+  public fetch() {
+    return "FetchedData";
   }
 }
 
@@ -53,6 +69,12 @@ class UpdateCommand implements CommandStruct {
   configurations: {
     enableVersion: require("./package.json").version,
   },
+  providers: [
+    {
+      identifier: DataService.name,
+      value: DataService,
+    },
+  ],
 })
 class Project implements MustardApp {
   onStart() {}

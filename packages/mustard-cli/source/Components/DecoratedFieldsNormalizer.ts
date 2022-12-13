@@ -127,8 +127,12 @@ export class DecoratedClassFieldsNormalizer {
 
     const provideValue =
       typeof providerFactory === "function"
-        ? providerFactory()
+        ? MustardUtils.isConstructable(providerFactory)
+          ? new providerFactory()
+          : providerFactory()
         : providerFactory;
+
+    // todo: control shared scope?
 
     MustardUtils.isPromise(provideValue)
       ? provideValue.then((resolvedValue) => {

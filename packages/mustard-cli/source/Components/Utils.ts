@@ -10,7 +10,7 @@ import type {
   CommandStruct,
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
-import type { Dictionary } from "../Typings/Shared.struct";
+import type { Constructable, Dictionary } from "../Typings/Shared.struct";
 
 export class MustardUtils {
   public static getInstanceFields(instance: CommandStruct): string[] {
@@ -153,6 +153,15 @@ export class MustardUtils {
       (typeof obj === "object" || typeof obj === "function") &&
       typeof obj.then === "function"
     );
+  }
+
+  public static isConstructable(input: any): input is Constructable {
+    try {
+      Reflect.construct(String, [], input);
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 
   public static uniq() {}

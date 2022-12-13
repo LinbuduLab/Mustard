@@ -21,7 +21,7 @@ export type MaybeAsyncFactory<T> = T | (() => Promise<T>);
 
 export type MaybePromise<T> = T | Promise<T>;
 
-export type Constructable<T> = new (...args: any[]) => T;
+export type Constructable<T = any> = new (...args: any[]) => T;
 
 export type ExpectedPropKeys<T extends object, ValueType> = {
   [Key in keyof T]-?: T[Key] extends ValueType ? Key : never;
