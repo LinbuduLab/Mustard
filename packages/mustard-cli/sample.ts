@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { MustardFactory, Context, MustardUtils } from "mustard-cli";
+import { MustardFactory, Context, MustardUtils } from "./source/Exports";
 import {
   Command,
   RootCommand,
@@ -10,11 +10,12 @@ import {
   Ctx,
   Input,
   Inject,
-  Provide,
   Utils,
-} from "mustard-cli/Decorators";
-import { Validator } from "mustard-cli/Validator";
-import { CommandStruct, MustardApp } from "mustard-cli/ComanndLine";
+  Options,
+} from "./source/Exports/Decorators";
+import { Validator } from "./source/Exports/Validator";
+import { CommandStruct, MustardApp } from "./source/Exports/ComanndLine";
+import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
@@ -34,8 +35,14 @@ class UpdateCommand implements CommandStruct {
   @Option(Validator.Boolean())
   public dry = false;
 
+  @Option({ alias: "d" })
+  public define: boolean;
+
   @Option("all")
   public applyAll: boolean;
+
+  @Options()
+  public completeOptions: any;
 
   @Ctx()
   public context: Context;
@@ -56,13 +63,14 @@ class UpdateCommand implements CommandStruct {
   public packages: string[] = [];
 
   public run(): void {
-    console.warn("DryRun Mode: ", this.dry);
-    console.info("Execution Depth", this.depth);
-    console.info("Specified Packages", this.packages);
-    console.info("Additional Input", this.input);
-    console.info("Injected DataService", this.data.fetch());
-    console.info("Injected SharedService", this.shared.execute());
-    console.info("Mustard Utils", this.utils.json.readSync);
+    console.log("Complete Options! ", this.completeOptions);
+    // console.warn("DryRun Mode: ", this.dry);
+    // console.info("Execution Depth", this.depth);
+    // console.info("Specified Packages", this.packages);
+    // console.info("Additional Input", this.input);
+    // console.info("Injected DataService", this.data.fetch());
+    // console.info("Injected SharedService", this.shared.execute());
+    // console.info("Mustard Utils", this.utils.json.readSync);
     // console.info("Context", this.context);
   }
 }
@@ -83,7 +91,8 @@ class SharedService {
   name: "LinbuduLab CLI",
   commands: [RootCommandHandle, UpdateCommand],
   configurations: {
-    enableVersion: require("./package.json").version,
+    allowUnknownOptions: true,
+    enableVersion: require(path.resolve("./package.json")).version,
   },
   providers: [
     SharedService,

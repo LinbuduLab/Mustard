@@ -21,7 +21,7 @@ export type OptionInitializerPlaceHolder = {
 };
 
 export type OptionConfiguration = {
-  name: string;
+  name?: string;
   alias?: string;
   description?: string;
   validator?: Partial<ValidatorFactory>;

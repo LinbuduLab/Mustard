@@ -132,8 +132,6 @@ export class DecoratedClassFieldsNormalizer {
           : providerFactory()
         : providerFactory;
 
-    // todo: control shared scope?
-
     MustardUtils.isPromise(provideValue)
       ? provideValue.then((resolvedValue) => {
           MustardUtils.setInstanceFieldValue(
@@ -147,8 +145,6 @@ export class DecoratedClassFieldsNormalizer {
           instanceField,
           provideValue
         );
-
-    MustardUtils.setInstanceFieldValue(instance, instanceField, provideValue);
   }
 
   public static normalizeContextField(

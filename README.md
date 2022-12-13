@@ -7,10 +7,8 @@ IoC & [Native ECMAScript Decotator](https://github.com/tc39/proposal-decorators)
 ## WIP
 
 - fix overloads
-- better di support(class.name!)
 - Usage info generation & for nested commands...
 - Parse enhancement
-- ~~Publish related~~，等 5.0 正式发布了再搞复杂的
 
 ## Features
 
