@@ -8,7 +8,7 @@ import type { ValidationTypes } from "../Typings/Shared.struct";
 export class StringValidator implements BaseValidator<ZodType<String>, string> {
   _schema: ZodString;
 
-  constructor(private required: boolean = false) {
+  constructor(public required: boolean = false) {
     this._schema = z.string();
   }
 
@@ -51,13 +51,13 @@ export class StringValidator implements BaseValidator<ZodType<String>, string> {
     return this;
   }
 
-  public StartsWith(): Omit<this, "StartsWith"> {
-    this.addValidation("startsWith", []);
+  public StartsWith(arg: string): Omit<this, "StartsWith"> {
+    this.addValidation("startsWith", [arg]);
     return this;
   }
 
-  public EndsWith(): Omit<this, "EndsWith"> {
-    this.addValidation("endsWith", []);
+  public EndsWith(arg: string): Omit<this, "EndsWith"> {
+    this.addValidation("endsWith", [arg]);
     return this;
   }
 }
@@ -67,7 +67,7 @@ export class BooleanValidator
 {
   _schema: ZodBoolean;
 
-  constructor(private required: boolean = false) {
+  constructor(public required: boolean = false) {
     this._schema = z.boolean();
   }
 
@@ -96,7 +96,7 @@ export class BooleanValidator
 export class NumberValidator implements BaseValidator<ZodType<Number>, number> {
   _schema: ZodNumber;
 
-  constructor(private required: boolean = false) {
+  constructor(public required: boolean = false) {
     this._schema = z.number();
   }
 

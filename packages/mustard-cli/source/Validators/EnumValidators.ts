@@ -11,7 +11,7 @@ export class NativeEnumValidator {
 
   constructor(
     private required: boolean = false,
-    private enumValues: Dictionary<string>
+    private enumValues: Dictionary<any>
   ) {
     this._schema = z.nativeEnum(this.enumValues);
   }

@@ -3,7 +3,7 @@ import { MustardConstanst } from "./Constants";
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 import type { Dictionary } from "../Typings/Shared.struct";
 
-const CommandRegistry = Map<string, CommandRegistryPayload>;
+const CommandRegistry = Map<string, Partial<CommandRegistryPayload>>;
 
 export class MustardRegistry {
   private static InitCommandRegistry = new CommandRegistry();
@@ -12,12 +12,15 @@ export class MustardRegistry {
 
   public static registerInit(
     identifier: string,
-    payload: CommandRegistryPayload
+    payload: Partial<CommandRegistryPayload>
   ) {
     MustardRegistry.InitCommandRegistry.set(identifier, payload);
   }
 
-  public static register(identifier: string, payload: CommandRegistryPayload) {
+  public static register(
+    identifier: string,
+    payload: Partial<CommandRegistryPayload>
+  ) {
     MustardRegistry.CommandRegistry.set(identifier, payload);
   }
 

@@ -4,12 +4,12 @@ export default defineConfig({
   test: {
     environment: "node",
     passWithNoTests: true,
-    exclude: ["**/node_modules/**"],
+    include: ["source/__tests__/Integrations/**/*.{spec,test}.ts"],
+    // exclude: ["**/node_modules/**"],
     coverage: {
       enabled: true,
       reporter: ["text", "html"],
-      include: ["./source/**/*.ts"],
-      exclude: ["./source/__tests__/**/*"],
+      include: ["source"],
     },
     threads: true,
   },

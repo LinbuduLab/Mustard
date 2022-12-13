@@ -1,3 +1,5 @@
+import _debug from "debug";
+
 import { MustardRegistry } from "../Components/Registry";
 import { ValidatorFactory } from "../Validators/Factory";
 
@@ -9,6 +11,8 @@ import type {
 import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
 import type { Nullable } from "../Typings/Shared.struct";
 
+const debug = _debug("mustard:decorator:option");
+
 export class OptionDecorators {
   /**
    * @example
@@ -18,16 +22,6 @@ export class OptionDecorators {
    * }
    */
   public static Option(): AnyClassFieldDecoratorReturnType;
-  /**
-   * @example
-   * class RunCommand {
-   *  \@Option({ name: 'dryRun' })
-   *   public dry: boolean;
-   * }
-   */
-  public static Option(
-    optionConfig: OptionConfiguration
-  ): AnyClassFieldDecoratorReturnType;
   /**
    * @example
    * class RunCommand {
@@ -45,6 +39,16 @@ export class OptionDecorators {
    */
   public static Option(
     validator: Partial<ValidatorFactory>
+  ): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
+   *  \@Option({ name: 'dryRun' })
+   *   public dry: boolean;
+   * }
+   */
+  public static Option(
+    optionConfig: OptionConfiguration
   ): AnyClassFieldDecoratorReturnType;
   /**
    * @example
@@ -89,6 +93,18 @@ export class OptionDecorators {
   /**
    * @example
    * class RunCommand {
+   *  \@Option('dryRun', 'd', 'dry run mode')
+   *   public dry: boolean;
+   * }
+   */
+  public static Option(
+    optionName: string,
+    alias: string,
+    description: string
+  ): AnyClassFieldDecoratorReturnType;
+  /**
+   * @example
+   * class RunCommand {
    *  \@Option('dryRun', 'd', 'dry run mode', Validator.Boolean())
    *   public dry: boolean;
    * }
@@ -106,8 +122,7 @@ export class OptionDecorators {
       | OptionConfiguration,
     aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
     descriptionOrValidator?: string | Partial<ValidatorFactory>,
-    validator?: Partial<ValidatorFactory>,
-    type?: "Option" | "VariadicOption"
+    validator?: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType {
     if (
       !optionNameOrValidatorOrCompleteConfig &&
@@ -127,9 +142,12 @@ export class OptionDecorators {
           optionNameOrValidatorOrCompleteConfig
         );
       } else {
-        const { name, alias, description, validator } = <OptionConfiguration>(
-          optionNameOrValidatorOrCompleteConfig
-        );
+        const {
+          name = null,
+          alias = null,
+          description = null,
+          validator = null,
+        } = <OptionConfiguration>optionNameOrValidatorOrCompleteConfig;
         return OptionDecorators.OptionImpl(name, alias, description, validator);
       }
     }
@@ -204,7 +222,7 @@ export class OptionDecorators {
       <string>optionNameOrValidatorOrCompleteConfig,
       <string>aliasOrDescriptionOrValidator,
       <string>descriptionOrValidator,
-      <Partial<ValidatorFactory>>validator
+      <Partial<ValidatorFactory>>validator ?? null
     );
   }
 
@@ -212,19 +230,20 @@ export class OptionDecorators {
     optionName?: Nullable<string>,
     alias?: Nullable<string>,
     description?: Nullable<string>,
-    validator?: Nullable<Partial<ValidatorFactory>>,
-    type: "Option" | "VariadicOption" = "Option"
+    validator?: Nullable<Partial<ValidatorFactory>>
   ): AnyClassFieldDecoratorReturnType {
     return (_, { name }) =>
       (initValue) => {
         const applyOptionName = optionName ?? String(name);
+
+        debug("Option %s registered", applyOptionName);
 
         alias
           ? (MustardRegistry.OptionAliasMap[applyOptionName] = alias)
           : void 0;
 
         return <OptionInitializerPlaceHolder>{
-          type,
+          type: "Option",
           optionName: applyOptionName,
           optionAlias: alias,
           initValue,
@@ -234,29 +253,95 @@ export class OptionDecorators {
       };
   }
 
+  public static VariadicOption(): AnyClassFieldDecoratorReturnType;
   public static VariadicOption(
-    optionName?: string
-  ): ClassFieldDecoratorFunction<any, any, any> {
-    return (_, { name }) =>
-      (initValue) => {
-        const optionNameValue = optionName ?? String(name);
+    optionName: string
+  ): AnyClassFieldDecoratorReturnType;
+  public static VariadicOption(
+    config: VariadicOptionConfiguration
+  ): AnyClassFieldDecoratorReturnType;
+  public static VariadicOption(
+    optionName: string,
+    aliasOrDescription?: string
+  ): AnyClassFieldDecoratorReturnType;
+  public static VariadicOption(
+    optionName: string,
+    alias: string,
+    description: string
+  ): AnyClassFieldDecoratorReturnType;
+  public static VariadicOption(
+    optionNameOrCompleteConfig?: string | VariadicOptionConfiguration,
+    aliasOrDescription?: string,
+    description?: string
+  ): AnyClassFieldDecoratorReturnType {
+    if (typeof optionNameOrCompleteConfig === "object") {
+      const {
+        name = null,
+        alias = null,
+        description = null,
+      } = optionNameOrCompleteConfig;
+      return OptionDecorators.VariadicOptionImpl(name, alias, description);
+    }
 
-        MustardRegistry.VariadicOptions.add(optionNameValue);
+    if (typeof description === "string") {
+      return OptionDecorators.VariadicOptionImpl(
+        optionNameOrCompleteConfig ?? null,
+        aliasOrDescription ?? null,
+        description
+      );
+    }
 
-        return <OptionInitializerPlaceHolder>{
-          type: "VariadicOption",
-          optionName: optionNameValue,
-          initValue,
-        };
+    if (optionNameOrCompleteConfig && !aliasOrDescription && !description) {
+      return OptionDecorators.VariadicOptionImpl(
+        optionNameOrCompleteConfig,
+        null,
+        null
+      );
+    }
+
+    if (!optionNameOrCompleteConfig && !aliasOrDescription && !description) {
+      return OptionDecorators.VariadicOptionImpl(null, null, null);
+    }
+
+    const asAlias = aliasOrDescription!.length <= 2;
+
+    return OptionDecorators.VariadicOptionImpl(
+      optionNameOrCompleteConfig ?? null,
+      asAlias ? aliasOrDescription : null,
+      asAlias ? null : aliasOrDescription
+    );
+  }
+
+  private static VariadicOptionImpl(
+    optionName?: Nullable<string>,
+    alias?: Nullable<string>,
+    description?: Nullable<string>
+  ): AnyClassFieldDecoratorReturnType {
+    return (_, context) => (initValue) => {
+      const applyOptionName = optionName ?? String(context.name);
+
+      debug("Variadic Option %s registered", applyOptionName);
+
+      MustardRegistry.VariadicOptions.add(applyOptionName);
+
+      return <OptionInitializerPlaceHolder>{
+        type: "VariadicOption",
+        optionName: applyOptionName,
+        optionAlias: alias,
+        description,
+        initValue,
       };
+    };
   }
 
   // @Options accept no args as it represents all options received
-  public static Options(): ClassFieldDecoratorFunction<any, any, any> {
-    return (initValue) => () =>
-      <OptionInitializerPlaceHolder>{
+  public static Options(): AnyClassFieldDecoratorReturnType {
+    return (_, context) => (initValue) => {
+      debug("Options registered in %s field", context.name);
+      return <OptionInitializerPlaceHolder>{
         type: "Options",
         initValue,
       };
+    };
   }
 }

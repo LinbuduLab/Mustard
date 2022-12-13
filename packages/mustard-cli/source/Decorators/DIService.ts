@@ -6,11 +6,11 @@ import type {
 } from "../Typings/Temp";
 
 export class DIServiceDecorators {
-  public static Inject(identifier: string): AnyClassFieldDecoratorReturnType {
+  public static Inject(identifier?: string): AnyClassFieldDecoratorReturnType {
     return (_, context) => () =>
       <InjectInitializerPlaceHolder>{
         type: "Inject",
-        identifier,
+        identifier: identifier ?? context.name,
       };
   }
 

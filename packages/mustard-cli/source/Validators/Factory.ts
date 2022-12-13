@@ -11,7 +11,7 @@ import type { ZodType } from "zod";
 export class ValidatorFactory {
   public schema: Nullable<ZodType> = null;
 
-  constructor(private required: boolean = false) {}
+  constructor(public required: boolean = false) {}
 
   public Required() {
     return new ValidatorFactory(true);
@@ -33,7 +33,7 @@ export class ValidatorFactory {
     return new NumberValidator(this.required);
   }
 
-  public Enum(input: Dictionary<string>): NativeEnumValidator {
+  public Enum(input: Dictionary<unknown>): NativeEnumValidator {
     return new NativeEnumValidator(this.required, input);
   }
 }

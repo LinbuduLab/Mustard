@@ -3,6 +3,7 @@ import { MustardConstanst } from "../Components/Constants";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 import { MustardUtils } from "../Components/Utils";
 import { BuiltInCommands } from "./BuiltInCommands";
+import _debug from "debug";
 
 import { CommandNotFoundError } from "../Errors/CommandNotFoundError";
 import { NoRootHandlerError } from "../Errors/NoRootHandlerError";
@@ -19,6 +20,8 @@ import type {
 } from "../Typings/configuration.struct";
 import type { Provider } from "../Typings/DIService.struct";
 import type { MaybeArray } from "../Typings/Shared.struct";
+
+const debug = _debug("mustard:command-line");
 
 export class CLI {
   constructor(
@@ -68,9 +71,12 @@ export class CLI {
       lifeCycles,
       didYouMean,
     };
+
+    debug("normalized configurations: %O", this.options);
   }
 
   public configure(overrides: Partial<CLIInstantiationConfiguration>) {
+    debug("overriding configurations: %O", overrides);
     Object.assign(this.options ?? {}, overrides ?? {});
   }
 
@@ -121,6 +127,8 @@ export class CLI {
       Array.from(MustardRegistry.VariadicOptions),
       MustardRegistry.OptionAliasMap
     );
+
+    debug("parsed arguments: %O", this.parsedArgs);
   }
 
   public start() {

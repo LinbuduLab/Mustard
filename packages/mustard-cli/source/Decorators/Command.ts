@@ -1,3 +1,5 @@
+import _debug from "debug";
+
 import { CommandList } from "source/Typings/Configuration.struct";
 import { MustardRegistry } from "../Components/Registry";
 import { MustardConstanst } from "../Components/Constants";
@@ -5,6 +7,8 @@ import { MustardConstanst } from "../Components/Constants";
 import type { Nullable } from "../Typings/Shared.struct";
 import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
 import type { CommandConfiguration } from "../Typings/Command.struct";
+
+const debug = _debug("mustard:decorator:command");
 
 export class CommandDecorators {
   /**
@@ -90,7 +94,7 @@ export class CommandDecorators {
     commandNameOrConfig: string | CommandConfiguration,
     aliasOrDescriptionOrChildComnandList?: string | CommandList,
     descriptionOrChildComnandList?: string | CommandList,
-    childCommandList: CommandList = []
+    childCommandList?: CommandList
   ): AnyClassDecoratorReturnType {
     //  @Command(config: CommandConfiguration)
     if (typeof commandNameOrConfig === "object") {
@@ -207,6 +211,8 @@ export class CommandDecorators {
     childCommandList: CommandList = []
   ): AnyClassDecoratorReturnType {
     return (target, context) => {
+      debug("Command %s registered", commandInvokeName);
+
       MustardRegistry.registerInit(<string>context.name, {
         commandInvokeName,
         commandAlias,

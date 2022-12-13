@@ -184,7 +184,6 @@ export class DecoratedClassFieldsNormalizer {
       optionName: injectKey,
       initValue,
       schema,
-
       // todo: by XOR types
     } = <Required<OptionInitializerPlaceHolder>>initializer;
 

@@ -1,12 +1,13 @@
 import { CLI } from "../Command/CommandLine";
+import { NullishFactoryOptionError } from "../Errors/NullishFactoryOptionError";
 
 import type { MustardApp } from "../Typings/Factory.struct";
 import type { AppFactoryOptions } from "../Typings/configuration.struct";
-import type { Constructable } from "../Typings/Shared.struct";
+import type { Constructable, Nullable } from "../Typings/Shared.struct";
 import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
 
 export class MustardFactory {
-  private static FactoryOptions: AppFactoryOptions;
+  private static FactoryOptions: Nullable<AppFactoryOptions> = null;
 
   public static App(
     configuration: AppFactoryOptions
@@ -16,7 +17,13 @@ export class MustardFactory {
     };
   }
 
+  private static flush(): void {
+    MustardFactory.FactoryOptions = null;
+  }
+
   public static init(Cls: Constructable<MustardApp>): CLI {
+    if (!MustardFactory.FactoryOptions) throw new NullishFactoryOptionError();
+
     const ins = new Cls();
 
     const {
@@ -37,6 +44,8 @@ export class MustardFactory {
         onComplete: ins.onComplete,
       },
     });
+
+    MustardFactory.flush();
 
     return cli;
   }

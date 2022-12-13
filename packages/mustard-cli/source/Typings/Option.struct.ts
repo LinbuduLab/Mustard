@@ -27,4 +27,7 @@ export type OptionConfiguration = {
   validator?: Partial<ValidatorFactory>;
 };
 
-export type VariadicOptionConfiguration = OptionConfiguration;
+export type VariadicOptionConfiguration = Omit<
+  OptionConfiguration,
+  "validator"
+>;
