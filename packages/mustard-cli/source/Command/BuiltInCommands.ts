@@ -45,8 +45,18 @@ export class BuiltInCommands {
   }
 
   public static useVersionCommand(
+    parsedArgs: Arguments | boolean,
     controller?: Configurations["enableVersion"]
   ) {
+    const printVersion =
+      typeof parsedArgs === "boolean"
+        ? parsedArgs
+        : BuiltInCommands.containsVersionFlag(parsedArgs);
+
+    if (!printVersion) {
+      return;
+    }
+
     if (!controller) return;
 
     const version =

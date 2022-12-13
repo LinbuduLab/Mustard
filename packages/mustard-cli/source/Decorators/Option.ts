@@ -235,32 +235,19 @@ export class OptionDecorators {
   }
 
   public static VariadicOption(
-    optionNameOrValidatorOrCompleteConfig?:
-      | string
-      | Partial<ValidatorFactory>
-      | OptionConfiguration,
-    aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
-    descriptionOrValidator?: string | Partial<ValidatorFactory>,
-    validator?: Partial<ValidatorFactory>
+    optionName?: string
   ): ClassFieldDecoratorFunction<any, any, any> {
     return (_, { name }) =>
       (initValue) => {
-        const optionNameValue =
-          typeof optionNameOrValidatorOrCompleteConfig === "string"
-            ? optionNameOrValidatorOrCompleteConfig
-            : typeof optionNameOrValidatorOrCompleteConfig === "object"
-            ? "name" in optionNameOrValidatorOrCompleteConfig
-              ? optionNameOrValidatorOrCompleteConfig.name
-              : String(name)
-            : String(name);
+        const optionNameValue = optionName ?? String(name);
+
         MustardRegistry.VariadicOptions.add(optionNameValue);
 
-        return OptionDecorators.Option(
-          optionNameOrValidatorOrCompleteConfig,
-          aliasOrDescriptionOrValidator,
-          descriptionOrValidator,
-          validator
-        );
+        return <OptionInitializerPlaceHolder>{
+          type: "VariadicOption",
+          optionName: optionNameValue,
+          initValue,
+        };
       };
   }
 

@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-import { MustardFactory } from "mustard-cli";
+import { MustardFactory, Context } from "mustard-cli";
 import {
   Command,
   RootCommand,
   Option,
   VariadicOption,
   App,
+  Ctx,
 } from "mustard-cli/Decorators";
 import { Validator } from "mustard-cli/Validator";
 import { CommandStruct, MustardApp } from "mustard-cli/ComanndLine";
@@ -32,13 +33,17 @@ class UpdateCommand implements CommandStruct {
   @Option("all")
   public applyAll: boolean;
 
+  @Ctx()
+  public context: Context;
+
   @VariadicOption()
-  public packages: string[];
+  public packages: string[] = [];
 
   public run(): void {
     console.warn("DryRun Mode: ", this.dry);
     console.info("Execution Depth", this.depth);
     console.info("Specified Packages", this.packages);
+    // console.info("Context", this.context);
   }
 }
 
