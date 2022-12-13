@@ -196,7 +196,6 @@ export class CLI {
 
     if (rootCommandRegistration) {
       BuiltInCommands.useHelpCommand(this.parsedArgs, rootCommandRegistration);
-
       this.executeCommandFromRegistration(rootCommandRegistration);
     } else if (this.options?.enableUsage) {
       BuiltInCommands.useHelpCommand(true);
