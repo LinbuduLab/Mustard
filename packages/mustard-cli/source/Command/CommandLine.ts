@@ -43,10 +43,12 @@ export class CLI {
     if (!providerList.length) return;
 
     providerList.forEach((provider) => {
-      MustardRegistry.ExternalProviderRegistry.set(
-        provider.identifier,
-        provider.value
-      );
+      MustardUtils.isConstructable(provider)
+        ? MustardRegistry.ExternalProviderRegistry.set(provider.name, provider)
+        : MustardRegistry.ExternalProviderRegistry.set(
+            provider.identifier,
+            provider.value
+          );
     });
   }
 
@@ -126,7 +128,10 @@ export class CLI {
 
     this.instantiateWithParse();
 
-    BuiltInCommands.useVersionCommand(this.options?.enableVersion);
+    BuiltInCommands.useVersionCommand(
+      this.parsedArgs,
+      this.options?.enableVersion
+    );
 
     const useRootHandle = this.parsedArgs._?.length === 0;
 

@@ -44,4 +44,6 @@ export type InjectInitializerPlaceHolder = {
 
 export type ProvideInitializerPlaceHolder = {
   type: "Provide";
+  identifier: string;
+  context: ClassDecoratorContext;
 };

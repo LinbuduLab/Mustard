@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { MustardFactory, Context } from "mustard-cli";
+import { MustardFactory, Context, MustardUtils } from "mustard-cli";
 import {
   Command,
   RootCommand,
@@ -10,6 +10,8 @@ import {
   Ctx,
   Input,
   Inject,
+  Provide,
+  Utils,
 } from "mustard-cli/Decorators";
 import { Validator } from "mustard-cli/Validator";
 import { CommandStruct, MustardApp } from "mustard-cli/ComanndLine";
@@ -41,8 +43,14 @@ class UpdateCommand implements CommandStruct {
   @Input()
   public input: string[];
 
+  @Utils()
+  public utils: MustardUtils;
+
   @Inject("DataService")
   public data: DataService;
+
+  @Inject("SharedService")
+  public shared: SharedService;
 
   @VariadicOption()
   public packages: string[] = [];
@@ -52,7 +60,9 @@ class UpdateCommand implements CommandStruct {
     console.info("Execution Depth", this.depth);
     console.info("Specified Packages", this.packages);
     console.info("Additional Input", this.input);
-    console.info("Injected Service", this.data.fetch());
+    console.info("Injected DataService", this.data.fetch());
+    console.info("Injected SharedService", this.shared.execute());
+    console.info("Mustard Utils", this.utils.json.readSync);
     // console.info("Context", this.context);
   }
 }
@@ -63,6 +73,12 @@ class DataService {
   }
 }
 
+class SharedService {
+  public execute() {
+    return "ExecuteSharedService";
+  }
+}
+
 @App({
   name: "LinbuduLab CLI",
   commands: [RootCommandHandle, UpdateCommand],
@@ -70,6 +86,7 @@ class DataService {
     enableVersion: require("./package.json").version,
   },
   providers: [
+    SharedService,
     {
       identifier: DataService.name,
       value: DataService,

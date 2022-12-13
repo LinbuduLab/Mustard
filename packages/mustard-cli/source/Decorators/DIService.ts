@@ -1,3 +1,4 @@
+import { MustardRegistry } from "../Components/Registry";
 import type { InjectInitializerPlaceHolder } from "../Typings/Context.struct";
 import type {
   AnyClassDecoratorReturnType,
@@ -13,7 +14,12 @@ export class DIServiceDecorators {
       };
   }
 
-  public static Service(identifier: string): AnyClassDecoratorReturnType {
-    return () => () => {};
+  public static Provide(identifier?: string): AnyClassDecoratorReturnType {
+    return (target, context) => () => {
+      MustardRegistry.ExternalProviderRegistry.set(
+        identifier ?? context.name,
+        target
+      );
+    };
   }
 }

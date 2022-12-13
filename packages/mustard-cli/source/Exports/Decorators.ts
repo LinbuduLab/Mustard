@@ -9,5 +9,5 @@ export const { App } = MustardFactory;
 export const { Command, RootCommand } = CommandDecorators;
 export const { Option, Options, VariadicOption } = OptionDecorators;
 export const { Input } = InputDecorator;
-export const { Service, Inject } = DIServiceDecorators;
+export const { Provide, Inject } = DIServiceDecorators;
 export const { Ctx, Utils } = BuiltInDecorators;
