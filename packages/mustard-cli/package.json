@@ -11,7 +11,8 @@
     "local": "nodemon index.ts run sync --dry",
     "dev": "tsc --watch",
     "build": "tsc",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest"
   },
   "nodemonConfig": {
     "delay": 500,
@@ -43,11 +44,13 @@
   "devDependencies": {
     "@types/node": "^18.11.7",
     "@types/yargs-parser": "^21.0.0",
+    "@vitest/coverage-c8": "^0.25.8",
     "chalk": "4.0.0",
     "lodash": "^4.17.21",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
-    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31"
+    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31",
+    "vitest": "^0.25.8"
   }
 }
