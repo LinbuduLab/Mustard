@@ -32,5 +32,6 @@
       "NODE_ENV": "development"
     },
     "ext": "ts,json"
-  }
+  },
+  "prettier": {}
 }
