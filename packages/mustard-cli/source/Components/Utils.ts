@@ -39,7 +39,6 @@ export class MustardUtils {
 
     aliasMap: Dictionary<string> = {}
   ) {
-    console.log("withVariadic: ", withVariadic);
     const useCompleteParse = Boolean(
       withVariadic.length || Object.keys(aliasMap).length
     );

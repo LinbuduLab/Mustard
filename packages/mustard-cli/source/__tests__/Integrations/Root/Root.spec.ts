@@ -1,31 +1,15 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MustardFactory, Context, MustardUtils } from "../../../Exports";
+import { describe, it, expect } from "vitest";
 import { execaCommand } from "execa";
-import {
-  Command,
-  RootCommand,
-  Option,
-  VariadicOption,
-  App,
-  Ctx,
-  Input,
-  Inject,
-  Utils,
-  Options,
-} from "../../../Exports/Decorators";
-import { Validator } from "../../../Exports/Validator";
-import { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
 import path from "path";
 
-const UsagePath1 = path.resolve(__dirname, "./Usage1.ts");
+const UsagePath1 = path.resolve(__dirname, "./Usage.ts");
 
 describe("IntegrationTesting:RootCommandHandle", () => {
   it("should use root command as handler", async () => {
     const { stdout: stdout1 } = await execaCommand(`ts-node-esm ${UsagePath1}`);
     expect(stdout1).toMatchInlineSnapshot(
       `
-      "withVariadic:  [ 'projects', 'p' ]
-      --msg option: default value of msg
+      "--msg option: default value of msg
       --projects option: 
       inputs: 
       options: {}"
@@ -37,8 +21,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout2).toMatchInlineSnapshot(
       `
-      "withVariadic:  [ 'projects', 'p' ]
-      --msg option: Hello
+      "--msg option: Hello
       --projects option: 
       inputs: 
       options: {\\"msg\\":\\"Hello\\"}"
@@ -50,8 +33,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout3).toMatchInlineSnapshot(
       `
-      "withVariadic:  [ 'projects', 'p' ]
-      --msg option: Hello
+      "--msg option: Hello
       --projects option: app1,app2,app3
       inputs: 
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\"]}"
@@ -63,8 +45,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout4).toMatchInlineSnapshot(
       `
-      "withVariadic:  [ 'projects', 'p' ]
-      --msg option: Hello
+      "--msg option: Hello
       --projects option: app1,app2,app3
       inputs: enhance
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\"]}"
@@ -76,8 +57,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout5).toMatchInlineSnapshot(
       `
-      "withVariadic:  [ 'projects', 'p' ]
-      --msg option: Hello
+      "--msg option: Hello
       --projects option: app1,app2,app3
       inputs: enhance
       options: {\\"msg\\":\\"Hello\\",\\"p\\":[\\"app1\\",\\"app2\\",\\"app3\\"]}"
