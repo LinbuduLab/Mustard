@@ -184,19 +184,24 @@ export class DecoratedClassFieldsNormalizer {
       optionName: injectKey,
       initValue,
       schema,
+      optionAlias: injectSubKey,
       // todo: by XOR types
     } = <Required<OptionInitializerPlaceHolder>>initializer;
 
     // use value from parsed args
-    if (injectKey in parsedArgs) {
-      const argValue = parsedArgs[injectKey];
+    if (injectKey in parsedArgs || injectSubKey in parsedArgs) {
+      const argValue = parsedArgs[injectKey] ?? parsedArgs[injectSubKey];
 
       let validatedValue = null;
 
       if (schema) {
         const validation = schema.safeParse(argValue);
         if (!validation.success) {
-          throw new ValidationError(injectKey, argValue, validation.error);
+          throw new ValidationError(
+            injectKey ?? injectSubKey,
+            argValue,
+            validation.error
+          );
         }
         validatedValue = validation.data;
       } else {

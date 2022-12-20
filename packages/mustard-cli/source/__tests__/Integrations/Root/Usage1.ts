@@ -1,34 +1,36 @@
-import { MustardFactory, Context, MustardUtils } from "../../../Exports";
+import { MustardFactory } from "../../../Exports";
 import {
-  Command,
   RootCommand,
   Option,
   VariadicOption,
   App,
-  Ctx,
   Input,
-  Inject,
-  Utils,
   Options,
 } from "../../../Exports/Decorators";
-import { Validator } from "../../../Exports/Validator";
 import { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option()
+  @Option("msg", "m")
   public msg = "default value of msg";
 
-  @VariadicOption()
+  @VariadicOption({ alias: "p" })
   public projects: string[] = [];
 
   @Input()
   public inputs: string;
 
+  @Options()
+  public options: unknown;
+
   public run(): void {
-    console.log(
-      `Root command with msg option: ${this.msg}, projects option: ${this.projects}, inputs: ${this.inputs}`
-    );
+    console.log(`--msg option: ${this.msg}`);
+
+    console.log(`--projects option: ${this.projects.join(",")}`);
+
+    console.log(`inputs: ${this.inputs}`);
+
+    console.log(`options: ${JSON.stringify(this.options)}`);
   }
 }
 

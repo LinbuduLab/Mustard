@@ -324,6 +324,8 @@ export class OptionDecorators {
 
       MustardRegistry.VariadicOptions.add(applyOptionName);
 
+      alias ? MustardRegistry.VariadicOptions.add(alias) : void 0;
+
       return <OptionInitializerPlaceHolder>{
         type: "VariadicOption",
         optionName: applyOptionName,

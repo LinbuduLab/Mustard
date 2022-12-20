@@ -106,19 +106,19 @@ export class CLI {
   }
 
   private instantiateWithParse() {
-    const variadicOptionKeys = new Set<string>();
+    // const variadicOptionKeys = new Set<string>();
 
     MustardRegistry.provide().forEach((commandRegistration, key) => {
       const instance = new commandRegistration.Class();
 
-      const decoratedInstanceFields =
-        MustardUtils.filterDecoratedInstanceFields(instance);
+      // const decoratedInstanceFields =
+      //   MustardUtils.filterDecoratedInstanceFields(instance);
 
-      decoratedInstanceFields
-        .filter((v) => v.type === "VariadicOption")
-        .forEach((v) => {
-          variadicOptionKeys.add(v.key);
-        });
+      // decoratedInstanceFields
+      //   .filter((v) => v.type === "VariadicOption")
+      //   .forEach((v) => {
+      //     variadicOptionKeys.add(v.key);
+      //   });
 
       MustardRegistry.upsert(key, { instance });
     });
