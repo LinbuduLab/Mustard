@@ -8,6 +8,10 @@ export class CommandNotFoundError extends Error {
   }
 
   get message(): string {
-    return `Command not found with parsed args: ${this.parsedArgs}`;
+    return `Command not found with parsed args: ${JSON.stringify(
+      this.parsedArgs,
+      null,
+      2
+    )}`;
   }
 }

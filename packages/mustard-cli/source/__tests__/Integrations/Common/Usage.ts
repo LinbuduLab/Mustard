@@ -10,8 +10,136 @@ import {
 } from "../../../Exports/Decorators";
 import { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
 
-@Command("run")
+@Command("run", "r")
 class RunCommandHandle implements CommandStruct {
+  @Option()
+  public pure = "default value of pure";
+
+  @Option("msg", "m")
+  public msgOption = "default value of msg";
+
+  @VariadicOption({ alias: "p" })
+  public projects: string[] = [];
+
+  @Input()
+  public inputs: string;
+
+  @Options()
+  public options: unknown;
+
+  public run(): void {
+    console.log("Run Command");
+
+    console.log(`--pure option: ${this.pure}`);
+
+    console.log(`--msg option: ${this.msgOption}`);
+
+    console.log(`--projects option: ${this.projects.join(",")}`);
+
+    console.log(`inputs: ${this.inputs}`);
+
+    console.log(`options: ${JSON.stringify(this.options)}`);
+  }
+}
+
+@Command("node", "n")
+class UpdateDepNodeCommandHandle implements CommandStruct {
+  @Option()
+  public pure = "default value of pure";
+
+  @Option("msg", "m")
+  public msgOption = "default value of msg";
+
+  @VariadicOption({ alias: "p" })
+  public projects: string[] = [];
+
+  @Input()
+  public inputs: string;
+
+  @Options()
+  public options: unknown;
+
+  public run(): void {
+    console.log("Update Dep Node Command");
+
+    console.log(`--pure option: ${this.pure}`);
+
+    console.log(`--msg option: ${this.msgOption}`);
+
+    console.log(`--projects option: ${this.projects.join(",")}`);
+
+    console.log(`inputs: ${this.inputs}`);
+
+    console.log(`options: ${JSON.stringify(this.options)}`);
+  }
+}
+
+@Command("dep", "d", [UpdateDepNodeCommandHandle])
+class UpdateDepCommandHandle implements CommandStruct {
+  @Option()
+  public pure = "default value of pure";
+
+  @Option("msg", "m")
+  public msgOption = "default value of msg";
+
+  @VariadicOption({ alias: "p" })
+  public projects: string[] = [];
+
+  @Input()
+  public inputs: string;
+
+  @Options()
+  public options: unknown;
+
+  public run(): void {
+    console.log("Update Dep Command");
+
+    console.log(`--pure option: ${this.pure}`);
+
+    console.log(`--msg option: ${this.msgOption}`);
+
+    console.log(`--projects option: ${this.projects.join(",")}`);
+
+    console.log(`inputs: ${this.inputs}`);
+
+    console.log(`options: ${JSON.stringify(this.options)}`);
+  }
+}
+
+@Command("sys", "s", [])
+class UpdateSysCommandHandle implements CommandStruct {
+  @Option()
+  public pure = "default value of pure";
+
+  @Option("msg", "m")
+  public msgOption = "default value of msg";
+
+  @VariadicOption({ alias: "p" })
+  public projects: string[] = [];
+
+  @Input()
+  public inputs: string;
+
+  @Options()
+  public options: unknown;
+
+  public run(): void {
+    console.log("Update Sys Command");
+
+    console.log(`--pure option: ${this.pure}`);
+
+    console.log(`--msg option: ${this.msgOption}`);
+
+    console.log(`--projects option: ${this.projects.join(",")}`);
+
+    console.log(`inputs: ${this.inputs}`);
+
+    console.log(`options: ${JSON.stringify(this.options)}`);
+  }
+}
+
+@Command("update", "u", [UpdateDepCommandHandle, UpdateSysCommandHandle])
+class UpdateCommandHandle implements CommandStruct {
   @Option("msg", "m")
   public msg = "default value of msg";
 
@@ -25,6 +153,8 @@ class RunCommandHandle implements CommandStruct {
   public options: unknown;
 
   public run(): void {
+    console.log("Update Command");
+
     console.log(`--msg option: ${this.msg}`);
 
     console.log(`--projects option: ${this.projects.join(",")}`);
@@ -33,26 +163,6 @@ class RunCommandHandle implements CommandStruct {
 
     console.log(`options: ${JSON.stringify(this.options)}`);
   }
-}
-
-@Command("node", "n")
-class UpdateDepNodeCommandHandle implements CommandStruct {
-  public run(): void {}
-}
-
-@Command("dep", "d", [UpdateDepNodeCommandHandle])
-class UpdateDepCommandHandle implements CommandStruct {
-  public run(): void {}
-}
-
-@Command("sys", "s", [])
-class UpdateSysCommandHandle implements CommandStruct {
-  public run(): void {}
-}
-
-@Command("update", "u", [UpdateDepCommandHandle, UpdateSysCommandHandle])
-class UpdateCommandHandle implements CommandStruct {
-  public run(): void {}
 }
 
 @App({

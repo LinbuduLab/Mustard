@@ -5,7 +5,7 @@ export default defineConfig({
     testTimeout: 300000,
     environment: "node",
     passWithNoTests: true,
-    include: ["source/__tests__/Integrations/**/*.{spec,test}.ts"],
+    include: ["source/__tests__/**/*.{spec,test}.ts"],
     // exclude: ["**/node_modules/**"],
     coverage: {
       enabled: true,
