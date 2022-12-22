@@ -203,7 +203,6 @@ export class DecoratedClassFieldsNormalizer {
       initValue,
       schema,
       optionAlias: injectSubKey,
-      // todo: by XOR types
     } = <Required<OptionInitializerPlaceHolder>>initializer;
 
     // use value from parsed args
