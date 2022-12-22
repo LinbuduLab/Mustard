@@ -1,16 +1,45 @@
 import fs from "fs";
+import fsp from "fs/promises";
 import { EOL } from "os";
+import { Nullable } from "../Typings/Shared.struct";
+
+interface ReadJsonOptions {
+  encoding?: null | undefined;
+  flag?: string | undefined;
+  throw?: boolean;
+  parserOptions?: string;
+  reviver?: (key: string, value: any) => any;
+}
 
 class JSONHelper {
+  public static async readJson<TParsedContent = Record<string, unknown>>(
+    filePath: string,
+    options?: Nullable<ReadJsonOptions>
+  ): Promise<TParsedContent> {
+    return new Promise<TParsedContent>((resolve, reject) => {
+      fsp.readFile(filePath).then((content) => {
+        let parsed: any;
+        try {
+          parsed = JSON.parse(
+            content.toString().replace(/^\uFEFF/, ""),
+            options?.reviver
+          );
+          resolve(parsed);
+        } catch (error: any) {
+          if (options?.throw) {
+            error.message = `${filePath}: ${error.message}`;
+            reject(error);
+          } else {
+            resolve({} as TParsedContent);
+          }
+        }
+      });
+    });
+  }
+
   public static readJsonSync<TParsedContent = Record<string, unknown>>(
     filePath: string,
-    options?: {
-      encoding?: null | undefined;
-      flag?: string | undefined;
-      throw?: boolean;
-      parserOptions?: string;
-      reviver?: (key: string, value: any) => any;
-    } | null
+    options?: Nullable<ReadJsonOptions>
   ): TParsedContent {
     const content = fs
       .readFileSync(filePath, {
@@ -35,6 +64,19 @@ class JSONHelper {
     return parsed;
   }
 
+  public static async writeJson(
+    filePath: string,
+    content: any,
+    options?: fs.WriteFileOptions
+  ): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const contentStr =
+        JSON.stringify(content, null, 2).replace(/\n/g, EOL) + EOL;
+
+      fsp.writeFile(filePath, contentStr, options).then(resolve).catch(reject);
+    });
+  }
+
   public static writeJsonSync(
     filePath: string,
     content: any,
@@ -51,34 +93,18 @@ class JSONHelper {
  * @Utils
  * @Utils.Json
  * @Utils.PackageJson
- * @Utils.TmpFile
  */
 export class MustardUtilsProvider {
   public static produce() {
     return {
-      tmpFile: MustardUtilsProvider.tmpFile,
       json: MustardUtilsProvider.json,
-      npm: MustardUtilsProvider.npm,
     };
-  }
-
-  public static get tmpFile() {
-    return {};
   }
 
   public static get json() {
     return {
       readSync: JSONHelper.readJsonSync,
       writeSync: JSONHelper.writeJsonSync,
-    };
-  }
-
-  public static get npm() {
-    return {
-      getPackageManager: () => {},
-      install: () => {},
-      uninstall: () => {},
-      installDev: () => {},
     };
   }
 }
