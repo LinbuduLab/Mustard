@@ -48,6 +48,28 @@ export class DecoratedClassFieldsNormalizer {
   ) {
     const completeInstanceFields = <string[]>Reflect.ownKeys(instance);
 
+    const optionsField = completeInstanceFields.find((instanceField) => {
+      const initializer = Reflect.get(instance, instanceField);
+
+      const { type } = <
+          {
+            type: InstanceFieldDecorationTypesUnion;
+          }
+        >initializer ?? {};
+
+      return type === "Options";
+    });
+
+    if (optionsField) {
+      DecoratedClassFieldsNormalizer.normalizeOptions(
+        instance,
+        optionsField,
+        parsedArgs
+      );
+    }
+
+    // should init Options first...
+
     completeInstanceFields.forEach((instanceField) => {
       const initializer = Reflect.get(instance, instanceField);
 
@@ -92,11 +114,7 @@ export class DecoratedClassFieldsNormalizer {
           );
           break;
         case "Options":
-          DecoratedClassFieldsNormalizer.normalizeOptions(
-            instance,
-            instanceField,
-            parsedArgs
-          );
+          // Options Field is already normalized
           break;
         default:
           // Not Decorated Instance Field
@@ -232,6 +250,24 @@ export class DecoratedClassFieldsNormalizer {
     parsedArgs: Dictionary
   ) {
     const { _, ...preservedParsedArgs } = parsedArgs;
+
+    // const optionFieldsWithInitialValue =
+    //   MustardUtils.filterDecoratedInstanceFields(instance).reduce<Dictionary>(
+    //     (acc, curr) => {
+    //       return curr.type === "Option" || curr.type === "VariadicOption"
+    //         ? {
+    //             ...acc,
+    //             [curr.value.optionName as string]: curr.value.initValue,
+    //           }
+    //         : acc;
+    //     },
+    //     {}
+    //   );
+    // for (const optionField in optionFieldsWithInitialValue) {
+    //   preservedParsedArgs[optionField] =
+    //     optionFieldsWithInitialValue[optionField];
+    // }
+
     MustardUtils.setInstanceFieldValue(
       instance,
       instanceField,
