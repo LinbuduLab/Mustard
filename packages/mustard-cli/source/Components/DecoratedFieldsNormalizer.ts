@@ -185,7 +185,6 @@ export class DecoratedClassFieldsNormalizer {
       initValue,
       schema,
       optionAlias: injectSubKey,
-      // todo: by XOR types
     } = <Required<OptionInitializerPlaceHolder>>initializer;
 
     // use value from parsed args
@@ -232,6 +231,9 @@ export class DecoratedClassFieldsNormalizer {
     parsedArgs: Dictionary
   ) {
     const { _, ...preservedParsedArgs } = parsedArgs;
+
+    // todo: should merge with provided default values
+
     MustardUtils.setInstanceFieldValue(
       instance,
       instanceField,
