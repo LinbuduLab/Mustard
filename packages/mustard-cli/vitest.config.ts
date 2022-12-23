@@ -6,7 +6,7 @@ export default defineConfig({
     environment: "node",
     passWithNoTests: true,
     include: ["source/__tests__/**/*.{spec,test}.ts"],
-    // exclude: ["**/node_modules/**"],
+    exclude: ["source/__tests__/Integrations"],
     coverage: {
       enabled: true,
       reporter: ["text", "html"],
