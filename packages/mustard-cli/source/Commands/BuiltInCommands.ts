@@ -8,25 +8,26 @@ import type { Arguments } from "yargs-parser";
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 
 export class BuiltInCommands {
-  public static containsHelpFlag(parsedArgs: Arguments) {
-    return (
+  public static containsHelpFlag(parsedArgs: Arguments): boolean {
+    return Boolean(
       parsedArgs["help"] ||
-      parsedArgs["h"] ||
-      parsedArgs[MustardConstanst.InternalHelpFlag]
+        parsedArgs["h"] ||
+        parsedArgs[MustardConstanst.InternalHelpFlag]
     );
   }
 
-  public static containsVersionFlag(parsedArgs: Arguments) {
-    return (
+  public static containsVersionFlag(parsedArgs: Arguments): boolean {
+    return Boolean(
       parsedArgs["version"] ||
-      parsedArgs["v"] ||
-      parsedArgs[MustardConstanst.InternalVersionFlag]
+        parsedArgs["v"] ||
+        parsedArgs[MustardConstanst.InternalVersionFlag]
     );
   }
 
   public static useHelpCommand(
     parsedArgs: Arguments | boolean,
-    registration?: CommandRegistryPayload
+    registration?: CommandRegistryPayload,
+    exit = true
   ) {
     const printHelp =
       typeof parsedArgs === "boolean"
@@ -41,12 +42,13 @@ export class BuiltInCommands {
       ? UsageInfoGenerator.collectSpecificCommandUsage(registration)
       : UsageInfoGenerator.collectCompleteAppUsage();
 
-    process.exit(0);
+    exit && process.exit(0);
   }
 
   public static useVersionCommand(
     parsedArgs: Arguments | boolean,
-    controller?: Configurations["enableVersion"]
+    controller?: Configurations["enableVersion"],
+    exit = true
   ) {
     const printVersion =
       typeof parsedArgs === "boolean"
@@ -64,6 +66,6 @@ export class BuiltInCommands {
 
     console.log(`V ${chalk.bold(version)}`);
 
-    process.exit(0);
+    exit && process.exit(0);
   }
 }

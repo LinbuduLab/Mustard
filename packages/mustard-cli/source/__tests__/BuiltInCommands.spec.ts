@@ -7,12 +7,24 @@ import { BuiltInCommands } from "../Commands/BuiltInCommands";
 import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "../Components/UsageGenerator";
 
-beforeEach(() => {
-  vi.spyOn(UsageInfoGenerator, "collectCompleteAppUsage").mockClear();
-  vi.spyOn(UsageInfoGenerator, "collectSpecificCommandUsage").mockClear();
-});
+vi.spyOn(UsageInfoGenerator, "collectCompleteAppUsage").mockImplementation(
+  () => {}
+);
+vi.spyOn(UsageInfoGenerator, "collectSpecificCommandUsage").mockImplementation(
+  // @ts-expect-error
+  () => {}
+);
 
-describe.skip("BuiltInCommands", () => {
+const registration = {
+  commandInvokeName: "foo",
+  root: false,
+  Class: class Foo implements CommandStruct {
+    run() {}
+  },
+  childCommandList: [],
+} satisfies CommandRegistryPayload;
+
+describe("BuiltInCommands", () => {
   it("should check if contains help flag", () => {
     expect(BuiltInCommands.containsHelpFlag({ _: [], help: true })).toBe(true);
     expect(BuiltInCommands.containsHelpFlag({ _: [], h: true })).toBe(true);
@@ -64,24 +76,15 @@ describe.skip("BuiltInCommands", () => {
     expect(UsageInfoGenerator.collectCompleteAppUsage).not.toBeCalled();
     expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
 
-    BuiltInCommands.useHelpCommand(true);
+    BuiltInCommands.useHelpCommand(true, undefined, false);
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(1);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
 
-    BuiltInCommands.useHelpCommand({ _: [], help: true });
+    BuiltInCommands.useHelpCommand({ _: [], help: true }, undefined, false);
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
 
-    const registration = {
-      commandInvokeName: "foo",
-      root: false,
-      Class: class Foo implements CommandStruct {
-        run() {}
-      },
-      childCommandList: [],
-    } satisfies CommandRegistryPayload;
-
-    BuiltInCommands.useHelpCommand(true, registration);
+    BuiltInCommands.useHelpCommand(true, registration, false);
 
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(1);
@@ -89,7 +92,7 @@ describe.skip("BuiltInCommands", () => {
       registration
     );
 
-    BuiltInCommands.useHelpCommand({ _: [], help: true }, registration);
+    BuiltInCommands.useHelpCommand({ _: [], help: true }, registration, false);
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(2);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledWith(
@@ -98,6 +101,26 @@ describe.skip("BuiltInCommands", () => {
   });
 
   it("should handle version command", () => {
-    expect(1 + 1).toBe(2);
+    const controller = vi.fn().mockReturnValue("1.0.0");
+    vi.spyOn(console, "log").mockImplementation(() => {});
+
+    BuiltInCommands.useVersionCommand(false, controller, false);
+    expect(controller).not.toBeCalled();
+
+    BuiltInCommands.useVersionCommand(true, controller, false);
+    expect(controller).toBeCalledTimes(1);
+    expect(console.log).toBeCalledTimes(1);
+
+    BuiltInCommands.useVersionCommand(
+      { _: [], version: true },
+      controller,
+      false
+    );
+    expect(console.log).toBeCalledTimes(2);
+    expect(controller).toBeCalledTimes(2);
+
+    BuiltInCommands.useVersionCommand(true, "1.2.0", false);
+    expect(controller).toBeCalledTimes(2);
+    expect(console.log).toBeCalledTimes(3);
   });
 });

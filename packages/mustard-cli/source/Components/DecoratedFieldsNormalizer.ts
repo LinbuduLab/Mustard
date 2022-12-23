@@ -48,25 +48,25 @@ export class DecoratedClassFieldsNormalizer {
   ) {
     const completeInstanceFields = <string[]>Reflect.ownKeys(instance);
 
-    const optionsField = completeInstanceFields.find((instanceField) => {
-      const initializer = Reflect.get(instance, instanceField);
+    // const optionsField = completeInstanceFields.find((instanceField) => {
+    //   const initializer = Reflect.get(instance, instanceField);
 
-      const { type } = <
-          {
-            type: InstanceFieldDecorationTypesUnion;
-          }
-        >initializer ?? {};
+    //   const { type } = <
+    //       {
+    //         type: InstanceFieldDecorationTypesUnion;
+    //       }
+    //     >initializer ?? {};
 
-      return type === "Options";
-    });
+    //   return type === "Options";
+    // });
 
-    if (optionsField) {
-      DecoratedClassFieldsNormalizer.normalizeOptions(
-        instance,
-        optionsField,
-        parsedArgs
-      );
-    }
+    // if (optionsField) {
+    //   DecoratedClassFieldsNormalizer.normalizeOptions(
+    //     instance,
+    //     optionsField,
+    //     parsedArgs
+    //   );
+    // }
 
     // should init Options first...
 
@@ -114,7 +114,11 @@ export class DecoratedClassFieldsNormalizer {
           );
           break;
         case "Options":
-          // Options Field is already normalized
+          DecoratedClassFieldsNormalizer.normalizeOptions(
+            instance,
+            instanceField,
+            parsedArgs
+          );
           break;
         default:
           // Not Decorated Instance Field

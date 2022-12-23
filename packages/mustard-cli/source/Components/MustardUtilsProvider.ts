@@ -11,7 +11,7 @@ interface ReadJsonOptions {
   reviver?: (key: string, value: any) => any;
 }
 
-class JSONHelper {
+export class JSONHelper {
   public static async readJson<TParsedContent = Record<string, unknown>>(
     filePath: string,
     options?: Nullable<ReadJsonOptions>
@@ -104,7 +104,9 @@ export class MustardUtilsProvider {
   public static get json() {
     return {
       readSync: JSONHelper.readJsonSync,
+      read: JSONHelper.readJson,
       writeSync: JSONHelper.writeJsonSync,
+      write: JSONHelper.writeJson,
     };
   }
 }
