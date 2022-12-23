@@ -40,20 +40,20 @@
     "find-up": "^6.3.0",
     "mri": "^1.2.0",
     "yargs-parser": "^21.1.1",
-    "zod": "^3.19.1"
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
-    "@types/node": "^18.11.7",
+    "@types/node": "^18.11.17",
     "@types/yargs-parser": "^21.0.0",
-    "@vitest/coverage-c8": "^0.25.8",
-    "chalk": "4.0.0",
-    "execa": "^6.1.0",
+    "@vitest/coverage-c8": "^0.26.2",
+    "chalk": "^4.0.0",
+    "execa": "^6.0.0",
     "lodash": "^4.17.21",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.0",
+    "tsconfig-paths": "^4.1.1",
     "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31",
-    "vitest": "^0.25.8"
+    "vitest": "^0.26.2"
   }
 }
