@@ -35,5 +35,5 @@
     }
   },
   "include": ["./**/*.ts"],
-  "exclude": ["_samples", "advanced", "dist", "Samples"]
+  "exclude": ["dist", "samples"]
 }

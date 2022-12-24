@@ -60,6 +60,7 @@ export class UsageInfoGenerator {
       : void 0;
   }
 
+  // WIP
   public static formatCommandUsage(collect: ParsedCommandUsage): string {
     return `
 Command: ${collect.name}${collect.alias ? ` (${collect.alias})` : ""}

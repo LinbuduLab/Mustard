@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { MustardFactory } from "../Exports";
+import { MustardFactory } from "../source/Exports";
 import {
   Command,
   RootCommand,
@@ -9,9 +9,9 @@ import {
   App,
   Input,
   Options,
-} from "../Exports/Decorators";
-import { Validator } from "../Exports/Validator";
-import { CommandStruct, MustardApp } from "../Exports/ComanndLine";
+} from "../source/Exports/Decorators";
+import { Validator } from "../source/Exports/Validator";
+import { CommandStruct, MustardApp } from "../source/Exports/ComanndLine";
 import path from "path";
 
 @RootCommand()

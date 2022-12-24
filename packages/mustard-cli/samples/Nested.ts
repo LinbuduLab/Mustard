@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { MustardFactory } from "../Exports";
-import { Command, VariadicOption, App } from "../Exports/Decorators";
-import { CommandStruct, MustardApp } from "../Exports/ComanndLine";
+import { MustardFactory } from "../source/Exports";
+import { Command, VariadicOption, App } from "../source/Exports/Decorators";
+import { CommandStruct, MustardApp } from "../source/Exports/ComanndLine";
 
 @Command("dep", [])
 class UpdateDepCommand implements CommandStruct {
