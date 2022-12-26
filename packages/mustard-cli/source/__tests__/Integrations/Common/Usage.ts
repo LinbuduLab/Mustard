@@ -10,6 +10,38 @@ import {
 } from "../../../Exports/Decorators";
 import { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
 
+@RootCommand()
+class RootCommandHandle implements CommandStruct {
+  @Option()
+  public pure = "default value of pure";
+
+  @Option("msg", "m")
+  public msgOption = "default value of msg";
+
+  @VariadicOption({ alias: "p" })
+  public projects: string[] = [];
+
+  @Input()
+  public inputs: string;
+
+  @Options()
+  public options: unknown;
+
+  public run(): void {
+    console.log("Root Command");
+
+    console.log(`--pure option: ${this.pure}`);
+
+    console.log(`--msg option: ${this.msgOption}`);
+
+    console.log(`--projects option: ${this.projects.join(",")}`);
+
+    console.log(`inputs: ${this.inputs}`);
+
+    console.log(`options: ${JSON.stringify(this.options)}`);
+  }
+}
+
 @Command("run", "r")
 class RunCommandHandle implements CommandStruct {
   @Option()
@@ -168,6 +200,7 @@ class UpdateCommandHandle implements CommandStruct {
 @App({
   name: "LinbuduLab CLI",
   commands: [
+    RootCommandHandle,
     RunCommandHandle,
     UpdateCommandHandle,
     UpdateDepCommandHandle,

@@ -6,6 +6,48 @@ const UsagePath = path.resolve(__dirname, "./Usage.ts");
 
 describe("IntegrationTesting:CommonCommandHandle", () => {
   it("should dispatch command", async () => {
+    const { stdout: stdoutWithRoot1 } = await execaCommand(
+      `ts-node-esm ${UsagePath}`
+    );
+    expect(stdoutWithRoot1).toMatchInlineSnapshot(
+      `
+      "Root Command
+      --pure option: default value of pure
+      --msg option: default value of msg
+      --projects option: 
+      inputs: 
+      options: {}"
+    `
+    );
+
+    const { stdout: stdoutWithRoot2 } = await execaCommand(
+      `ts-node-esm ${UsagePath} input1 input2 input3`
+    );
+    expect(stdoutWithRoot2).toMatchInlineSnapshot(
+      `
+      "Root Command
+      --pure option: default value of pure
+      --msg option: default value of msg
+      --projects option: 
+      inputs: input1,input2,input3
+      options: {}"
+    `
+    );
+
+    const { stdout: stdoutWithRoot3 } = await execaCommand(
+      `ts-node-esm ${UsagePath} input1 input2 input3 --msg Hello --pure pureValue --projects app1 app2 app3 --projects app4`
+    );
+    expect(stdoutWithRoot3).toMatchInlineSnapshot(
+      `
+      "Root Command
+      --pure option: pureValue
+      --msg option: Hello
+      --projects option: app1,app2,app3,app4
+      inputs: input1,input2,input3
+      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+    `
+    );
+
     const { stdout: stdout1 } = await execaCommand(
       `ts-node-esm ${UsagePath} run`
     );

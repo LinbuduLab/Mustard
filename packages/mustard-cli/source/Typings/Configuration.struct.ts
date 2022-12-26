@@ -1,11 +1,11 @@
-import { CommandStruct } from "./Command.struct";
+import { CommandRegistryPayload, CommandStruct } from "./Command.struct";
 import { Provider } from "./DIService.struct";
 import { MaybeFactory } from "./Shared.struct";
 
 export interface Configurations {
   allowUnknownOptions?: boolean;
   debug: boolean;
-  enableUsage: boolean | MaybeFactory<string>;
+  enableUsage: boolean | ((registration?: CommandRegistryPayload) => string);
   enableVersion: false | MaybeFactory<string>;
   lifeCycles?: Partial<LifeCycles>;
   didYouMean?: boolean;

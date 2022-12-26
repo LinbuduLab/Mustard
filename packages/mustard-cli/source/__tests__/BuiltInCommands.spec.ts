@@ -72,19 +72,24 @@ describe("BuiltInCommands", () => {
   });
 
   it("should handle help command", () => {
-    BuiltInCommands.useHelpCommand(false);
+    BuiltInCommands.useHelpCommand(false, undefined, undefined, false);
     expect(UsageInfoGenerator.collectCompleteAppUsage).not.toBeCalled();
     expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
 
-    BuiltInCommands.useHelpCommand(true, undefined, false);
+    BuiltInCommands.useHelpCommand(true, undefined, false, false);
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(1);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
 
-    BuiltInCommands.useHelpCommand({ _: [], help: true }, undefined, false);
+    BuiltInCommands.useHelpCommand(
+      { _: [], help: true },
+      undefined,
+      false,
+      false
+    );
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
 
-    BuiltInCommands.useHelpCommand(true, registration, false);
+    BuiltInCommands.useHelpCommand(true, registration, false, false);
 
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(1);
@@ -92,7 +97,12 @@ describe("BuiltInCommands", () => {
       registration
     );
 
-    BuiltInCommands.useHelpCommand({ _: [], help: true }, registration, false);
+    BuiltInCommands.useHelpCommand(
+      { _: [], help: true },
+      registration,
+      false,
+      false
+    );
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(2);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledWith(

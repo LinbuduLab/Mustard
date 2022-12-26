@@ -13,7 +13,7 @@ export type ClassStruct<TInstanceType extends unknown = unknown> = new (
 
 export type Nullable<T> = T | null;
 
-export type MaybeFactory<T> = T | (() => T);
+export type MaybeFactory<T> = T | ((...args: any[]) => T);
 
 export type MaybeArray<T> = T | T[];
 

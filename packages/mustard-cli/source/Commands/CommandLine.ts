@@ -57,16 +57,16 @@ export class CLI {
 
   private normalizeConfigurations() {
     const {
-      enableUsage = true,
       allowUnknownOptions = false,
+      enableUsage = true,
       enableVersion = false,
       lifeCycles = {},
       didYouMean = true,
     } = this.options ?? {};
 
     this.options = {
-      enableUsage,
       allowUnknownOptions,
+      enableUsage,
       enableVersion,
       lifeCycles,
       didYouMean,
@@ -171,7 +171,11 @@ export class CLI {
       throw new CommandNotFoundError(this.parsedArgs);
     }
 
-    BuiltInCommands.useHelpCommand(this.parsedArgs, commandRegistration);
+    BuiltInCommands.useHelpCommand(
+      this.parsedArgs,
+      commandRegistration,
+      this.options?.enableUsage
+    );
 
     this.handleCommandExecution(commandRegistration, commandInput);
   }
@@ -203,10 +207,18 @@ export class CLI {
     const rootCommandRegistration = MustardRegistry.provideRootCommand();
 
     if (rootCommandRegistration) {
-      BuiltInCommands.useHelpCommand(this.parsedArgs, rootCommandRegistration);
+      BuiltInCommands.useHelpCommand(
+        this.parsedArgs,
+        rootCommandRegistration,
+        this.options?.enableUsage
+      );
       this.executeCommandFromRegistration(rootCommandRegistration);
     } else if (this.options?.enableUsage) {
-      BuiltInCommands.useHelpCommand(true);
+      BuiltInCommands.useHelpCommand(
+        true,
+        undefined,
+        this.options?.enableUsage
+      );
     } else {
       throw new NoRootHandlerError();
     }

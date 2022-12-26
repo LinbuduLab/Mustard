@@ -6,6 +6,7 @@ import { MustardConstanst } from "../Components/Constants";
 import type { Configurations } from "../Typings/Configuration.struct";
 import type { Arguments } from "yargs-parser";
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
+import type { MaybeFactory } from "../../source/Typings/Shared.struct";
 
 export class BuiltInCommands {
   public static containsHelpFlag(parsedArgs: Arguments): boolean {
@@ -24,9 +25,19 @@ export class BuiltInCommands {
     );
   }
 
+  private static useController<T extends string | boolean>(
+    factory: MaybeFactory<T>,
+    ...factoryArguments: unknown[]
+  ): T {
+    return typeof factory === "function"
+      ? factory(...factoryArguments)
+      : factory;
+  }
+
   public static useHelpCommand(
     parsedArgs: Arguments | boolean,
     registration?: CommandRegistryPayload,
+    controller?: Configurations["enableUsage"],
     exit = true
   ) {
     const printHelp =
@@ -38,7 +49,11 @@ export class BuiltInCommands {
       return;
     }
 
-    registration
+    controller
+      ? typeof controller === "function"
+        ? console.log(controller(registration))
+        : console.log(controller)
+      : registration
       ? UsageInfoGenerator.collectSpecificCommandUsage(registration)
       : UsageInfoGenerator.collectCompleteAppUsage();
 
@@ -61,10 +76,7 @@ export class BuiltInCommands {
 
     if (!controller) return;
 
-    const version =
-      typeof controller === "function" ? controller() : controller;
-
-    console.log(`V ${chalk.bold(version)}`);
+    console.log(`V ${chalk.bold(BuiltInCommands.useController(controller))}`);
 
     exit && process.exit(0);
   }

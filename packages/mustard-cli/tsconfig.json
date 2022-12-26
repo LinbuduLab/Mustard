@@ -35,5 +35,5 @@
     }
   },
   "include": ["./**/*.ts"],
-  "exclude": ["dist", "samples"]
+  "exclude": ["dist", "samples", "__tests__/Integrations"]
 }
