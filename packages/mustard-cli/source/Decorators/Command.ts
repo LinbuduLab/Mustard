@@ -1,9 +1,9 @@
 import _debug from "debug";
 
-import { CommandList } from "source/Typings/Configuration.struct";
 import { MustardRegistry } from "../Components/Registry";
 import { MustardConstanst } from "../Components/Constants";
 
+import type { CommandList } from "../Typings/Configuration.struct";
 import type { Nullable } from "../Typings/Shared.struct";
 import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
 import type { CommandConfiguration } from "../Typings/Command.struct";

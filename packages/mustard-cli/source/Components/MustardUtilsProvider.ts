@@ -1,7 +1,8 @@
 import fs from "fs";
 import fsp from "fs/promises";
 import { EOL } from "os";
-import { Nullable } from "../Typings/Shared.struct";
+
+import type { Nullable } from "../Typings/Shared.struct";
 
 interface ReadJsonOptions {
   encoding?: null | undefined;

@@ -1,9 +1,11 @@
+import _debug from "debug";
+
 import { MustardRegistry } from "../Components/Registry";
 import { MustardConstanst } from "../Components/Constants";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 import { MustardUtils } from "../Components/Utils";
+
 import { BuiltInCommands } from "./BuiltInCommands";
-import _debug from "debug";
 
 import { CommandNotFoundError } from "../Errors/CommandNotFoundError";
 import { NoRootHandlerError } from "../Errors/NoRootHandlerError";

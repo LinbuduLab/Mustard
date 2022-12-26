@@ -1,5 +1,5 @@
-import parse from "yargs-parser";
 import mri from "mri";
+import parse from "yargs-parser";
 import { closest } from "fastest-levenshtein";
 import { MustardRegistry } from "./Registry";
 import { MustardConstanst } from "./Constants";
