@@ -10,14 +10,21 @@ import type { CommandConfiguration } from "../Typings/Command.struct";
 
 const debug = _debug("mustard:decorator:command");
 
+/**
+ * Command related decorators
+ *
+ * `@Command` and `@RootCommand`
+ */
 export class CommandDecorators {
   /**
+   * Register command handler class
    * @example
    * \@Command('run')
    * class RunCommand {}
    */
   public static Command(commandName: string): AnyClassDecoratorReturnType;
   /**
+   * Register command handler class
    * @example
    * \@Command({ name: 'run', alias: 'r' })
    * class RunCommand {}
@@ -26,6 +33,7 @@ export class CommandDecorators {
     config: CommandConfiguration
   ): AnyClassDecoratorReturnType;
   /**
+   * Register command handler class
    * @example
    * \@Command('run', 'r')
    * class RunCommand {}
@@ -38,6 +46,7 @@ export class CommandDecorators {
     aliasOrDescription: string
   ): AnyClassDecoratorReturnType;
   /**
+   * Register command handler class
    * @example
    *  \@Command('task')
    * class RunTaskCommand {}
@@ -50,8 +59,8 @@ export class CommandDecorators {
     childCommandList: CommandList
   ): AnyClassDecoratorReturnType;
   /**
+   * Register command handler class
    * @example
-
    * \@Command('run', 'r', 'run command handle')
    * class RunCommand {}
    */
@@ -61,6 +70,7 @@ export class CommandDecorators {
     description: string
   ): AnyClassDecoratorReturnType;
   /**
+   * Register command handler class
    * @example
    *  \@Command('task')
    * class RunTaskCommand {}
@@ -77,6 +87,7 @@ export class CommandDecorators {
     childCommandList: CommandList
   ): AnyClassDecoratorReturnType;
   /**
+   * Register command handler class
    * @example
    *  \@Command('task')
    * class RunTaskCommand {}
@@ -193,6 +204,10 @@ export class CommandDecorators {
     );
   }
 
+  /**
+   * Register root command handler class
+   * @returns
+   */
   public static RootCommand(): AnyClassDecoratorReturnType {
     return (target, context) => {
       MustardRegistry.registerInit(<string>context.name, {

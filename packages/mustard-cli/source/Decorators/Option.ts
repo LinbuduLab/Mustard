@@ -13,8 +13,12 @@ import type { Nullable } from "../Typings/Shared.struct";
 
 const debug = _debug("mustard:decorator:option");
 
+/**
+ * CLI arguments(options?) related decorators
+ */
 export class OptionDecorators {
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option()
@@ -23,6 +27,7 @@ export class OptionDecorators {
    */
   public static Option(): AnyClassFieldDecoratorReturnType;
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option('dryRun')
@@ -31,6 +36,7 @@ export class OptionDecorators {
    */
   public static Option(optionName: string): AnyClassFieldDecoratorReturnType;
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option(Validator.Boolean())
@@ -41,6 +47,7 @@ export class OptionDecorators {
     validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option({ name: 'dryRun' })
@@ -51,6 +58,7 @@ export class OptionDecorators {
     optionConfig: OptionConfiguration
   ): AnyClassFieldDecoratorReturnType;
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option('dryRun', 'dry run mode')
@@ -65,6 +73,7 @@ export class OptionDecorators {
     aliasOrDescription: string
   ): AnyClassFieldDecoratorReturnType;
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option('dryRun', Validator.Boolean())
@@ -76,6 +85,7 @@ export class OptionDecorators {
     validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option('dryRun', 'dry run mode', Validator.Boolean())
@@ -91,6 +101,7 @@ export class OptionDecorators {
     validator: Partial<ValidatorFactory>
   ): AnyClassFieldDecoratorReturnType;
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option('dryRun', 'd', 'dry run mode')
@@ -103,6 +114,7 @@ export class OptionDecorators {
     description: string
   ): AnyClassFieldDecoratorReturnType;
   /**
+   * Register option value inject
    * @example
    * class RunCommand {
    *  \@Option('dryRun', 'd', 'dry run mode', Validator.Boolean())
@@ -253,17 +265,60 @@ export class OptionDecorators {
       };
   }
 
+  /**
+   * Register variadic option value inject
+   * @example
+   * class RunCommand {
+   *  \@VariadicOption()
+   *   public packages: string[];
+   * }
+   */
   public static VariadicOption(): AnyClassFieldDecoratorReturnType;
+  /**
+   * Register variadic option value inject
+   * @example
+   * class RunCommand {
+   *  \@VariadicOption('pkg')
+   *   public packages: string[];
+   * }
+   */
   public static VariadicOption(
     optionName: string
   ): AnyClassFieldDecoratorReturnType;
+  /**
+   * Register variadic option value inject
+   * @example
+   * class RunCommand {
+   *  \@VariadicOption({ name: 'pkg', alias: 'p' })
+   *   public packages: string[];
+   * }
+   */
   public static VariadicOption(
     config: VariadicOptionConfiguration
   ): AnyClassFieldDecoratorReturnType;
+  /**
+   * Register variadic option value inject
+   * @example
+   * class RunCommand {
+   *  \@VariadicOption('pkg', 'p')
+   *   public packages: string[];
+   *
+   * \@VariadicOption('conf', 'config file to use')
+   *   public config: string[];
+   * }
+   */
   public static VariadicOption(
     optionName: string,
     aliasOrDescription?: string
   ): AnyClassFieldDecoratorReturnType;
+  /**
+   * Register variadic option value inject
+   * @example
+   * class RunCommand {
+   *  \@VariadicOption('pkg', 'p', 'some description')
+   *   public packages: string[];
+   * }
+   */
   public static VariadicOption(
     optionName: string,
     alias: string,
@@ -336,7 +391,17 @@ export class OptionDecorators {
     };
   }
 
-  // @Options accept no args as it represents all options received
+  /**
+   * Register options value(complete parsed args merged with default values) inject
+   *
+   * \@Options accept no args as it represents all options received
+   * @example
+   * class RunCommand {
+   *  \@Options()
+   *   public completeOptions: unknown;
+   * }
+   * @returns
+   */
   public static Options(): AnyClassFieldDecoratorReturnType {
     return (_, context) => (initValue) => {
       debug("Options registered in %s field", context.name);

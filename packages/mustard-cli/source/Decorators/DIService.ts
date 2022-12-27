@@ -6,6 +6,9 @@ import type {
   AnyClassFieldDecoratorReturnType,
 } from "../Typings/Temp";
 
+/**
+ * DI related decorators
+ */
 export class DIServiceDecorators {
   public static Inject(identifier?: string): AnyClassFieldDecoratorReturnType {
     return (_, context) => () =>

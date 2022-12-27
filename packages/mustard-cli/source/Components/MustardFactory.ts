@@ -9,6 +9,10 @@ import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
 export class MustardFactory {
   private static FactoryOptions: Nullable<AppFactoryOptions> = null;
 
+  /**
+   * Register application entry handler
+   * @returns
+   */
   public static App(
     configuration: AppFactoryOptions
   ): AnyClassDecoratorReturnType {
@@ -21,6 +25,11 @@ export class MustardFactory {
     MustardFactory.FactoryOptions = null;
   }
 
+  /**
+   * Initialize application
+   * @param Cls
+   * @returns
+   */
   public static init(Cls: Constructable<MustardApp>): CLI {
     if (!MustardFactory.FactoryOptions) throw new NullishFactoryOptionError();
 
