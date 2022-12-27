@@ -113,16 +113,10 @@ export class CLI {
     MustardRegistry.provide().forEach((commandRegistration, key) => {
       const instance = new commandRegistration.Class();
 
-      // const decoratedInstanceFields =
-      //   MustardUtils.filterDecoratedInstanceFields(instance);
+      const decoratedInstanceFields =
+        MustardUtils.filterDecoratedInstanceFields(instance);
 
-      // decoratedInstanceFields
-      //   .filter((v) => v.type === "VariadicOption")
-      //   .forEach((v) => {
-      //     variadicOptionKeys.add(v.key);
-      //   });
-
-      MustardRegistry.upsert(key, { instance });
+      MustardRegistry.upsert(key, { instance, decoratedInstanceFields });
     });
 
     this.parsedArgs = MustardUtils.parseFromProcessArgs(
@@ -197,7 +191,7 @@ export class CLI {
       : void 0;
 
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
-      handler,
+      command,
       inputs,
       this.parsedArgs
     );

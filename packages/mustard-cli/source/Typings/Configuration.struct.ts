@@ -1,6 +1,6 @@
-import { CommandRegistryPayload, CommandStruct } from "./Command.struct";
-import { Provider } from "./DIService.struct";
-import { MaybeFactory } from "./Shared.struct";
+import type { CommandRegistryPayload, CommandStruct } from "./Command.struct";
+import type { Provider } from "./DIService.struct";
+import type { MaybeFactory } from "./Shared.struct";
 
 export interface Configurations {
   allowUnknownOptions?: boolean;
@@ -14,7 +14,7 @@ export interface Configurations {
 
 export interface LifeCycles {
   onStart: () => void;
-  onError: () => void;
+  onError: (err: Error) => void;
   onComplete: () => void;
 }
 

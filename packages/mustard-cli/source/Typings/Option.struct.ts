@@ -1,4 +1,4 @@
-import { ZodType } from "zod";
+import type { ZodType } from "zod";
 
 import type { ClassStruct } from "./Shared.struct";
 import type { ValidatorFactory } from "../Validators/Factory";

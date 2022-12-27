@@ -1,5 +1,6 @@
-import { MaybePromise, Constructable, Nullable } from "./Shared.struct";
-import { CommandList } from "./Configuration.struct";
+import type { MaybePromise, Constructable, Nullable } from "./Shared.struct";
+import type { CommandList } from "./Configuration.struct";
+import type { TaggedDecoratedInstanceFields } from "./Utils.struct";
 
 export type CommandRegistryPayload = {
   commandInvokeName: string;
@@ -9,7 +10,8 @@ export type CommandRegistryPayload = {
 
   commandAlias?: Nullable<string>;
   description?: Nullable<string>;
-  instance?: CommandStruct;
+  instance: CommandStruct;
+  decoratedInstanceFields: TaggedDecoratedInstanceFields[];
 };
 
 export abstract class CommandStruct {

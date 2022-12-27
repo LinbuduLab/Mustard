@@ -79,13 +79,13 @@ describe("FieldsNormalizer", () => {
 
   it("should normalize @Option and @VariadicOption field", () => {});
 
-  it("should normalize @Options field", () => {
-    DecoratedClassFieldsNormalizer.normalizeOptions(foo, "field1", {
-      foo: "bar",
-    });
+  // it("should normalize @Options field", () => {
+  //   DecoratedClassFieldsNormalizer.normalizeOptions(foo, "field1", {
+  //     foo: "bar",
+  //   });
 
-    expect(foo.field1).toEqual({
-      foo: "bar",
-    });
-  });
+  //   expect(foo.field1).toEqual({
+  //     foo: "bar",
+  //   });
+  // });
 });

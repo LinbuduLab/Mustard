@@ -1,6 +1,4 @@
-import { InstanceFieldDecorationTypesUnion } from "source/Components/Constants";
-import { OptionInitializerPlaceHolder } from "./Option.struct";
-import { Dictionary } from "./Shared.struct";
+import type { InstanceFieldDecorationTypesUnion } from "source/Components/Constants";
 
 export interface BasePlaceholder {
   type: InstanceFieldDecorationTypesUnion;

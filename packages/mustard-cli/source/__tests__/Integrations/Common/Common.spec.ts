@@ -16,7 +16,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: default value of msg
       --projects option: 
       inputs: 
-      options: {}"
+      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
     `
     );
 
@@ -30,7 +30,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: default value of msg
       --projects option: 
       inputs: input1,input2,input3
-      options: {}"
+      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
     `
     );
 
@@ -44,7 +44,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2,input3
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
 
@@ -58,7 +58,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: default value of msg
       --projects option: 
       inputs: 
-      options: {}"
+      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
     `
     );
 
@@ -72,7 +72,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
 
@@ -85,7 +85,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
 
@@ -98,7 +98,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
 
@@ -112,7 +112,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
 
@@ -126,7 +126,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
 
@@ -140,7 +140,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
 
@@ -154,7 +154,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: default value of msg
       --projects option: 
       inputs: 
-      options: {}"
+      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
     `
     );
 
@@ -168,7 +168,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app\\"]}"
+      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app\\"]}"
     `
     );
 
@@ -182,7 +182,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
 
@@ -196,7 +196,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: Hello
       --projects option: app1,app2,app3,app4
       inputs: input1,input2
-      options: {\\"msg\\":\\"Hello\\",\\"pure\\":\\"pureValue\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
     );
   });

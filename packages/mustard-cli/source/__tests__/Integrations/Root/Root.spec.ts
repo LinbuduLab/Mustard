@@ -12,7 +12,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
       "--msg option: default value of msg
       --projects option: 
       inputs: 
-      options: {}"
+      options: {\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
     `
     );
 
@@ -24,7 +24,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
       "--msg option: Hello
       --projects option: 
       inputs: 
-      options: {\\"msg\\":\\"Hello\\"}"
+      options: {\\"msg\\":\\"Hello\\",\\"projects\\":[]}"
     `
     );
 
@@ -60,7 +60,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
       "--msg option: Hello
       --projects option: app1,app2,app3
       inputs: enhance
-      options: {\\"msg\\":\\"Hello\\",\\"p\\":[\\"app1\\",\\"app2\\",\\"app3\\"]}"
+      options: {\\"msg\\":\\"Hello\\",\\"projects\\":[]}"
     `
     );
   });

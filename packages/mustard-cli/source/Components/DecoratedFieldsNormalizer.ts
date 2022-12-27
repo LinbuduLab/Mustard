@@ -1,6 +1,7 @@
 import { MustardRegistry } from "./Registry";
 import { MustardUtils } from "./Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
+import groupBy from "lodash.groupby";
 
 import {
   DidYouMeanError,
@@ -8,14 +9,20 @@ import {
 } from "../Errors/UnknownOptionsError";
 import { ValidationError } from "../Errors/ValidationError";
 
-import type { InstanceFieldDecorationTypesUnion } from "./Constants";
 import type {
   Context,
   InjectInitializerPlaceHolder,
 } from "../Typings/Context.struct";
 import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
 import type { Dictionary } from "../Typings/Shared.struct";
-import type { CommandStruct } from "../Typings/Command.struct";
+import type {
+  CommandRegistryPayload,
+  CommandStruct,
+} from "../Typings/Command.struct";
+import type {
+  BasePlaceholder,
+  TaggedDecoratedInstanceFields,
+} from "../Typings/Utils.struct";
 
 export class DecoratedClassFieldsNormalizer {
   public static throwOnUnknownOptions(
@@ -43,43 +50,13 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeDecoratedFields(
-    instance: CommandStruct,
+    command: CommandRegistryPayload,
     parsedInputs: string[],
     parsedArgs: Dictionary
   ) {
-    const completeInstanceFields = <string[]>Reflect.ownKeys(instance);
+    const { instance, decoratedInstanceFields = [] } = command;
 
-    // const optionsField = completeInstanceFields.find((instanceField) => {
-    //   const initializer = Reflect.get(instance, instanceField);
-
-    //   const { type } = <
-    //       {
-    //         type: InstanceFieldDecorationTypesUnion;
-    //       }
-    //     >initializer ?? {};
-
-    //   return type === "Options";
-    // });
-
-    // if (optionsField) {
-    //   DecoratedClassFieldsNormalizer.normalizeOptions(
-    //     instance,
-    //     optionsField,
-    //     parsedArgs
-    //   );
-    // }
-
-    // should init Options first...
-
-    completeInstanceFields.forEach((instanceField) => {
-      const initializer = Reflect.get(instance, instanceField);
-
-      const { type } = <
-          {
-            type: InstanceFieldDecorationTypesUnion;
-          }
-        >initializer ?? {};
-
+    decoratedInstanceFields.forEach(({ key: instanceField, value, type }) => {
       switch (type) {
         case "Context":
           DecoratedClassFieldsNormalizer.normalizeContextField(
@@ -111,18 +88,19 @@ export class DecoratedClassFieldsNormalizer {
           DecoratedClassFieldsNormalizer.normalizeOption(
             instance,
             instanceField,
-            parsedArgs
+            parsedArgs,
+            value
           );
           break;
         case "Options":
           DecoratedClassFieldsNormalizer.normalizeOptions(
             instance,
             instanceField,
-            parsedArgs
+            parsedArgs,
+            decoratedInstanceFields
           );
           break;
         default:
-          // Not Decorated Instance Field
           break;
       }
     });
@@ -196,19 +174,15 @@ export class DecoratedClassFieldsNormalizer {
   public static normalizeOption(
     instance: CommandStruct,
     instanceField: string,
-    parsedArgs: Dictionary
+    parsedArgs: Dictionary,
+    value: BasePlaceholder
   ) {
-    const initializer = MustardUtils.getInstanceFieldValue(
-      instance,
-      instanceField
-    );
-
     const {
       optionName: injectKey,
       initValue,
       schema,
       optionAlias: injectSubKey,
-    } = <Required<OptionInitializerPlaceHolder>>initializer;
+    } = <Required<OptionInitializerPlaceHolder>>value;
 
     // use value from parsed args
     if (injectKey in parsedArgs || injectSubKey in parsedArgs) {
@@ -251,31 +225,40 @@ export class DecoratedClassFieldsNormalizer {
   public static normalizeOptions(
     instance: CommandStruct,
     instanceField: string,
-    parsedArgs: Dictionary
+    parsedArgs: Dictionary,
+    commonFields: TaggedDecoratedInstanceFields[]
   ) {
     const { _, ...preservedParsedArgs } = parsedArgs;
 
-    // const optionFieldsWithInitialValue =
-    //   MustardUtils.filterDecoratedInstanceFields(instance).reduce<Dictionary>(
-    //     (acc, curr) => {
-    //       return curr.type === "Option" || curr.type === "VariadicOption"
-    //         ? {
-    //             ...acc,
-    //             [curr.value.optionName as string]: curr.value.initValue,
-    //           }
-    //         : acc;
-    //     },
-    //     {}
-    //   );
-    // for (const optionField in optionFieldsWithInitialValue) {
-    //   preservedParsedArgs[optionField] =
-    //     optionFieldsWithInitialValue[optionField];
-    // }
+    const commonOptionFieldsWithInitialValue = commonFields.reduce<Dictionary>(
+      (acc, curr) => {
+        // collect initValue of @Option and @VariadicOption fields
+        return curr.type === "Option" || curr.type === "VariadicOption"
+          ? // filter only the fields with valid initial values
+            // null was regarded as a valid initial value here as it was set by the user
+            typeof curr.value.initValue !== "undefined"
+            ? {
+                ...acc,
+                [curr.value.optionName as string]: curr.value.initValue,
+              }
+            : acc
+          : acc;
+      },
+      {}
+    );
+
+    const mergedOptionsFieldValue: Dictionary = {};
+
+    for (const optionField in commonOptionFieldsWithInitialValue) {
+      mergedOptionsFieldValue[optionField] =
+        preservedParsedArgs[optionField] ??
+        commonOptionFieldsWithInitialValue[optionField];
+    }
 
     MustardUtils.setInstanceFieldValue(
       instance,
       instanceField,
-      preservedParsedArgs
+      mergedOptionsFieldValue
     );
   }
 }
