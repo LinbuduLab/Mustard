@@ -77,15 +77,139 @@ describe("FieldsNormalizer", () => {
     expect(foo.field1).toEqual(["foo"]);
   });
 
-  it("should normalize @Option and @VariadicOption field", () => {});
+  it("should normalize @Option field", () => {
+    DecoratedClassFieldsNormalizer.normalizeOption(
+      foo,
+      "field1",
+      {
+        foo: "foo-value",
+      },
+      {
+        type: "Option",
+        optionName: "foo",
+        initValue: undefined,
+      }
+    );
 
-  // it("should normalize @Options field", () => {
-  //   DecoratedClassFieldsNormalizer.normalizeOptions(foo, "field1", {
-  //     foo: "bar",
-  //   });
+    expect(foo.field1).toBe("foo-value");
 
-  //   expect(foo.field1).toEqual({
-  //     foo: "bar",
-  //   });
-  // });
+    DecoratedClassFieldsNormalizer.normalizeOption(
+      foo,
+      "field1",
+      {
+        foo: "foo-value",
+      },
+      {
+        type: "Option",
+        optionName: "foo",
+        initValue: "foo-init-value",
+      }
+    );
+
+    expect(foo.field1).toBe("foo-value");
+
+    DecoratedClassFieldsNormalizer.normalizeOption(
+      foo,
+      "field1",
+      {},
+      {
+        type: "Option",
+        optionName: "foo",
+        initValue: "foo-init-value",
+      }
+    );
+
+    expect(foo.field1).toBe("foo-init-value");
+  });
+
+  it("should normalize @VariadicOption field", () => {
+    DecoratedClassFieldsNormalizer.normalizeOption(
+      foo,
+      "field1",
+      {
+        foo: ["foo-value"],
+      },
+      {
+        type: "VariadicOption",
+        optionName: "foo",
+        initValue: undefined,
+      }
+    );
+
+    expect(foo.field1).toEqual(["foo-value"]);
+
+    DecoratedClassFieldsNormalizer.normalizeOption(
+      foo,
+      "field1",
+      {
+        foo: ["foo-value"],
+      },
+      {
+        type: "VariadicOption",
+        optionName: "foo",
+        initValue: ["foo-init-value"],
+      }
+    );
+
+    expect(foo.field1).toEqual(["foo-value"]);
+
+    DecoratedClassFieldsNormalizer.normalizeOption(
+      foo,
+      "field1",
+      {},
+      {
+        type: "VariadicOption",
+        optionName: "foo",
+        initValue: ["foo-init-value"],
+      }
+    );
+
+    expect(foo.field1).toEqual(["foo-init-value"]);
+  });
+
+  it("should normalize @Options field", () => {
+    DecoratedClassFieldsNormalizer.normalizeOptions(
+      foo,
+      "field1",
+      {
+        foo: "foo-value",
+      },
+      []
+    );
+
+    expect(foo.field1).toEqual({});
+
+    DecoratedClassFieldsNormalizer.normalizeOptions(
+      foo,
+      "field1",
+      {
+        foo: "foo-value",
+      },
+      [
+        {
+          key: "bar",
+          type: "Option",
+          value: {
+            type: "Option",
+            optionName: "bar",
+            initValue: "bar-value",
+          },
+        },
+        {
+          key: "baz",
+          type: "VariadicOption",
+          value: {
+            type: "VariadicOption",
+            optionName: "baz",
+            initValue: ["baz-value"],
+          },
+        },
+      ]
+    );
+
+    expect(foo.field1).toEqual({
+      bar: "bar-value",
+      baz: ["baz-value"],
+    });
+  });
 });
