@@ -57,22 +57,32 @@ export class UsageInfoGenerator {
             UsageInfoGenerator.collectSpecificCommandUsage(registration)
           )
         )
-      : void 0;
+      : console.log(
+          UsageInfoGenerator.formatCommandUsage(
+            // @ts-expect-error
+            UsageInfoGenerator.collectCompleteAppUsage()
+          )
+        );
   }
 
-  // WIP
   public static formatCommandUsage(collect: ParsedCommandUsage): string {
+    const commandPart = `${collect.name}${
+      collect.alias ? `, ${collect.alias},` : ""
+    } ${collect.description ? collect.description + "\n" : ""}`;
+
+    let optionsPart = "";
+
+    optionsPart += "\n\n";
+
+    collect.options.forEach((o) => {
+      optionsPart += `--${o.name}${o.alias ? ` -${o.alias}` : ""}${
+        o.description ? `, ${o.description}` : ""
+      }${o.defaultValue ? `, default: ${o.defaultValue}` : ""}`;
+      optionsPart += "\n\n";
+    });
+
     return `
-Command: ${collect.name}${collect.alias ? ` (${collect.alias})` : ""}
-${collect.description ? collect.description + "\n" : ""}
-Options:
-${collect.options.map((o) => {
-  return `
---${o.name}${o.alias ? `, --${o.alias}` : ""}${
-    o.description ? `, ${o.description}` : ""
-  }
-`;
-})}
-    `;
+Command: ${commandPart}
+Options: ${optionsPart}`;
   }
 }
