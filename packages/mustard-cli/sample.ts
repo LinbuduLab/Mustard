@@ -1,16 +1,13 @@
 #!/usr/bin/env node
 
-import { MustardFactory, Context, MustardUtils } from "./source/Exports";
+import { MustardFactory } from "./source/Exports";
 import {
   Command,
   RootCommand,
   Option,
   VariadicOption,
   App,
-  Ctx,
   Input,
-  Inject,
-  Utils,
   Options,
 } from "./source/Exports/Decorators";
 import { Validator } from "./source/Exports/Validator";
@@ -19,11 +16,11 @@ import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option("d")
+  @Option("m")
   public msg = "default value of msg";
 
   public run(): void {
-    console.log("Root Command! ", this.msg);
+    console.log(`Root command executed with: msg: ${this.msg}`);
   }
 }
 
@@ -35,55 +32,23 @@ class UpdateCommand implements CommandStruct {
   @Option(Validator.Boolean())
   public dry = false;
 
-  @Option({ alias: "d" })
-  public define: boolean;
-
-  @Option("all")
-  public applyAll: boolean;
-
-  @Options()
-  public completeOptions: any;
-
-  @Ctx()
-  public context: Context;
+  @Option({ name: "target", alias: "t" })
+  public targetOption: string;
 
   @Input()
-  public input: string[];
-
-  @Utils()
-  public utils: MustardUtils;
-
-  @Inject("DataService")
-  public data: DataService;
-
-  @Inject("SharedService")
-  public shared: SharedService;
+  public input: string[] = [];
 
   @VariadicOption()
   public packages: string[] = [];
 
   public run(): void {
-    console.log("Complete Options! ", this.completeOptions);
-    // console.warn("DryRun Mode: ", this.dry);
-    // console.info("Execution Depth", this.depth);
-    // console.info("Specified Packages", this.packages);
-    // console.info("Additional Input", this.input);
-    // console.info("Injected DataService", this.data.fetch());
-    // console.info("Injected SharedService", this.shared.execute());
-    // console.info("Mustard Utils", this.utils.json.readSync);
-    // console.info("Context", this.context);
-  }
-}
-
-class DataService {
-  public fetch() {
-    return "FetchedData";
-  }
-}
-
-class SharedService {
-  public execute() {
-    return "ExecuteSharedService";
+    console.log(
+      `Update command executed with: depth: ${this.depth}, dry: ${
+        this.dry
+      }, targetOption: ${this.targetOption}, input: ${JSON.stringify(
+        this.input
+      )}, packages: ${JSON.stringify(this.packages)}`
+    );
   }
 }
 
@@ -94,13 +59,6 @@ class SharedService {
     allowUnknownOptions: true,
     enableVersion: require(path.resolve("./package.json")).version,
   },
-  providers: [
-    SharedService,
-    {
-      identifier: DataService.name,
-      value: DataService,
-    },
-  ],
 })
 class Project implements MustardApp {
   onStart() {}

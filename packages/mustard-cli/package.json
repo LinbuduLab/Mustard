@@ -1,6 +1,6 @@
 {
   "name": "mustard-cli",
-  "version": "0.1.2",
+  "version": "0.2.1",
   "main": "./dist/source/Exports/index.js",
   "types": "./dist/source/Exports/index.d.ts",
   "publishConfig": {

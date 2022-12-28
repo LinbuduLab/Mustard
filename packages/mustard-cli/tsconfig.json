@@ -35,5 +35,11 @@
     }
   },
   "include": ["./**/*.ts"],
-  "exclude": ["dist", "samples", "__tests__/Integrations"]
+  "exclude": [
+    "dist",
+    "samples",
+    "__tests__/Integrations",
+    "vitest.config.ts",
+    "sample.ts"
+  ]
 }

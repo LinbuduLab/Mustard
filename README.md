@@ -1,12 +1,8 @@
 # Mustard
 
-> **This is an incubating project of [@LinbuduLab](https://github.com/LinbuduLab).**
+> **This is an incubating project of [@LinbuduLab](https://github.com/LinbuduLab), which also means it's still under development.**
 
 IoC & [Native ECMAScript Decotator](https://github.com/tc39/proposal-decorators) based command line app builder.
-
-## WIP
-
-- Usage info generation & for nested commands...
 
 ## Features
 
@@ -31,27 +27,32 @@ You will need to use a wip version of typescript to use this library:
 npm i mustard-cli
 ```
 
+You can find more samples in [Samples](packages/mustard-cli/samples/).
+
 ```typescript
 #!/usr/bin/env node
 
-import { MustardFactory } from "mustard-cli";
+import { MustardFactory } from "./source/Exports";
 import {
   Command,
   RootCommand,
   Option,
   VariadicOption,
   App,
-} from "mustard-cli/Decorators";
-import { Validator } from "mustard-cli/Validator";
-import { CommandStruct, MustardApp } from "mustard-cli/ComanndLine";
+  Input,
+  Options,
+} from "./source/Exports/Decorators";
+import { Validator } from "./source/Exports/Validator";
+import { CommandStruct, MustardApp } from "./source/Exports/ComanndLine";
+import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option()
+  @Option("m")
   public msg = "default value of msg";
 
   public run(): void {
-    console.log("Root Command! ", this.msg);
+    console.log(`Root command executed with: msg: ${this.msg}`);
   }
 }
 
@@ -63,22 +64,33 @@ class UpdateCommand implements CommandStruct {
   @Option(Validator.Boolean())
   public dry = false;
 
-  @Option("all")
-  public applyAll: boolean;
+  @Option({ name: "target", alias: "t" })
+  public targetOption: string;
+
+  @Input()
+  public input: string[] = [];
 
   @VariadicOption()
-  public packages: string[];
+  public packages: string[] = [];
 
   public run(): void {
-    console.warn("DryRun Mode: ", this.dry);
-    console.info("Execution Depth", this.depth);
-    console.info("Specified Packages", this.packages);
+    console.log(
+      `Update command executed with: depth: ${this.depth}, dry: ${
+        this.dry
+      }, targetOption: ${this.targetOption}, input: ${JSON.stringify(
+        this.input
+      )}, packages: ${JSON.stringify(this.packages)}`
+    );
   }
 }
 
 @App({
   name: "LinbuduLab CLI",
   commands: [RootCommandHandle, UpdateCommand],
+  configurations: {
+    allowUnknownOptions: true,
+    enableVersion: require(path.resolve("./package.json")).version,
+  },
 })
 class Project implements MustardApp {
   onStart() {}
@@ -90,12 +102,16 @@ MustardFactory.init(Project).start();
 ```
 
 ```bash
-$ mm
-# Root Command!  default value of msg
-$ mm update --depth=1 --all --packages p1 p2 p3
-# DryRun Mode:  false
-# Execution Depth 1
-# Specified Packages [ 'p1', 'p2', 'p3' ]
+$ cli
+# Root command executed with: msg: default value of msg
+$ cli -m
+# Root command executed with: msg: hello
+$ mm update
+# Update command executed with: depth: 10, dry: false, targetOption: undefined, input: [], packages: []
+$ mm update --depth=1 --target=dep --packages p1 p2 p3
+# Update command executed with: depth: 1, dry: false, targetOption: dep, input: [], packages: ["p1","p2","p3"]
+$ mm update p1 p2 p3 -t=dev
+# Update command executed with: depth: 10, dry: false, targetOption: dev, input: ["p1","p2","p3"], packages: []
 ```
 
 ## License
