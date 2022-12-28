@@ -58,7 +58,7 @@ export class UsageInfoGenerator {
           )
         )
       : console.log(
-          UsageInfoGenerator.formatCommandUsage(
+          UsageInfoGenerator.batchfFormatCommandUsage(
             // @ts-expect-error
             UsageInfoGenerator.collectCompleteAppUsage()
           )
@@ -84,5 +84,17 @@ export class UsageInfoGenerator {
     return `
 Command: ${commandPart}
 Options: ${optionsPart}`;
+  }
+
+  public static batchfFormatCommandUsage(
+    collect: ParsedCommandUsage[]
+  ): string {
+    let result = "";
+
+    collect.forEach((c) => {
+      result += UsageInfoGenerator.formatCommandUsage(c);
+    });
+
+    return result;
   }
 }

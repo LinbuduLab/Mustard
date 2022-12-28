@@ -25,14 +25,26 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       `ts-node-esm ${UsagePath1} -h`
     );
     expect(stdout3).toMatchInlineSnapshot(
-      '""'
+      `
+      "
+      Command: root 
+      Options: 
+
+      "
+    `
     );
 
     const { stdout: stdout4 } = await execaCommand(
       `ts-node-esm ${UsagePath1} --help`
     );
     expect(stdout4).toMatchInlineSnapshot(
-      '""'
+      `
+      "
+      Command: root 
+      Options: 
+
+      "
+    `
     );
   });
 
@@ -41,7 +53,13 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       `ts-node-esm ${UsagePath2} --help`
     );
     expect(stdout1).toMatchInlineSnapshot(
-      '"Usage: root"'
+      `
+      "
+      Command: root 
+      Options: 
+
+      "
+    `
     );
   });
 });

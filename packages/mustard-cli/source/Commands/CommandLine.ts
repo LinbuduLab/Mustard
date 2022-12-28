@@ -106,8 +106,6 @@ export class CLI {
   }
 
   private instantiateWithParse() {
-    // const variadicOptionKeys = new Set<string>();
-
     MustardRegistry.provide().forEach((commandRegistration, key) => {
       const instance = new commandRegistration.Class();
 
@@ -140,20 +138,6 @@ export class CLI {
     useRootHandle ? this.dispatchRootHandler() : this.dispatchCommand();
   }
 
-  private handleCommandExecution(
-    commandRegistration: CommandRegistryPayload,
-    commandInput: string[]
-  ) {
-    this.executeCommandFromRegistration(commandRegistration, commandInput)
-      .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
-      .catch(
-        this.options?.lifeCycles?.onError ??
-          ((err) => {
-            throw err;
-          })
-      );
-  }
-
   private dispatchCommand() {
     const { command: commandRegistration, inputs: commandInput } =
       MustardUtils.findHandlerCommandWithInputs(
@@ -172,6 +156,20 @@ export class CLI {
     );
 
     this.handleCommandExecution(commandRegistration, commandInput);
+  }
+
+  private handleCommandExecution(
+    commandRegistration: CommandRegistryPayload,
+    commandInput: string[]
+  ) {
+    this.executeCommandFromRegistration(commandRegistration, commandInput)
+      .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
+      .catch(
+        this.options?.lifeCycles?.onError ??
+          ((err) => {
+            throw err;
+          })
+      );
   }
 
   private async executeCommandFromRegistration(
@@ -206,6 +204,7 @@ export class CLI {
         rootCommandRegistration,
         this.options?.enableUsage
       );
+
       this.executeCommandFromRegistration(rootCommandRegistration);
     } else if (this.options?.enableUsage) {
       BuiltInCommands.useHelpCommand(

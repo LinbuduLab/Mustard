@@ -7,21 +7,19 @@ import { BuiltInCommands } from "../Commands/BuiltInCommands";
 import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "../Components/UsageGenerator";
 
-vi.spyOn(UsageInfoGenerator, "collectCompleteAppUsage").mockImplementation(
-  () => {}
-);
-vi.spyOn(UsageInfoGenerator, "collectSpecificCommandUsage").mockImplementation(
-  // @ts-expect-error
-  () => {}
-);
+vi.spyOn(UsageInfoGenerator, "printHelp").mockImplementation(() => {});
+
+class Foo implements CommandStruct {
+  run() {}
+}
 
 const registration = {
   commandInvokeName: "foo",
   root: false,
-  Class: class Foo implements CommandStruct {
-    run() {}
-  },
+  Class: Foo,
+  instance: new Foo(),
   childCommandList: [],
+  decoratedInstanceFields: [],
 } satisfies CommandRegistryPayload;
 
 describe("BuiltInCommands", () => {
@@ -73,12 +71,10 @@ describe("BuiltInCommands", () => {
 
   it("should handle help command", () => {
     BuiltInCommands.useHelpCommand(false, undefined, undefined, false);
-    expect(UsageInfoGenerator.collectCompleteAppUsage).not.toBeCalled();
-    expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
+    expect(UsageInfoGenerator.printHelp).not.toBeCalled();
 
     BuiltInCommands.useHelpCommand(true, undefined, false, false);
-    expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(1);
-    expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
+    expect(UsageInfoGenerator.printHelp).toBeCalledTimes(1);
 
     BuiltInCommands.useHelpCommand(
       { _: [], help: true },
@@ -86,16 +82,12 @@ describe("BuiltInCommands", () => {
       false,
       false
     );
-    expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
-    expect(UsageInfoGenerator.collectSpecificCommandUsage).not.toBeCalled();
+    expect(UsageInfoGenerator.printHelp).toBeCalledTimes(2);
 
     BuiltInCommands.useHelpCommand(true, registration, false, false);
 
-    expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
-    expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(1);
-    expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledWith(
-      registration
-    );
+    expect(UsageInfoGenerator.printHelp).toBeCalledTimes(3);
+    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
 
     BuiltInCommands.useHelpCommand(
       { _: [], help: true },
@@ -103,11 +95,8 @@ describe("BuiltInCommands", () => {
       false,
       false
     );
-    expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(2);
-    expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(2);
-    expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledWith(
-      registration
-    );
+    expect(UsageInfoGenerator.printHelp).toBeCalledTimes(4);
+    expect(UsageInfoGenerator.printHelp).toBeCalledWith(registration);
   });
 
   it("should handle version command", () => {
