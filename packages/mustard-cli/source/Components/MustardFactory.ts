@@ -2,7 +2,7 @@ import { CLI } from "../Commands/CommandLine";
 import { NullishFactoryOptionError } from "../Errors/NullishFactoryOptionError";
 
 import type { MustardApp } from "../Typings/Factory.struct";
-import type { AppFactoryOptions } from "../Typings/configuration.struct";
+import type { AppFactoryOptions } from "../Typings/Configuration.struct";
 import type { Constructable, Nullable } from "../Typings/Shared.struct";
 import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
 

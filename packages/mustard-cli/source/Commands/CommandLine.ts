@@ -19,7 +19,7 @@ import type {
 import type {
   CLIInstantiationConfiguration,
   CommandList,
-} from "../Typings/configuration.struct";
+} from "../Typings/Configuration.struct";
 import type { Provider } from "../Typings/DIService.struct";
 import type { MaybeArray } from "../Typings/Shared.struct";
 
