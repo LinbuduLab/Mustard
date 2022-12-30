@@ -15,11 +15,8 @@ class RootCommandHandle implements CommandStruct {
   @Option()
   public pure = "default value of pure";
 
-  @Option("msg", "m")
+  @Option("msg")
   public msgOption = "default value of msg";
-
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
 
   @Input()
   public inputs: string;
@@ -34,8 +31,6 @@ class RootCommandHandle implements CommandStruct {
 
     console.log(`--msg option: ${this.msgOption}`);
 
-    console.log(`--projects option: ${JSON.stringify(this.projects)}`);
-
     console.log(`inputs: ${JSON.stringify(this.inputs)}`);
 
     console.log(`options: ${JSON.stringify(this.options)}`);
@@ -47,11 +42,8 @@ class RunCommandHandle implements CommandStruct {
   @Option()
   public pure = "default value of pure";
 
-  @Option("msg", "m")
+  @Option("msg")
   public msgOption = "default value of msg";
-
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
 
   @Input()
   public inputs: string;
@@ -66,8 +58,6 @@ class RunCommandHandle implements CommandStruct {
 
     console.log(`--msg option: ${this.msgOption}`);
 
-    console.log(`--projects option: ${JSON}`);
-
     console.log(`inputs: ${JSON.stringify(this.inputs)}`);
 
     console.log(`options: ${JSON.stringify(this.options)}`);
@@ -79,11 +69,8 @@ class UpdateDepNodeCommandHandle implements CommandStruct {
   @Option()
   public pure = "default value of pure";
 
-  @Option("msg", "m")
+  @Option("msg")
   public msgOption = "default value of msg";
-
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
 
   @Input()
   public inputs: string;
@@ -98,8 +85,6 @@ class UpdateDepNodeCommandHandle implements CommandStruct {
 
     console.log(`--msg option: ${this.msgOption}`);
 
-    console.log(`--projects option: ${JSON}`);
-
     console.log(`inputs: ${JSON.stringify(this.inputs)}`);
 
     console.log(`options: ${JSON.stringify(this.options)}`);
@@ -111,11 +96,8 @@ class UpdateDepCommandHandle implements CommandStruct {
   @Option()
   public pure = "default value of pure";
 
-  @Option("msg", "m")
+  @Option("msg")
   public msgOption = "default value of msg";
-
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
 
   @Input()
   public inputs: string;
@@ -130,8 +112,6 @@ class UpdateDepCommandHandle implements CommandStruct {
 
     console.log(`--msg option: ${this.msgOption}`);
 
-    console.log(`--projects option: ${JSON}`);
-
     console.log(`inputs: ${JSON.stringify(this.inputs)}`);
 
     console.log(`options: ${JSON.stringify(this.options)}`);
@@ -143,11 +123,8 @@ class UpdateSysCommandHandle implements CommandStruct {
   @Option()
   public pure = "default value of pure";
 
-  @Option("msg", "m")
+  @Option("msg")
   public msgOption = "default value of msg";
-
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
 
   @Input()
   public inputs: string;
@@ -162,8 +139,6 @@ class UpdateSysCommandHandle implements CommandStruct {
 
     console.log(`--msg option: ${this.msgOption}`);
 
-    console.log(`--projects option: ${JSON}`);
-
     console.log(`inputs: ${JSON.stringify(this.inputs)}`);
 
     console.log(`options: ${JSON.stringify(this.options)}`);
@@ -172,11 +147,8 @@ class UpdateSysCommandHandle implements CommandStruct {
 
 @Command("update", "u", [UpdateDepCommandHandle, UpdateSysCommandHandle])
 class UpdateCommandHandle implements CommandStruct {
-  @Option("msg", "m")
+  @Option("msg")
   public msg = "default value of msg";
-
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
 
   @Input()
   public inputs: string;
@@ -188,8 +160,6 @@ class UpdateCommandHandle implements CommandStruct {
     console.log("Update Command");
 
     console.log(`--msg option: ${this.msg}`);
-
-    console.log(`--projects option: ${JSON}`);
 
     console.log(`inputs: ${JSON.stringify(this.inputs)}`);
 
