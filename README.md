@@ -4,16 +4,23 @@
 
 IoC & [Native ECMAScript Decotator](https://github.com/tc39/proposal-decorators) based command line app builder.
 
+## Resources
+
+- If you want to know more about the usage of new decorators(using TypeScript or Babel), please refer to [with-new-decorators](https://github.com/linbudu599/with-new-decorators).
+- For the development progress of the new decorators, please refer to [#50820](https://github.com/microsoft/TypeScript/pull/50820) and more issues.
+
 ## Features
 
-- Nest command support
 - Born to be type safe
+- Nest command support
 - Validator support by [Zod](https://github.com/colinhacks/zod)
 - Automatic usage info generation
 - Build decoupled applications using IoC concepts
 - Essential built-in utils for CLI app
 
 ## Getting Started
+
+> Complete documentation will be provided after TypeScript 5.0 is officially released.
 
 You will need to use a wip version of typescript to use this library:
 
