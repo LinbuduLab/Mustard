@@ -3,8 +3,10 @@ import _debug from "debug";
 import { MustardRegistry } from "../Components/Registry";
 import { MustardConstanst } from "../Components/Constants";
 
+import { MultiRootCommandError } from "source/Errors/MultiRootCommandError";
+
 import type { CommandList } from "../Typings/Configuration.struct";
-import type { Nullable } from "../Typings/Shared.struct";
+import type { ClassStruct, Nullable } from "../Typings/Shared.struct";
 import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
 import type { CommandConfiguration } from "../Typings/Command.struct";
 
@@ -204,12 +206,22 @@ export class CommandDecorators {
     );
   }
 
+  private static RootCommandTargetClass: Nullable<ClassStruct> = null;
+
   /**
    * Register root command handler class
    * @returns
    */
   public static RootCommand(): AnyClassDecoratorReturnType {
     return (target, context) => {
+      if (CommandDecorators.RootCommandTargetClass) {
+        throw new MultiRootCommandError(
+          CommandDecorators.RootCommandTargetClass,
+          target
+        );
+      }
+
+      CommandDecorators.RootCommandTargetClass = target;
       MustardRegistry.registerInit(<string>context.name, {
         commandInvokeName: MustardConstanst.RootCommandRegistryKey,
         Class: target,
