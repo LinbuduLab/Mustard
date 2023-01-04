@@ -2,7 +2,7 @@
 
 > **This is an incubating project of [@LinbuduLab](https://github.com/LinbuduLab), which also means it's still under development.**
 
-IoC & [Native ECMAScript Decotator](https://github.com/tc39/proposal-decorators) based command line app builder.
+IoC & [Native ECMAScript Decorator](https://github.com/tc39/proposal-decorators) based command line app builder.
 
 ## Resources
 
