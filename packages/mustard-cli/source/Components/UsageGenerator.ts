@@ -1,5 +1,6 @@
 import { MustardRegistry } from "./Registry";
 import { MustardUtils } from "./Utils";
+import uniqBy from "lodash.uniqBy";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 import type { Nullable } from "../Typings/Shared.struct";
@@ -22,6 +23,15 @@ interface ParsedOptionInfo extends SharedInfo {
 export class UsageInfoGenerator {
   public static collectCompleteAppUsage() {
     const completeRegistration = MustardRegistry.provide();
+
+    const commands: ParsedCommandUsage[] = uniqBy(
+      Array.from(completeRegistration.values()).map((c) =>
+        UsageInfoGenerator.collectSpecificCommandUsage(c)
+      ),
+      "name"
+    );
+
+    return commands;
   }
 
   public static collectSpecificCommandUsage(
@@ -51,7 +61,7 @@ export class UsageInfoGenerator {
   }
 
   public static printHelp(registration?: CommandRegistryPayload) {
-    registration
+    registration && !registration.root
       ? console.log(
           UsageInfoGenerator.formatCommandUsage(
             UsageInfoGenerator.collectSpecificCommandUsage(registration)
@@ -59,7 +69,6 @@ export class UsageInfoGenerator {
         )
       : console.log(
           UsageInfoGenerator.batchfFormatCommandUsage(
-            // @ts-expect-error
             UsageInfoGenerator.collectCompleteAppUsage()
           )
         );
@@ -68,7 +77,7 @@ export class UsageInfoGenerator {
   public static formatCommandUsage(collect: ParsedCommandUsage): string {
     const commandPart = `${collect.name}${
       collect.alias ? `, ${collect.alias},` : ""
-    } ${collect.description ? collect.description + "\n" : ""}`;
+    } ${collect.description ? collect.description + "\n" : "\n"}`;
 
     let optionsPart = "";
 
@@ -77,7 +86,11 @@ export class UsageInfoGenerator {
     collect.options.forEach((o) => {
       optionsPart += `--${o.name}${o.alias ? ` -${o.alias}` : ""}${
         o.description ? `, ${o.description}` : ""
-      }${o.defaultValue ? `, default: ${o.defaultValue}` : ""}`;
+      }${
+        o.defaultValue
+          ? `, default: ${JSON.stringify(o.defaultValue, null, 2)}`
+          : ""
+      }`;
       optionsPart += "\n\n";
     });
 

@@ -3,7 +3,7 @@ import _debug from "debug";
 import { MustardRegistry } from "../Components/Registry";
 import { MustardConstanst } from "../Components/Constants";
 
-import { MultiRootCommandError } from "source/Errors/MultiRootCommandError";
+import { MultiRootCommandError } from "../Errors/MultiRootCommandError";
 
 import type { CommandList } from "../Typings/Configuration.struct";
 import type { ClassStruct, Nullable } from "../Typings/Shared.struct";
