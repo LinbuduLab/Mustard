@@ -11,7 +11,10 @@
     "local": "nodemon index.ts run sync --dry",
     "dev": "tsc --watch",
     "build": "tsc",
-    "prepublishOnly": "pnpm run build",
+    "pub:check": "pnpx publint",
+    "prepublishOnly": "pnpm run pub:check && pnpm run build",
+    "test:unit": "TEST_TYPE=UNIT vitest",
+    "test:ig": "TEST_TYPE=INTEGRATION vitest",
     "test": "vitest"
   },
   "nodemonConfig": {

@@ -28,6 +28,7 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       `
       "
       Command: root 
+
       Options: 
 
       "
@@ -41,6 +42,7 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       `
       "
       Command: root 
+
       Options: 
 
       "
@@ -56,6 +58,7 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       `
       "
       Command: root 
+
       Options: 
 
       "
