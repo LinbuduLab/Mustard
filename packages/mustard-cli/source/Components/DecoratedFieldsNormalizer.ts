@@ -209,8 +209,6 @@ export class DecoratedClassFieldsNormalizer {
         instanceField,
         validatedValue
       );
-
-      // validate for values from parsed args
     } else {
       // use default value or mark as undefined
       // null should also be converted to undefined
