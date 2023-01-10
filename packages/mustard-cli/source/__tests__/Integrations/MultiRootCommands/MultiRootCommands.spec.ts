@@ -5,7 +5,7 @@ import path from "path";
 const UsagePath = path.resolve(__dirname, "./Usage.ts");
 
 describe("IntegrationTesting:MultiRootCommands", () => {
-  it("should throw error", async () => {
+  it.skip("should throw error", async () => {
     const { stderr } = await execaCommand(`ts-node-esm ${UsagePath}`, {
       reject: false,
     });

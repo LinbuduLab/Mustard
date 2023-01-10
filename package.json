@@ -7,7 +7,7 @@
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
-    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31"
+    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-64"
   },
   "scripts": {
     "dev": "pnpm --filter mustard-cli dev",

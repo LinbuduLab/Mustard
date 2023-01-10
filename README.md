@@ -26,7 +26,7 @@ You will need to use a wip version of typescript to use this library:
 
 ```json
 "devDependencies": {
-   "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31"
+   "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-64"
 }
 ```
 

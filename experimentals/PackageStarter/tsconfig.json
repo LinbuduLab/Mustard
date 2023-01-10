@@ -24,7 +24,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": false,
     "strictPropertyInitialization": false,
-    "keyofStringsOnly": true,
+    "keyofStringsOnly": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
