@@ -9,7 +9,6 @@
     "lib": [],
     "target": "ES6",
     "module": "CommonJS",
-    "outDir": "dist",
     "skipLibCheck": true,
     "strictNullChecks": true,
     "declaration": true,
@@ -28,18 +27,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "rootDir": "source",
-    "paths": {
-      "mustard-cli": ["./source/Exports/index.ts"],
-      "mustard-cli/*": ["./source/Exports/*"]
-    }
+    "rootDir": "."
   },
   "include": ["./**/*.ts"],
-  "exclude": [
-    "dist",
-    "samples",
-    "./source/__tests__",
-    "vitest.config.ts",
-    "sample.ts"
-  ]
+  "exclude": []
 }

@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
-import { MustardFactory } from "../source/Exports";
-import { Command, App, Inject } from "../source/Exports/Decorators";
-import { CommandStruct, MustardApp } from "../source/Exports/ComanndLine";
+import { MustardFactory } from "mustard-cli/source/Exports";
+import { Command, App, Inject } from "mustard-cli/source/Exports/Decorators";
+import {
+  CommandStruct,
+  MustardApp,
+} from "mustard-cli/source/Exports/ComanndLine";
 import path from "path";
 
 @Command("update")

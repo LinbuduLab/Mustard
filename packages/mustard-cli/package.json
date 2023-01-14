@@ -1,8 +1,8 @@
 {
   "name": "mustard-cli",
   "version": "0.2.1",
-  "main": "./dist/source/Exports/index.js",
-  "types": "./dist/source/Exports/index.d.ts",
+  "main": "./dist/Exports/index.js",
+  "types": "./dist/Exports/index.d.ts",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -65,7 +65,7 @@
     "tmp": "^0.2.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
-    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-64",
+    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31",
     "vitest": "^0.26.2"
   }
 }

@@ -26,7 +26,7 @@ You will need to use a wip version of typescript to use this library:
 
 ```json
 "devDependencies": {
-   "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-64"
+   "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31"
 }
 ```
 
@@ -39,7 +39,7 @@ You can find more samples in [Samples](packages/mustard-cli/samples/).
 ```typescript
 #!/usr/bin/env node
 
-import { MustardFactory } from "./source/Exports";
+import { MustardFactory } from "mustard-cli";
 import {
   Command,
   RootCommand,
@@ -48,9 +48,10 @@ import {
   App,
   Input,
   Options,
-} from "./source/Exports/Decorators";
-import { Validator } from "./source/Exports/Validator";
-import { CommandStruct, MustardApp } from "./source/Exports/ComanndLine";
+} from "mustard-cli/Decorators";
+import { Validator } from "mustard-cli/Validator";
+import { CommandStruct, MustardApp } from "mustard-cli/ComanndLine";
+
 import path from "path";
 
 @RootCommand()
