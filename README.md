@@ -34,7 +34,7 @@ You will need to use a wip version of typescript to use this library:
 npm i mustard-cli
 ```
 
-You can find more samples in [Samples](packages/mustard-cli/samples/).
+You can find more samples in [Samples](packages/sample/samples/).
 
 ```typescript
 #!/usr/bin/env node
@@ -51,6 +51,19 @@ import {
 } from "mustard-cli/Decorators";
 import { Validator } from "mustard-cli/Validator";
 import { CommandStruct, MustardApp } from "mustard-cli/ComanndLine";
+
+import path from "path";
+import { MustardFactory } from "mustard-cli";
+import {
+  Command,
+  RootCommand,
+  Option,
+  VariadicOption,
+  App,
+  Input,
+} from "mustard-cli/decorator";
+import { Validator } from "mustard-cli/validator";
+import { CommandStruct, MustardApp } from "mustard-cli/cli";
 
 import path from "path";
 
