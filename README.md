@@ -1,5 +1,10 @@
 # Mustard
 
+![npm dev dependency version](https://img.shields.io/npm/dependency-version/mustard-cli/dev/typescript)
+
+![GitHub package.json version (subfolder of monorepo)](https://img.shields.io/github/package-json/v/LinbuduLab/Mustard?filename=packages%2Fmustard-cli%2Fpackage.json)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/mustard-cli)
+
 > **This is an incubating project of [@LinbuduLab](https://github.com/LinbuduLab), which also means it's still under development.**
 
 IoC & [Native ECMAScript Decorator](https://github.com/tc39/proposal-decorators) based command line app builder.
