@@ -14,7 +14,7 @@ import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option("m")
+  @Option("msg", "m")
   public msg = "default value of msg";
 
   public run(): void {
@@ -52,9 +52,10 @@ class UpdateCommand implements CommandStruct {
 
 @App({
   name: "LinbuduLab CLI",
-  commands: [RootCommandHandle, UpdateCommand],
+  commands: [UpdateCommand],
   configurations: {
     allowUnknownOptions: true,
+    enableUsage: true,
     enableVersion: require(path.resolve("./package.json")).version,
   },
 })
