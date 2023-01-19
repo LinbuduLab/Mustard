@@ -61,12 +61,18 @@ export class UsageInfoGenerator {
   }
 
   public static printHelp(registration?: CommandRegistryPayload) {
-    registration && !registration.root
-      ? console.log(
-          UsageInfoGenerator.formatCommandUsage(
-            UsageInfoGenerator.collectSpecificCommandUsage(registration)
+    registration
+      ? registration.root
+        ? console.log(
+            UsageInfoGenerator.formatRootCommandUsage(
+              UsageInfoGenerator.collectSpecificCommandUsage(registration)
+            )
           )
-        )
+        : console.log(
+            UsageInfoGenerator.formatCommandUsage(
+              UsageInfoGenerator.collectSpecificCommandUsage(registration)
+            )
+          )
       : console.log(
           UsageInfoGenerator.batchfFormatCommandUsage(
             UsageInfoGenerator.collectCompleteAppUsage()
@@ -96,6 +102,26 @@ export class UsageInfoGenerator {
 
     return `
 Command: ${commandPart}
+Options: ${optionsPart}`;
+  }
+
+  public static formatRootCommandUsage(collect: ParsedCommandUsage): string {
+    let optionsPart = "";
+
+    optionsPart += "\n\n";
+
+    collect.options.forEach((o) => {
+      optionsPart += `--${o.name}${o.alias ? ` -${o.alias}` : ""}${
+        o.description ? `, ${o.description}` : ""
+      }${
+        o.defaultValue
+          ? `, default: ${JSON.stringify(o.defaultValue, null, 2)}`
+          : ""
+      }`;
+      optionsPart += "\n\n";
+    });
+
+    return `
 Options: ${optionsPart}`;
   }
 

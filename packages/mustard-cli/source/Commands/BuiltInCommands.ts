@@ -52,7 +52,7 @@ export class BuiltInCommands {
     controller
       ? typeof controller === "function"
         ? console.log(controller(registration))
-        : console.log(controller)
+        : UsageInfoGenerator.printHelp(registration)
       : UsageInfoGenerator.printHelp(registration);
 
     exit && process.exit(0);

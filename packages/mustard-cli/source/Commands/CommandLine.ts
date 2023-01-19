@@ -60,6 +60,7 @@ export class CLI {
   private normalizeConfigurations() {
     const {
       allowUnknownOptions = false,
+      enableUsage,
       enableVersion = false,
       lifeCycles = {},
       didYouMean = true,
@@ -70,6 +71,7 @@ export class CLI {
       enableVersion,
       lifeCycles,
       didYouMean,
+      enableUsage,
     };
 
     debug("normalized configurations: %O", this.options);
