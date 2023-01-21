@@ -8,7 +8,7 @@ class RootCommandHandle implements CommandStruct {
 }
 
 @App({
-  name: "LinbuduLab CLI",
+  name: "create-mustard-app",
   commands: [RootCommandHandle],
   configurations: {
     allowUnknownOptions: true,

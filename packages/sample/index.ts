@@ -14,7 +14,7 @@ import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option("m")
+  @Option("msg", "m")
   public msg = "default value of msg";
 
   public run(): void {
@@ -50,11 +50,32 @@ class UpdateCommand implements CommandStruct {
   }
 }
 
+@Command("sync", "s", "sync project")
+class SyncCommand implements CommandStruct {
+  @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
+  public depth = 10;
+
+  @Option(Validator.Boolean())
+  public dry = false;
+
+  @Option({ name: "target", alias: "t" })
+  public targetOption: string;
+
+  @Input()
+  public input: string[] = [];
+
+  @VariadicOption()
+  public packages: string[] = [];
+
+  public run(): void {}
+}
+
 @App({
-  name: "LinbuduLab CLI",
-  commands: [RootCommandHandle, UpdateCommand],
+  name: "create-mustard-app",
+  commands: [UpdateCommand, SyncCommand],
   configurations: {
     allowUnknownOptions: true,
+    enableUsage: true,
     enableVersion: require(path.resolve("./package.json")).version,
   },
 })

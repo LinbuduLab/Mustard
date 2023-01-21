@@ -24,7 +24,9 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     expect(stdout3).toMatchInlineSnapshot(
       `
       "
-      Command: root 
+      Usage:
+
+      create-mustard-app
 
       Options: 
 
@@ -38,7 +40,9 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     expect(stdout4).toMatchInlineSnapshot(
       `
       "
-      Command: root 
+      Usage:
+
+      create-mustard-app
 
       Options: 
 
@@ -52,14 +56,7 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       `ts-node-esm ${UsagePath2} --help`
     );
     expect(stdout1).toMatchInlineSnapshot(
-      `
-      "
-      Command: root 
-
-      Options: 
-
-      "
-    `
+      '"Usage: root"'
     );
   });
 
@@ -70,14 +67,12 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     expect(stdout2).toMatchInlineSnapshot(
       `
       "
-      Command: update execute update command
+      Command:
 
-      Options: 
+      update execute update command
 
       --name, name of the project
-
       --version, version of the project
-
       "
     `
     );
@@ -88,14 +83,12 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     expect(stdout3).toMatchInlineSnapshot(
       `
       "
-      Command: sync execute update command
+      Command:
 
-      Options: 
+      sync execute update command
 
-      --name -n, name of the project
-
-      --type -t, type of the project
-
+      --name, -n, name of the project
+      --type, -t, type of the project
       "
     `
     );
