@@ -35,6 +35,7 @@ export class BuiltInCommands {
   }
 
   public static useHelpCommand(
+    bin: string,
     parsedArgs: Arguments | boolean,
     registration?: CommandRegistryPayload,
     controller?: Configurations["enableUsage"],
@@ -52,8 +53,8 @@ export class BuiltInCommands {
     controller
       ? typeof controller === "function"
         ? console.log(controller(registration))
-        : UsageInfoGenerator.printHelp(registration)
-      : UsageInfoGenerator.printHelp(registration);
+        : UsageInfoGenerator.printHelp(bin, registration)
+      : UsageInfoGenerator.printHelp(bin, registration);
 
     exit && process.exit(0);
   }

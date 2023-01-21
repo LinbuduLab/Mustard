@@ -60,7 +60,11 @@ export class UsageInfoGenerator {
     return command;
   }
 
-  public static printHelp(registration?: CommandRegistryPayload) {
+  private static commandBinaryName: Nullable<string> = null;
+
+  public static printHelp(bin: string, registration?: CommandRegistryPayload) {
+    UsageInfoGenerator.commandBinaryName = bin;
+
     registration
       ? registration.root
         ? console.log(
@@ -81,28 +85,30 @@ export class UsageInfoGenerator {
   }
 
   public static formatCommandUsage(collect: ParsedCommandUsage): string {
-    const commandPart = `${collect.name}${
+    const { commandBinaryName: bin } = UsageInfoGenerator;
+
+    const commandPart = `Command:\n\n${collect.name}${
       collect.alias ? `, ${collect.alias},` : ""
     } ${collect.description ? collect.description + "\n" : "\n"}`;
 
     let optionsPart = "";
 
-    optionsPart += "\n\n";
+    // optionsPart += "\n\n";
 
     collect.options.forEach((o) => {
-      optionsPart += `--${o.name}${o.alias ? ` -${o.alias}` : ""}${
+      optionsPart += `--${o.name}${o.alias ? `, -${o.alias}` : ""}${
         o.description ? `, ${o.description}` : ""
       }${
         o.defaultValue
           ? `, default: ${JSON.stringify(o.defaultValue, null, 2)}`
           : ""
       }`;
-      optionsPart += "\n\n";
+      optionsPart += "\n";
     });
 
     return `
-Command: ${commandPart}
-Options: ${optionsPart}`;
+${commandPart}
+${optionsPart}`;
   }
 
   public static formatRootCommandUsage(collect: ParsedCommandUsage): string {
@@ -122,17 +128,29 @@ Options: ${optionsPart}`;
     });
 
     return `
+Usage:
+
+${UsageInfoGenerator.commandBinaryName}
+
 Options: ${optionsPart}`;
   }
 
   public static batchfFormatCommandUsage(
     collect: ParsedCommandUsage[]
   ): string {
+    const { commandBinaryName: bin } = UsageInfoGenerator;
+
     let result = "";
 
     collect.forEach((c) => {
       result += UsageInfoGenerator.formatCommandUsage(c);
     });
+
+    result = `
+Usage:
+
+${bin} [command] [--options]
+${result}`;
 
     return result;
   }

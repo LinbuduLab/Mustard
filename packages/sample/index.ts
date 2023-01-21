@@ -50,9 +50,29 @@ class UpdateCommand implements CommandStruct {
   }
 }
 
+@Command("sync", "s", "sync project")
+class SyncCommand implements CommandStruct {
+  @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
+  public depth = 10;
+
+  @Option(Validator.Boolean())
+  public dry = false;
+
+  @Option({ name: "target", alias: "t" })
+  public targetOption: string;
+
+  @Input()
+  public input: string[] = [];
+
+  @VariadicOption()
+  public packages: string[] = [];
+
+  public run(): void {}
+}
+
 @App({
-  name: "LinbuduLab CLI",
-  commands: [UpdateCommand],
+  name: "create-mustard-app",
+  commands: [UpdateCommand, SyncCommand],
   configurations: {
     allowUnknownOptions: true,
     enableUsage: true,

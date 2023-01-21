@@ -152,6 +152,7 @@ export class CLI {
     }
 
     BuiltInCommands.useHelpCommand(
+      this.identifier,
       this.parsedArgs,
       commandRegistration,
       this.options?.enableUsage
@@ -201,7 +202,10 @@ export class CLI {
     const rootCommandRegistration = MustardRegistry.provideRootCommand();
 
     if (rootCommandRegistration) {
+      // bin --help with root command specified
+      // print help info for root command with identifer(binary name)
       BuiltInCommands.useHelpCommand(
+        this.identifier,
         this.parsedArgs,
         rootCommandRegistration,
         this.options?.enableUsage
@@ -209,12 +213,16 @@ export class CLI {
 
       this.executeCommandFromRegistration(rootCommandRegistration);
     } else if (this.options?.enableUsage) {
+      // bin --help without root command specified
+      // print help info for cpmplete app with identifer(binary name)
       BuiltInCommands.useHelpCommand(
+        this.identifier,
         true,
         undefined,
         this.options?.enableUsage
       );
     } else {
+      // no root command specified and options.enableUsage is disabled
       throw new NoRootHandlerError();
     }
   }
