@@ -12,12 +12,13 @@ cta:
 secondary:
   - View GitHub →
   - https://github.com/LinbuduLab/Mustard
-snippet: npm installl typescript@^5.0.0
+snippet: npx create-mustard-app
 ---
 
 #title
-Mustard CLI
+Mustard CLI :badge[v0.4.0]
 
 #description
 IoC & Native ES Decotator based command-line app builder.
+
 ::

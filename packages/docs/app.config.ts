@@ -13,7 +13,7 @@ export default defineAppConfig({
       contributors: true,
     },
     header: {
-      title: "LinbuduLab Projects",
+      title: "LinbuduLab",
       logo: false,
       showLinkIcon: true,
     },
