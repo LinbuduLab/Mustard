@@ -1,11 +1,47 @@
 {
   "name": "mustard-cli",
-  "version": "0.2.1",
-  "main": "./dist/source/Exports/index.js",
-  "types": "./dist/source/Exports/index.d.ts",
+  "version": "0.3.0",
+  "main": "./dist/Exports/index.js",
+  "types": "./dist/Exports/index.d.ts",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/Exports/index.d.ts",
+      "import": "./dist/Exports/index.js",
+      "require": "./dist/Exports/index.js"
+    },
+    "./decorator": {
+      "types": "./dist/Exports/Decorators.d.ts",
+      "import": "./dist/Exports/Decorators.js",
+      "require": "./dist/Exports/Decorators.js"
+    },
+    "./cli": {
+      "types": "./dist/Exports/ComanndLine.d.ts",
+      "import": "./dist/Exports/ComanndLine.js",
+      "require": "./dist/Exports/ComanndLine.js"
+    },
+    "./validator": {
+      "types": "./dist/Exports/Validator.d.ts",
+      "import": "./dist/Exports/Validator.js",
+      "require": "./dist/Exports/Validator.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "decorator": [
+        "dist/Exports/Decorators.d.ts"
+      ],
+      "cli": [
+        "dist/Exports/ComanndLine.d.ts"
+      ],
+      "validator": [
+        "dist/Exports/Validator.d.ts"
+      ]
+    }
   },
   "scripts": {
     "local": "nodemon index.ts run sync --dry",

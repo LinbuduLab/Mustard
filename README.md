@@ -1,5 +1,10 @@
 # Mustard
 
+![npm dev dependency version](https://img.shields.io/npm/dependency-version/mustard-cli/dev/typescript)
+
+![GitHub package.json version (subfolder of monorepo)](https://img.shields.io/github/package-json/v/LinbuduLab/Mustard?filename=packages%2Fmustard-cli%2Fpackage.json)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/mustard-cli)
+
 > **This is an incubating project of [@LinbuduLab](https://github.com/LinbuduLab), which also means it's still under development.**
 
 IoC & [Native ECMAScript Decorator](https://github.com/tc39/proposal-decorators) based command line app builder.
@@ -34,12 +39,12 @@ You will need to use a wip version of typescript to use this library:
 npm i mustard-cli
 ```
 
-You can find more samples in [Samples](packages/mustard-cli/samples/).
+You can find more samples in [Samples](packages/sample/samples/).
 
 ```typescript
 #!/usr/bin/env node
 
-import { MustardFactory } from "./source/Exports";
+import { MustardFactory } from "mustard-cli";
 import {
   Command,
   RootCommand,
@@ -47,10 +52,10 @@ import {
   VariadicOption,
   App,
   Input,
-  Options,
-} from "./source/Exports/Decorators";
-import { Validator } from "./source/Exports/Validator";
-import { CommandStruct, MustardApp } from "./source/Exports/ComanndLine";
+} from "mustard-cli/decorator";
+import { Validator } from "mustard-cli/validator";
+import { CommandStruct, MustardApp } from "mustard-cli/cli";
+
 import path from "path";
 
 @RootCommand()

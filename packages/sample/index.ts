@@ -1,6 +1,4 @@
-#!/usr/bin/env node
-
-import { MustardFactory } from "../source/Exports";
+import { MustardFactory } from "mustard-cli";
 import {
   Command,
   RootCommand,
@@ -8,40 +6,48 @@ import {
   VariadicOption,
   App,
   Input,
-  Options,
-} from "../source/Exports/Decorators";
-import { Validator } from "../source/Exports/Validator";
-import { CommandStruct, MustardApp } from "../source/Exports/ComanndLine";
+} from "mustard-cli/decorator";
+import { Validator } from "mustard-cli/validator";
+import { CommandStruct, MustardApp } from "mustard-cli/cli";
+
 import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option("d")
+  @Option("m")
   public msg = "default value of msg";
 
   public run(): void {
-    console.log("Root Command! ", this.msg);
+    console.log(`Root command executed with: msg: ${this.msg}`);
   }
 }
 
 @Command("update", "u", "update project dependencies")
 class UpdateCommand implements CommandStruct {
-  @Option("depth", Validator.Number().Gte(1))
+  @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
   public depth = 10;
 
   @Option(Validator.Boolean())
   public dry = false;
 
-  @Options()
-  public completeOptions: unknown;
+  @Option({ name: "target", alias: "t" })
+  public targetOption: string;
 
   @Input()
-  public input: string[];
+  public input: string[] = [];
 
   @VariadicOption()
   public packages: string[] = [];
 
-  public run(): void {}
+  public run(): void {
+    console.log(
+      `Update command executed with: depth: ${this.depth}, dry: ${
+        this.dry
+      }, targetOption: ${this.targetOption}, input: ${JSON.stringify(
+        this.input
+      )}, packages: ${JSON.stringify(this.packages)}`
+    );
+  }
 }
 
 @App({
@@ -51,7 +57,6 @@ class UpdateCommand implements CommandStruct {
     allowUnknownOptions: true,
     enableVersion: require(path.resolve("./package.json")).version,
   },
-  providers: [],
 })
 class Project implements MustardApp {
   onStart() {}
