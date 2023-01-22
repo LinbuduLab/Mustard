@@ -72,13 +72,9 @@ jobs:
       - name: Run publint
         run: pnpm --filter mustard-cli pub:check
 
-  codecov:
-    needs: complete
-    runs-on: macos-latest
-
-    defaults:
-      run:
-        working-directory: ./packages/mustard-cli
-    steps:
       - name: Coverage report
-        uses: codecov/codecov-action@v3
+        if: runner.os != 'Windows'
+        working-directory: ./packages/mustard-cli
+        run: |
+          echo "The operating system on the runner is $env:RUNNER_OS."
+          bash <(curl -s https://codecov.io/bash)

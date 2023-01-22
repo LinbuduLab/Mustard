@@ -4,6 +4,7 @@
 
 ![GitHub package.json version (subfolder of monorepo)](https://img.shields.io/github/package-json/v/LinbuduLab/Mustard?filename=packages%2Fmustard-cli%2Fpackage.json)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/mustard-cli)
+[![codecov](https://codecov.io/gh/LinbuduLab/Mustard/branch/main/graph/badge.svg?token=ceNVnMTgmM)](https://codecov.io/gh/LinbuduLab/Mustard)
 
 > **This is an incubating project of [@LinbuduLab](https://github.com/LinbuduLab), which also means it's still under development.**
 
