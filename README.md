@@ -143,4 +143,4 @@ $ mm update p1 p2 p3 -t=dev
 
 ## License
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLinbuduLab%2FMustard.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLinbuduLab%2FMustard?ref=badge_shield)
+[MIT](LICENSE)
