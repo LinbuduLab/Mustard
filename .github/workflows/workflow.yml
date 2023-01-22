@@ -76,4 +76,5 @@ jobs:
         if: runner.os != 'Windows'
         uses: codecov/codecov-action@v3
         with:
-          files: ./packages/mustard-cli/coverage/coverage-final.json
+          directory: ./packages/mustard-cli/coverage
+          verbose: true
