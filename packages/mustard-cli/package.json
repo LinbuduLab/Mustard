@@ -49,9 +49,9 @@
     "build": "tsc",
     "pub:check": "pnpx publint",
     "prepublishOnly": "pnpm run pub:check && pnpm run build",
-    "test:unit": "TEST_TYPE=UNIT vitest",
-    "test:ig": "TEST_TYPE=INTEGRATION vitest",
-    "test:igu": "TEST_TYPE=INTEGRATION vitest -u",
+    "test:unit": "cross-env TEST_TYPE=UNIT vitest",
+    "test:ig": "cross-env TEST_TYPE=INTEGRATION vitest",
+    "test:igu": "cross-env TEST_TYPE=INTEGRATION vitest -u",
     "test": "vitest"
   },
   "nodemonConfig": {
@@ -95,6 +95,7 @@
     "@types/yargs-parser": "^21.0.0",
     "@vitest/coverage-c8": "^0.26.2",
     "chalk": "^4.0.0",
+    "cross-env": "^7.0.3",
     "execa": "^6.0.0",
     "lodash": "^4.17.21",
     "nodemon": "^2.0.20",

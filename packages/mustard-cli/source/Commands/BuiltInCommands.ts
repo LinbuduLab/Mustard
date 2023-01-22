@@ -44,7 +44,8 @@ export class BuiltInCommands {
     const printHelp =
       typeof parsedArgs === "boolean"
         ? parsedArgs
-        : BuiltInCommands.containsHelpFlag(parsedArgs);
+        : // in ubuntu-latest image, yargs-parser returns undefined for parsedArgs instead of an empty object
+          BuiltInCommands.containsHelpFlag(parsedArgs ?? {});
 
     if (!printHelp) {
       return;

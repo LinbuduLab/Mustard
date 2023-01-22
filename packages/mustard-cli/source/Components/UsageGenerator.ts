@@ -1,6 +1,6 @@
 import { MustardRegistry } from "./Registry";
 import { MustardUtils } from "./Utils";
-import uniqBy from "lodash.uniqBy";
+import uniqBy from "lodash.uniqby";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 import type { Nullable } from "../Typings/Shared.struct";
