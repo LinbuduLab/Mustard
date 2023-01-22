@@ -13,13 +13,19 @@ on:
       - "release/**"
 
 jobs:
-  install:
+  complete:
+    name: Complete Workflow
+
     strategy:
       matrix:
         node-version: [16, 18]
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        working-directory: ./
 
     steps:
       - uses: actions/checkout@v3
@@ -65,3 +71,10 @@ jobs:
 
       - name: Run publint
         run: pnpm --filter mustard-cli pub:check
+
+      - name: Coverage report
+        if: runner.os != 'Windows'
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./packages/mustard-cli/coverage
+          verbose: true

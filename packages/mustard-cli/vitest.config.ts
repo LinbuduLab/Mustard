@@ -15,7 +15,7 @@ export default defineConfig({
     ),
     coverage: {
       enabled: true,
-      reporter: ["text", "html"],
+      reporter: ["text", "html", "json"],
       include: ["source"],
     },
     threads: true,
