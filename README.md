@@ -1,6 +1,7 @@
 # Mustard
 
 ![npm dev dependency version](https://img.shields.io/npm/dependency-version/mustard-cli/dev/typescript)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLinbuduLab%2FMustard.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLinbuduLab%2FMustard?ref=badge_shield)
 
 ![GitHub package.json version (subfolder of monorepo)](https://img.shields.io/github/package-json/v/LinbuduLab/Mustard?filename=packages%2Fmustard-cli%2Fpackage.json)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/mustard-cli)
@@ -129,3 +130,6 @@ $ mm update p1 p2 p3 -t=dev
 ## License
 
 [MIT](LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLinbuduLab%2FMustard.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLinbuduLab%2FMustard?ref=badge_large)
