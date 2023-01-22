@@ -9,10 +9,24 @@
 
 IoC & [Native ECMAScript Decorator](https://github.com/tc39/proposal-decorators) based command line app builder.
 
+## Requires
+
+- Node.js >= 16.0.0
+- TypeScript >= 5.0.0
+
+Before TypeScript 5.0 is released, you will need to configure the used TypeScript version like below in `.vscode/settings.json`:
+
+```json
+{
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
+```
+
 ## Resources
 
 - If you want to know more about the usage of new decorators(using TypeScript or Babel), please refer to [with-new-decorators](https://github.com/linbudu599/with-new-decorators).
 - For the development progress of the new decorators, please refer to [#50820](https://github.com/microsoft/TypeScript/pull/50820) and more issues.
+- Also, please check the [5.0 Iteration Plan](https://github.com/microsoft/TypeScript/issues/51362) for more information.
 
 ## Features
 
@@ -128,4 +142,4 @@ $ mm update p1 p2 p3 -t=dev
 
 ## License
 
-[MIT](LICENSE)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLinbuduLab%2FMustard.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLinbuduLab%2FMustard?ref=badge_shield)
