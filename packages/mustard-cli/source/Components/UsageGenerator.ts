@@ -87,16 +87,16 @@ export class UsageInfoGenerator {
   public static formatCommandUsage(collect: ParsedCommandUsage): string {
     const { commandBinaryName: bin } = UsageInfoGenerator;
 
-    const commandPart = `Command:\n\n${collect.name}${
+    const commandPart = `Command:\n  ${collect.name}${
       collect.alias ? `, ${collect.alias},` : ""
     } ${collect.description ? collect.description + "\n" : "\n"}`;
 
-    let optionsPart = "";
+    let optionsPart = "Options:\n";
 
     // optionsPart += "\n\n";
 
     collect.options.forEach((o) => {
-      optionsPart += `--${o.name}${o.alias ? `, -${o.alias}` : ""}${
+      optionsPart += `  --${o.name}${o.alias ? `, -${o.alias}` : ""}${
         o.description ? `, ${o.description}` : ""
       }${
         o.defaultValue
@@ -114,10 +114,10 @@ ${optionsPart}`;
   public static formatRootCommandUsage(collect: ParsedCommandUsage): string {
     let optionsPart = "";
 
-    optionsPart += "\n\n";
+    optionsPart += "\n";
 
     collect.options.forEach((o) => {
-      optionsPart += `--${o.name}${o.alias ? ` -${o.alias}` : ""}${
+      optionsPart += `  --${o.name}${o.alias ? ` -${o.alias}` : ""}${
         o.description ? `, ${o.description}` : ""
       }${
         o.defaultValue
@@ -130,7 +130,7 @@ ${optionsPart}`;
     return `
 Usage:
 
-${UsageInfoGenerator.commandBinaryName}
+  $ ${UsageInfoGenerator.commandBinaryName}
 
 Options: ${optionsPart}`;
   }
@@ -149,7 +149,7 @@ Options: ${optionsPart}`;
     result = `
 Usage:
 
-${bin} [command] [--options]
+  $ ${bin} [command] [--options]
 ${result}`;
 
     return result;

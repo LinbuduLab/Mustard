@@ -72,7 +72,7 @@ class SyncCommand implements CommandStruct {
 
 @App({
   name: "create-mustard-app",
-  commands: [UpdateCommand, SyncCommand],
+  commands: [RootCommandHandle],
   configurations: {
     allowUnknownOptions: true,
     enableUsage: true,

@@ -26,10 +26,9 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       "
       Usage:
 
-      create-mustard-app
+        $ create-mustard-app
 
       Options: 
-
       "
     `
     );
@@ -42,10 +41,9 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       "
       Usage:
 
-      create-mustard-app
+        $ create-mustard-app
 
       Options: 
-
       "
     `
     );
@@ -68,11 +66,11 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       `
       "
       Command:
+        update execute update command
 
-      update execute update command
-
-      --name, name of the project
-      --version, version of the project
+      Options:
+        --name, name of the project
+        --version, version of the project
       "
     `
     );
@@ -84,11 +82,11 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       `
       "
       Command:
+        sync execute update command
 
-      sync execute update command
-
-      --name, -n, name of the project
-      --type, -t, type of the project
+      Options:
+        --name, -n, name of the project
+        --type, -t, type of the project
       "
     `
     );

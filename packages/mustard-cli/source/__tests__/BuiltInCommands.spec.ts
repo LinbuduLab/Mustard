@@ -22,7 +22,7 @@ const registration = {
   decoratedInstanceFields: [],
 } satisfies CommandRegistryPayload;
 
-describe.skip("BuiltInCommands", () => {
+describe("BuiltInCommands", () => {
   it("should check if contains help flag", () => {
     expect(BuiltInCommands.containsHelpFlag({ _: [], help: true })).toBe(true);
     expect(BuiltInCommands.containsHelpFlag({ _: [], h: true })).toBe(true);
@@ -70,13 +70,14 @@ describe.skip("BuiltInCommands", () => {
   });
 
   it("should handle help command", () => {
-    BuiltInCommands.useHelpCommand(false, undefined, undefined, false);
+    BuiltInCommands.useHelpCommand("mm", false, undefined, undefined, false);
     expect(UsageInfoGenerator.printHelp).not.toBeCalled();
 
-    BuiltInCommands.useHelpCommand(true, undefined, false, false);
+    BuiltInCommands.useHelpCommand("mm", true, undefined, false, false);
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(1);
 
     BuiltInCommands.useHelpCommand(
+      "mm",
       { _: [], help: true },
       undefined,
       false,
@@ -84,19 +85,23 @@ describe.skip("BuiltInCommands", () => {
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(2);
 
-    BuiltInCommands.useHelpCommand(true, registration, false, false);
+    BuiltInCommands.useHelpCommand("mm", true, registration, false, false);
 
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(3);
-    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
+    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(
+      "mm",
+      registration
+    );
 
     BuiltInCommands.useHelpCommand(
+      "mm",
       { _: [], help: true },
       registration,
       false,
       false
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(4);
-    expect(UsageInfoGenerator.printHelp).toBeCalledWith(registration);
+    expect(UsageInfoGenerator.printHelp).toBeCalledWith("mm", registration);
   });
 
   it("should handle version command", () => {
