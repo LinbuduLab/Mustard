@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "pnpm --filter mustard-cli dev",
-    "build": "pnpm --filter mustard-* build"
+    "build": "pnpm --filter mustard-* build",
+    "release": "pnpm --filter mustard-cli publish --no-git-checks"
   },
   "nodemonConfig": {
     "ignore": [
