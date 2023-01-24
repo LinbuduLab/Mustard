@@ -11,7 +11,7 @@ interface SharedInfo {
   description?: Nullable<string>;
 }
 
-interface ParsedCommandUsage extends SharedInfo {
+export interface ParsedCommandUsage extends SharedInfo {
   options: ParsedOptionInfo[];
   variadicOptions: ParsedOptionInfo[];
 }
@@ -60,7 +60,7 @@ export class UsageInfoGenerator {
     return command;
   }
 
-  private static commandBinaryName: Nullable<string> = null;
+  public static commandBinaryName: Nullable<string> = null;
 
   public static printHelp(bin: string, registration?: CommandRegistryPayload) {
     UsageInfoGenerator.commandBinaryName = bin;

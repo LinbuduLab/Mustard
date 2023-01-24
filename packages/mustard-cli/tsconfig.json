@@ -31,7 +31,9 @@
     "rootDir": "source",
     "paths": {
       "mustard-cli": ["./source/Exports/index.ts"],
-      "mustard-cli/*": ["./source/Exports/*"]
+      "mustard-cli/decorator": ["./source/Exports/Decorators.ts"],
+      "mustard-cli/cli": ["./source/Exports/ComanndLine.ts"],
+      "mustard-cli/validator": ["./source/Exports/Validator.ts"]
     }
   },
   "include": ["./**/*.ts"],
