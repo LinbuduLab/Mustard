@@ -1,0 +1,65 @@
+{
+  "name": "create-mustard-app",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "create-mustard-app": "index.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "index.js",
+    "dist",
+    "template-*"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "pub:check": "pnpx publint",
+    "prepublishOnly": "pnpm run pub:check && pnpm run build"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "nodemonConfig": {
+    "delay": 500,
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "execMap": {
+      "ts": "ts-node-esm"
+    },
+    "ext": "ts,json",
+    "ignore": [
+      "**/test/**",
+      "**/docs/**",
+      "node_modules"
+    ],
+    "restartable": "rs",
+    "verbose": true,
+    "watch": [
+      "*.ts"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LinbuduLab/Mustard.git",
+    "directory": "packages/create-mustard-app"
+  },
+  "bugs": {
+    "url": "https://github.com/LinbuduLab/create-mustard-app/issues"
+  },
+  "dependencies": {
+    "mustard-cli": "workspace:^0.4.1"
+  },
+  "devDependencies": {
+    "chalk": "^4.0.0",
+    "execa": "^6.0.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.1",
+    "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31"
+  }
+}
