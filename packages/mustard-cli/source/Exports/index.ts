@@ -1,4 +1,4 @@
-import { MustardUtilsProvider } from "source/Components/MustardUtilsProvider";
+import { MustardUtilsProvider } from "../Components/MustardUtilsProvider";
 
 export * from "./Decorators";
 export * from "./ComanndLine";

@@ -1,5 +1,5 @@
-import { MustardFactory } from "mustard-cli";
-import { RootCommand, Option, App } from "mustard-cli/decorator";
+import { MustardFactory, MustardUtils } from "mustard-cli";
+import { RootCommand, Option, App, Utils } from "mustard-cli/decorator";
 import { CommandStruct, MustardApp } from "mustard-cli/cli";
 
 type Template = "simple" | "template";
@@ -12,7 +12,13 @@ class RootCommandHandle implements CommandStruct {
   @Option("template", "t", "template to use, 'simple' or 'complete'")
   public template: Template = "simple";
 
-  public run(): void {}
+  @Utils()
+  public utils!: MustardUtils;
+
+  public run(): void {
+    console.log(this.utils.colors.green("Hello World"));
+    console.log(this.dry, this.template);
+  }
 }
 
 @App({
