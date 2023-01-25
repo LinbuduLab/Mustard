@@ -3,7 +3,7 @@ import path from "path";
 
 import { MustardFactory } from "mustard-cli";
 import { App } from "mustard-cli/Decorators";
-import { MustardApp } from "mustard-cli/ComanndLine";
+import { MustardApp } from "mustard-cli/cli";
 
 import { RootCommandHandle } from "./root";
 import { UpdateCommand } from "./update.command";
@@ -18,9 +18,9 @@ import { UpdateCommand } from "./update.command";
   providers: [],
 })
 class Project implements MustardApp {
-  onStart() {}
+  onStart() { }
 
-  onComplete() {}
+  onComplete() { }
 }
 
 MustardFactory.init(Project).start();

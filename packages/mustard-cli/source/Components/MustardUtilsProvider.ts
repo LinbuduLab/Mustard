@@ -206,6 +206,7 @@ export class MustardUtilsProvider {
   public static produce() {
     return {
       json: MustardUtilsProvider.json,
+      colors: MustardUtilsProvider.colors,
     };
   }
 

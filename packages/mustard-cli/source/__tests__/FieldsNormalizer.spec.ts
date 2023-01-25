@@ -72,9 +72,31 @@ describe("FieldsNormalizer", () => {
   });
 
   it("should normalize @Input field", () => {
-    DecoratedClassFieldsNormalizer.normalizeInputField(foo, "field1", ["foo"]);
+    DecoratedClassFieldsNormalizer.normalizeInputField(foo, "field1", ["foo"], {
+      type: "Input",
+    });
 
-    expect(foo.field1).toEqual(["foo"]);
+    expect(foo.field1).toEqual("foo");
+
+    DecoratedClassFieldsNormalizer.normalizeInputField(foo, "field2", [], {
+      type: "Input",
+      initValue: "bar",
+    });
+
+    expect(foo.field2).toEqual("bar");
+
+    DecoratedClassFieldsNormalizer.normalizeInputField(
+      foo,
+      "field3",
+      ["foo", "bar", "baz"],
+      {
+        type: "Input",
+        initValue: "bar",
+      }
+    );
+
+    // @ts-expect-error
+    expect(foo.field3).toEqual(["foo", "bar", "baz"]);
   });
 
   it("should normalize @Option field", () => {

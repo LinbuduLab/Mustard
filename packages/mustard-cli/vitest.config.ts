@@ -16,7 +16,8 @@ export default defineConfig({
     coverage: {
       enabled: true,
       reporter: ["text", "html", "json"],
-      include: ["source"],
+      include: ["source/**/*.ts"],
+      exclude: ["source/__tests__", "source/Errors/ValidationError.ts"],
     },
     threads: true,
   },

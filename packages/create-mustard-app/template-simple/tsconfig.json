@@ -28,20 +28,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "rootDir": "source",
-    "paths": {
-      "mustard-cli": ["./source/Exports/index.ts"],
-      "mustard-cli/decorator": ["./source/Exports/Decorators.ts"],
-      "mustard-cli/cli": ["./source/Exports/ComanndLine.ts"],
-      "mustard-cli/validator": ["./source/Exports/Validator.ts"]
-    }
+    "rootDir": "src"
   },
-  "include": ["./**/*.ts"],
-  "exclude": [
-    "dist",
-    "samples",
-    "./source/__tests__",
-    "vitest.config.ts",
-    "sample.ts"
-  ]
+  "include": ["src"],
+  "exclude": ["dist"]
 }

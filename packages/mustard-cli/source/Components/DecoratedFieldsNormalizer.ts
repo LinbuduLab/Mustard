@@ -80,7 +80,8 @@ export class DecoratedClassFieldsNormalizer {
           DecoratedClassFieldsNormalizer.normalizeInputField(
             instance,
             instanceField,
-            parsedInputs
+            parsedInputs,
+            value
           );
           break;
         case "Option":
@@ -109,9 +110,17 @@ export class DecoratedClassFieldsNormalizer {
   public static normalizeInputField(
     instance: CommandStruct,
     instanceField: string,
-    inputs: string[] = []
+    inputs: string[] = [],
+    value: BasePlaceholder
   ) {
-    MustardUtils.setInstanceFieldValue(instance, instanceField, inputs);
+    const inputValue =
+      inputs.length === 0
+        ? value.initValue ?? []
+        : inputs.length === 1
+        ? inputs[0] ?? value.initValue
+        : inputs;
+
+    MustardUtils.setInstanceFieldValue(instance, instanceField, inputValue);
   }
 
   public static normalizeInjectField(
