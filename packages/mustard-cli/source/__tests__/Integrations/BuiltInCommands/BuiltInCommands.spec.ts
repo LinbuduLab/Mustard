@@ -65,6 +65,11 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     expect(stdout2).toMatchInlineSnapshot(
       `
       "
+      Usage:
+
+        $ LinbuduLab CLI update
+
+
       Command:
         update execute update command
 
@@ -81,6 +86,11 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     expect(stdout3).toMatchInlineSnapshot(
       `
       "
+      Usage:
+
+        $ LinbuduLab CLI sync
+
+
       Command:
         sync execute update command
 
