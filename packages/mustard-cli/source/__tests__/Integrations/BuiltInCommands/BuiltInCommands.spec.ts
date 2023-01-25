@@ -26,7 +26,7 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       "
       Usage:
 
-        $ create-mustard-app
+        $ create-mustard-app 
 
       Options: 
       "
@@ -41,7 +41,7 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       "
       Usage:
 
-        $ create-mustard-app
+        $ create-mustard-app 
 
       Options: 
       "
