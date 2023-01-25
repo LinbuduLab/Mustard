@@ -151,6 +151,7 @@ export class CLI {
       throw new CommandNotFoundError(this.parsedArgs);
     }
 
+    // execute command with help flag
     BuiltInCommands.useHelpCommand(
       this.identifier,
       this.parsedArgs,
@@ -203,7 +204,7 @@ export class CLI {
 
     if (rootCommandRegistration) {
       // bin --help with root command specified
-      // print help info for root command with identifer(binary name)
+      // print help info for root command only(even there're other commands)
       BuiltInCommands.useHelpCommand(
         this.identifier,
         this.parsedArgs,
@@ -214,7 +215,7 @@ export class CLI {
       this.executeCommandFromRegistration(rootCommandRegistration);
     } else if (this.options?.enableUsage) {
       // bin --help without root command specified
-      // print help info for cpmplete app with identifer(binary name)
+      // print help info for cpmplete app
       BuiltInCommands.useHelpCommand(
         this.identifier,
         true,

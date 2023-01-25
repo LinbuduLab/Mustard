@@ -78,22 +78,26 @@ export class UsageInfoGenerator {
 
   public static commandBinaryName: Nullable<string> = null;
 
+  // FIXME: if root command is registered, only usage info of root command will be displayed
   public static printHelp(bin: string, registration?: CommandRegistryPayload) {
     UsageInfoGenerator.commandBinaryName = bin;
 
     registration
       ? registration.root
-        ? console.log(
+        ? // print usage info for RootCommand only
+          console.log(
             UsageInfoGenerator.formatRootCommandUsage(
               UsageInfoGenerator.collectSpecificCommandUsage(registration)
             )
           )
-        : console.log(
+        : // print usage info for specific command only
+          console.log(
             UsageInfoGenerator.formatCommandUsage(
               UsageInfoGenerator.collectSpecificCommandUsage(registration)
             )
           )
-      : console.log(
+      : // print usage info for complete application
+        console.log(
           UsageInfoGenerator.batchfFormatCommandUsage(
             UsageInfoGenerator.collectCompleteAppUsage()
           )
@@ -101,17 +105,24 @@ export class UsageInfoGenerator {
   }
 
   public static formatCommandUsage(collect: ParsedCommandUsage): string {
-    const { commandBinaryName: bin } = UsageInfoGenerator;
+    return `
+Usage:
 
+  $ ${UsageInfoGenerator.commandBinaryName} ${collect.name}
+
+${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
+  }
+
+  public static formatCommandUsageInternal(
+    collect: ParsedCommandUsage
+  ): string {
     const commandPart = `Command:\n  ${collect.name}${
       collect.alias ? `, ${collect.alias},` : ""
     } ${collect.description ? collect.description + "\n" : "\n"}`;
 
     let optionsPart = "Options:\n";
 
-    // optionsPart += "\n\n";
-
-    collect.options.forEach((o) => {
+    [...collect.options, ...collect.variadicOptions].forEach((o) => {
       optionsPart += `  --${o.name}${o.alias ? `, -${o.alias}` : ""}${
         o.description ? `, ${o.description}` : ""
       }${
@@ -132,7 +143,7 @@ ${optionsPart}`;
 
     optionsPart += "\n";
 
-    collect.options.forEach((o) => {
+    [...collect.options, ...collect.variadicOptions].forEach((o) => {
       optionsPart += `  --${o.name}${o.alias ? ` -${o.alias}` : ""}${
         o.description ? `, ${o.description}` : ""
       }${
@@ -140,7 +151,7 @@ ${optionsPart}`;
           ? `, default: ${JSON.stringify(o.defaultValue, null, 2)}`
           : ""
       }`;
-      optionsPart += "\n\n";
+      optionsPart += "\n";
     });
 
     const inputPrePart = collect.input
@@ -173,7 +184,7 @@ Options: ${optionsPart}`;
     let result = "";
 
     collect.forEach((c) => {
-      result += UsageInfoGenerator.formatCommandUsage(c);
+      result += UsageInfoGenerator.formatCommandUsageInternal(c);
     });
 
     result = `

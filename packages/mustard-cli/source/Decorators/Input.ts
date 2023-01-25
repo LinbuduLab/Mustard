@@ -3,6 +3,11 @@ import type { InputConfiguration } from "../Typings/Option.struct";
 
 export class InputDecorator {
   /**
+   * TODO:
+   *
+   * @Input(name, alias, description)
+   * @Input({ name, alias, description })
+   *
    * Inject inputs after commands
    * @example
    * class RunCommand {

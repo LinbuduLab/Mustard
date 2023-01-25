@@ -2,7 +2,7 @@ import { MustardFactory, MustardUtils } from "mustard-cli";
 import { RootCommand, Option, App, Utils, Input } from "mustard-cli/decorator";
 import { CommandStruct, MustardApp } from "mustard-cli/cli";
 
-type Template = "simple" | "template";
+type Template = "simple" | "complete";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {

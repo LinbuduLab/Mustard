@@ -38,6 +38,11 @@ describe("UsageGenerator", () => {
 
     expect(result).toMatchInlineSnapshot(`
       "
+      Usage:
+
+        $ cli foo
+
+
       Command:
         foo, f, foo command
 
@@ -59,9 +64,7 @@ describe("UsageGenerator", () => {
 
       Options: 
         --bar -b, bar option, default: \\"bar\\"
-
         --baz -z, baz option, default: \\"baz\\"
-
       "
     `);
   });
