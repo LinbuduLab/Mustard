@@ -95,6 +95,7 @@ describe("FieldsNormalizer", () => {
       }
     );
 
+    // @ts-expect-error
     expect(foo.field3).toEqual(["foo", "bar", "baz"]);
   });
 

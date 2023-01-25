@@ -24,6 +24,11 @@ const collect = {
       defaultValue: "baz",
     },
   ],
+  input: {
+    name: "projects",
+    description: "projects to collect",
+    defaultValue: [],
+  },
   variadicOptions: [],
 } satisfies ParsedCommandUsage;
 
@@ -50,7 +55,7 @@ describe("UsageGenerator", () => {
       "
       Usage:
 
-        $ cli
+        $ cli [projects, projects to collect, default: []]
 
       Options: 
         --bar -b, bar option, default: \\"bar\\"
@@ -67,10 +72,12 @@ describe("UsageGenerator", () => {
       {
         ...collect,
         name: "bar",
+        variadicOptions: [],
       },
       {
         ...collect,
         name: "foo",
+        variadicOptions: [],
       },
     ]);
 

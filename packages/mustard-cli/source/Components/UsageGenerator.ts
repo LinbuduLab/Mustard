@@ -14,6 +14,7 @@ interface SharedInfo {
 export interface ParsedCommandUsage extends SharedInfo {
   options: ParsedOptionInfo[];
   variadicOptions: ParsedOptionInfo[];
+  input?: ParsedOptionInfo;
 }
 
 interface ParsedOptionInfo extends SharedInfo {
@@ -39,22 +40,37 @@ export class UsageInfoGenerator {
   ): ParsedCommandUsage {
     const { commandInvokeName, instance } = registration;
 
-    const options: ParsedOptionInfo[] =
-      MustardUtils.filterDecoratedInstanceFields(instance!).map((option) => {
-        return {
-          name: option.key,
-          alias: option.value.optionAlias,
-          description: option.value.description,
-          defaultValue: option.value.initValue,
-        };
-      });
+    const decoratedFields = MustardUtils.filterDecoratedInstanceFields(
+      instance!
+    ).map((option) => {
+      return {
+        name: option.key,
+        alias: option.value.optionAlias,
+        description: option.value.description,
+        defaultValue: option.value.initValue,
+        type: option.type,
+      };
+    });
+
+    const options: ParsedOptionInfo[] = decoratedFields.filter(
+      (o) => o.type === "Option"
+    ) as ParsedOptionInfo[];
+
+    const variadicOptions: ParsedOptionInfo[] = decoratedFields.filter(
+      (o) => o.type === "VariadicOption"
+    ) as ParsedOptionInfo[];
+
+    const input: ParsedOptionInfo = decoratedFields.find(
+      (o) => o.type === "Input"
+    ) as ParsedOptionInfo;
 
     const command: ParsedCommandUsage = {
       name: commandInvokeName,
       alias: registration.commandAlias,
       description: registration.description,
       options,
-      variadicOptions: [],
+      input,
+      variadicOptions,
     };
 
     return command;
@@ -127,10 +143,24 @@ ${optionsPart}`;
       optionsPart += "\n\n";
     });
 
+    const inputPrePart = collect.input
+      ? `[${collect.input.name}${
+          collect.input.description ? `, ${collect.input.description}` : ""
+        }${
+          collect.input.defaultValue
+            ? `, default: ${JSON.stringify(
+                collect.input.defaultValue,
+                null,
+                2
+              )}`
+            : ""
+        }]`
+      : "";
+
     return `
 Usage:
 
-  $ ${UsageInfoGenerator.commandBinaryName}
+  $ ${UsageInfoGenerator.commandBinaryName} ${inputPrePart}
 
 Options: ${optionsPart}`;
   }

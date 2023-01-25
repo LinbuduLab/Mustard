@@ -12,7 +12,7 @@ class RootCommandHandle implements CommandStruct {
   @Option("template", "t", "template to use, 'simple' or 'complete'")
   public template: Template = "simple";
 
-  @Input()
+  @Input("directory to create the project in")
   public dir: string = "./";
 
   @Utils()

@@ -115,7 +115,7 @@ export class DecoratedClassFieldsNormalizer {
   ) {
     const inputValue =
       inputs.length === 0
-        ? value.initValue
+        ? value.initValue ?? []
         : inputs.length === 1
         ? inputs[0] ?? value.initValue
         : inputs;
