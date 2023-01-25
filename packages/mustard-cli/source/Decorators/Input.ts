@@ -10,8 +10,11 @@ export class InputDecorator {
    * }
    */
   public static Input(): AnyClassFieldDecoratorReturnType {
-    return (_, context) => () => ({
-      type: "Input",
-    });
+    return (_, context) => (initValue) => {
+      return {
+        type: "Input",
+        initValue,
+      };
+    };
   }
 }
