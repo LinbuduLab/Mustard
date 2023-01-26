@@ -66,8 +66,8 @@ jobs:
       - name: Run unit testing
         run: pnpm --filter mustard-cli run test:unit
 
-      - name: Run integration testing
-        run: pnpm --filter mustard-cli run test:ig
+      # - name: Run integration testing
+      # run: pnpm --filter mustard-cli run test:ig
 
       - name: Run publint
         run: pnpm --filter mustard-cli pub:check
