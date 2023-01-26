@@ -7,6 +7,7 @@ export interface Configurations {
   debug: boolean;
   enableUsage: boolean | ((registration?: CommandRegistryPayload) => string);
   enableVersion: false | MaybeFactory<string>;
+  ignoreValidationErrors: boolean;
   defaultOverrides: boolean;
   lifeCycles?: Partial<LifeCycles>;
   didYouMean?: boolean;

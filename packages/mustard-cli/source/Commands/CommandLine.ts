@@ -64,6 +64,7 @@ export class CLI {
       enableVersion = false,
       lifeCycles = {},
       didYouMean = true,
+      ignoreValidationErrors = false,
     } = this.options ?? {};
 
     this.options = {
@@ -72,6 +73,7 @@ export class CLI {
       lifeCycles,
       didYouMean,
       enableUsage,
+      ignoreValidationErrors,
     };
 
     debug("normalized configurations: %O", this.options);

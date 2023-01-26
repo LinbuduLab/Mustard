@@ -23,6 +23,7 @@ import type {
   BasePlaceholder,
   TaggedDecoratedInstanceFields,
 } from "../Typings/Utils.struct";
+import type { CLIInstantiationConfiguration } from "../Typings/Configuration.struct";
 
 export class DecoratedClassFieldsNormalizer {
   public static throwOnUnknownOptions(
@@ -49,11 +50,16 @@ export class DecoratedClassFieldsNormalizer {
     }
   }
 
+  private static appOptions: CLIInstantiationConfiguration;
+
   public static normalizeDecoratedFields(
     command: CommandRegistryPayload,
     parsedInputs: string[],
-    parsedArgs: Dictionary
+    parsedArgs: Dictionary,
+    appOptions?: CLIInstantiationConfiguration
   ) {
+    DecoratedClassFieldsNormalizer.appOptions = appOptions ?? {};
+
     const { instance, decoratedInstanceFields = [] } = command;
 
     decoratedInstanceFields.forEach(({ key: instanceField, value, type }) => {
@@ -199,20 +205,33 @@ export class DecoratedClassFieldsNormalizer {
 
       let validatedValue = null;
 
+      // validator specified
       if (schema) {
         const validation = schema.safeParse(argValue);
-        if (!validation.success) {
-          throw new ValidationError(
-            injectKey ?? injectSubKey,
-            argValue,
-            ValidationError.formatError(
+        if (validation.success) {
+          // validation success
+          validatedValue = validation.data;
+        } else {
+          // validation failed
+          if (
+            DecoratedClassFieldsNormalizer.appOptions.ignoreValidationErrors
+          ) {
+            // ignore validation errors and keep the original value
+            validatedValue = argValue;
+          } else {
+            // throw validation error
+            throw new ValidationError(
               injectKey ?? injectSubKey,
-              validation.error
-            )
-          );
+              argValue,
+              ValidationError.formatError(
+                injectKey ?? injectSubKey,
+                validation.error
+              )
+            );
+          }
         }
-        validatedValue = validation.data;
       } else {
+        // no validator specified, only set the value
         validatedValue = argValue;
       }
 
