@@ -14,7 +14,7 @@ import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option("msg", "m", Validator.String().MinLength(5))
+  @Option("msg", "m", Validator.Required().String().MinLength(5))
   public msg = "default value of msg";
 
   public run(): void {

@@ -24,6 +24,7 @@ import type {
   TaggedDecoratedInstanceFields,
 } from "../Typings/Utils.struct";
 import type { CLIInstantiationConfiguration } from "../Typings/Configuration.struct";
+import { z } from "zod";
 
 export class DecoratedClassFieldsNormalizer {
   public static throwOnUnknownOptions(
@@ -199,6 +200,10 @@ export class DecoratedClassFieldsNormalizer {
       optionAlias: injectSubKey,
     } = <Required<OptionInitializerPlaceHolder>>value;
 
+    const isCurrentFieldRequired = schema ? !schema.isOptional() : false;
+
+    // FIXME: refactor this
+
     // use value from parsed args
     if (injectKey in parsedArgs || injectSubKey in parsedArgs) {
       const argValue = parsedArgs[injectKey] ?? parsedArgs[injectSubKey];
@@ -240,6 +245,17 @@ export class DecoratedClassFieldsNormalizer {
         instanceField,
         validatedValue
       );
+    } else if (isCurrentFieldRequired) {
+      // required field but not specified in parsed args
+      if (DecoratedClassFieldsNormalizer.appOptions.ignoreValidationErrors) {
+        void 0;
+      } else {
+        throw new ValidationError(
+          injectKey ?? injectSubKey,
+          undefined,
+          "Required field not specified in parsed args"
+        );
+      }
     } else {
       // use default value or mark as undefined
       // null should also be converted to undefined
