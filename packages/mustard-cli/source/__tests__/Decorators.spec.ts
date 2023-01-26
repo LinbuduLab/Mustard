@@ -1,4 +1,4 @@
-import { CommandStruct } from "mustard-cli";
+import { CommandStruct } from "../Typings/Command.struct";
 import { MustardRegistry } from "../Components/Registry";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { BuiltInDecorators } from "../Decorators/BuiltIn";
@@ -10,7 +10,7 @@ import { Validator } from "../Validators/index";
 
 const { Utils, Ctx } = BuiltInDecorators;
 const { Command, RootCommand } = CommandDecorators;
-const { Inject } = DIServiceDecorators;
+const { Inject, Provide } = DIServiceDecorators;
 const { Input } = InputDecorator;
 const { Option, Options, VariadicOption } = OptionDecorators;
 
@@ -37,6 +37,10 @@ vi.spyOn(CommandDecorators, "registerCommandImpl").mockImplementation(
 );
 
 vi.spyOn(MustardRegistry, "registerInit");
+
+const { ExternalProviderRegistry } = MustardRegistry;
+
+vi.spyOn(ExternalProviderRegistry, "set");
 
 const V = Validator.String().StartsWith("linbudu");
 
@@ -308,9 +312,51 @@ describe("Decorators.DIService", () => {
     expect(typeof Inject()).toBe("function");
     // @ts-expect-error
     expect(typeof Inject()()).toBe("function");
-    // @ts-expect-error
-    expect(Input()(undefined, {})()).toEqual({
-      type: "Input",
+    expect(
+      // @ts-expect-error
+      Inject()(undefined, {
+        name: "inputField",
+        kind: "field",
+      })()
+    ).toEqual({
+      type: "Inject",
+      identifier: "inputField",
     });
+    expect(
+      // @ts-expect-error
+      Inject("spec")(undefined, {
+        name: "inputField",
+        kind: "field",
+      })()
+    ).toEqual({
+      type: "Inject",
+      identifier: "spec",
+    });
+  });
+
+  it("should handle @Provide", () => {
+    expect(typeof Provide()).toBe("function");
+    // @ts-expect-error
+    expect(typeof Provide()()).toBe("function");
+
+    Provide()(
+      {},
+      {
+        name: "context_name",
+        kind: "class",
+        addInitializer: () => {},
+      }
+    )();
+    expect(ExternalProviderRegistry.set).toBeCalledWith("context_name", {});
+
+    Provide("spec")(
+      {},
+      {
+        name: "context_name",
+        kind: "class",
+        addInitializer: () => {},
+      }
+    )();
+    expect(ExternalProviderRegistry.set).toBeCalledWith("spec", {});
   });
 });

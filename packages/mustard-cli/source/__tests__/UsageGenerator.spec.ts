@@ -3,6 +3,10 @@ import {
   ParsedCommandUsage,
   UsageInfoGenerator,
 } from "../Components/UsageGenerator";
+import {
+  CommandRegistryPayload,
+  CommandStruct,
+} from "../Typings/Command.struct";
 
 UsageInfoGenerator.commandBinaryName = "cli";
 
@@ -112,5 +116,46 @@ describe("UsageGenerator", () => {
         --baz, -z, baz option, default: \\"baz\\"
       "
     `);
+  });
+
+  it("should collect complete app usage", () => {});
+
+  it("should collect specific command usage", () => {
+    class RunCommand implements CommandStruct {
+      run() {}
+    }
+    const registration = {
+      commandInvokeName: "run",
+      Class: RunCommand,
+      root: false,
+      childCommandList: [],
+      commandAlias: "r",
+      description: "run command",
+      instance: new RunCommand(),
+      decoratedInstanceFields: [
+        {
+          key: "foo",
+          type: "Option",
+          value: {
+            type: "Option",
+            optionName: "foo",
+            optionAlias: "f",
+            description: "foo option",
+            initValue: "foo_default",
+          },
+        },
+      ],
+    } satisfies CommandRegistryPayload;
+
+    expect(
+      UsageInfoGenerator.collectSpecificCommandUsage(registration)
+    ).toEqual({
+      alias: "r",
+      description: "run command",
+      input: undefined,
+      name: "run",
+      options: [],
+      variadicOptions: [],
+    });
   });
 });

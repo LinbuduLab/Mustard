@@ -22,6 +22,7 @@ export class DIServiceDecorators {
     return (target, context) => () => {
       MustardRegistry.ExternalProviderRegistry.set(
         identifier ?? context.name,
+
         target
       );
     };

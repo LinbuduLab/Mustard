@@ -72,6 +72,11 @@ describe("Validators", () => {
 });
 
 describe("Validators.String", () => {
+  it("should produce schema", () => {
+    expect(Validator.String().schema.isOptional()).toBeTruthy();
+    expect(Validator.Required().String().schema.isOptional()).toBeFalsy();
+  });
+
   it("should validate string primitive", () => {
     expect(Validator.String().validate("str")).toBe("str");
     try {
@@ -113,6 +118,11 @@ describe("Validators.String", () => {
 });
 
 describe("Validators.Number", () => {
+  it("should produce schema", () => {
+    expect(Validator.Number().schema.isOptional()).toBeTruthy();
+    expect(Validator.Required().Number().schema.isOptional()).toBeFalsy();
+  });
+
   it("should validate number primitive", () => {
     try {
       expect(Validator.Number().Positive().validate(-1));
@@ -171,6 +181,10 @@ describe("Validators.Number", () => {
 });
 
 describe("Validators.Enum", () => {
+  it("should produce schema", () => {
+    expect(Validator.Enum(VE).schema.isOptional()).toBeTruthy();
+    expect(Validator.Required().Enum(VE).schema.isOptional()).toBeFalsy();
+  });
   it("should validate native enum type", () => {
     try {
       expect(Validator.Enum(VE).validate(11));
