@@ -205,7 +205,10 @@ export class DecoratedClassFieldsNormalizer {
           throw new ValidationError(
             injectKey ?? injectSubKey,
             argValue,
-            validation.error
+            ValidationError.formatError(
+              injectKey ?? injectSubKey,
+              validation.error
+            )
           );
         }
         validatedValue = validation.data;

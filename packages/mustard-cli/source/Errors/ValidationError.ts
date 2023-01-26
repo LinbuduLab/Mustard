@@ -7,18 +7,21 @@ export class ValidationError extends Error {
   public name = "ValidationError";
 
   constructor(
-    private argName: string,
-    private ageValue: unknown,
-    private error: z.ZodError
+    private invalidOptionName: string,
+    private invalidOptionValue: unknown,
+    private msg: string
   ) {
     super();
+    this.stack = undefined;
   }
 
   get message(): string {
-    return ValidationError.format(this.argName, this.ageValue, this.error);
+    return chalk.yellow(
+      `Invalid input for option ${chalk.bold(this.invalidOptionName)}`
+    );
   }
 
-  public static format(argName: string, ageValue: unknown, error: z.ZodError) {
+  public static formatError(argName: string, error: z.ZodError) {
     const issue = error.issues[0];
 
     const { expected, received, message } = <ZodInvalidTypeIssue>issue;

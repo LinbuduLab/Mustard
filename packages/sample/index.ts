@@ -14,7 +14,7 @@ import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option("msg", "m")
+  @Option("msg", "m", Validator.String().MinLength(5))
   public msg = "default value of msg";
 
   public run(): void {
@@ -72,8 +72,8 @@ class SyncCommand implements CommandStruct {
 
 @App({
   name: "create-mustard-app",
-  // commands: [RootCommandHandle],
-  commands: [UpdateCommand, SyncCommand],
+  commands: [RootCommandHandle],
+  // commands: [UpdateCommand, SyncCommand],
   configurations: {
     allowUnknownOptions: true,
     enableUsage: true,
