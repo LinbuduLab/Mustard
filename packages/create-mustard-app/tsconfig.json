@@ -8,12 +8,14 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "ES2022",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "strict": true,
     "skipLibCheck": true,
     "declaration": false,
     "sourceMap": false,
     "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "outDir": "dist"
   },
