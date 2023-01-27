@@ -1,0 +1,53 @@
+{
+  "name": "awesome-mustard-app",
+  "version": "0.0.1",
+  "type": "module",
+  "main": ".dist/index.js",
+  "bin": {
+    "awesome-mustard-app": "./dist/index.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "pub:check": "pnpx publint",
+    "prepublishOnly": "pnpm run pub:check && pnpm run build"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "nodemonConfig": {
+    "delay": 500,
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "execMap": {
+      "ts": "ts-node-esm"
+    },
+    "ext": "ts,json",
+    "ignore": [
+      "**/test/**",
+      "**/docs/**",
+      "node_modules"
+    ],
+    "restartable": "rs",
+    "verbose": true,
+    "watch": [
+      "*.ts"
+    ]
+  },
+  "dependencies": {
+    "mustard-cli": "latest"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.1",
+    "typescript": "5.0.0-beta"
+  }
+}
