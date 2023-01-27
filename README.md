@@ -47,16 +47,9 @@ Before TypeScript 5.0 is released, you will need to configure the used TypeScrip
 
 > Complete documentation will be provided after TypeScript 5.0 is officially released.
 
-You will need to use a wip version of typescript to use this library:
-
-```json
-"devDependencies": {
-   "typescript": "npm:@typescript-deploys/pr-build@5.0.0-pr-50820-31"
-}
-```
-
 ```bash
-npm i mustard-cli
+$ npm i typescript@beta
+$ npm i mustard-cli
 ```
 
 You can find more samples in [Samples](packages/sample/samples/).

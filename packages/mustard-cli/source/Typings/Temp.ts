@@ -1,7 +1,9 @@
-export type AnyClassFieldDecoratorReturnType = ClassFieldDecoratorFunction<
-  any,
-  any,
-  any
->;
+export type AnyClassFieldDecoratorReturnType = (
+  a1: undefined,
+  context: ClassFieldDecoratorContext
+) => (initialValue: unknown) => unknown | void;
 
-export type AnyClassDecoratorReturnType = ClassDecoratorFunction<{}, any>; //
+export type AnyClassDecoratorReturnType = (
+  target: any,
+  context: ClassDecoratorContext
+) => void;
