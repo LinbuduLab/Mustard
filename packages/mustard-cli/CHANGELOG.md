@@ -1,5 +1,17 @@
 # ChangeLog for mustard-cli
 
+## 0.5.0
+
+### Minor Changes
+
+- 4902a30: Fix required schema validation
+
+### Patch Changes
+
+- Bump typescript version to 5.0.0 beta
+- 7c32d55: Fix UsageGenerator for all suits
+- 7302020: Configuration and Usage info collection for @Input
+
 ## 0.4.1
 
 ### Patch Changes

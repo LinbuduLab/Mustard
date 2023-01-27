@@ -1,6 +1,6 @@
 {
   "name": "create-mustard-app",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "main": "index.js",
   "bin": {
@@ -53,7 +53,7 @@
     "url": "https://github.com/LinbuduLab/create-mustard-app/issues"
   },
   "dependencies": {
-    "mustard-cli": "workspace:^0.4.1"
+    "mustard-cli": "workspace:^0.5.0"
   },
   "devDependencies": {
     "chalk": "^4.0.0",
