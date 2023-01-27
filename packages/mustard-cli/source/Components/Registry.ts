@@ -1,4 +1,4 @@
-import { MustardConstanst } from "./Constants";
+import { MustardConstanst } from "./Constants.js";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 import type { Dictionary } from "../Typings/Shared.struct";

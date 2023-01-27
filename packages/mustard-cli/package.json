@@ -1,6 +1,7 @@
 {
   "name": "mustard-cli",
-  "version": "0.5.0",
+  "version": "0.6.2",
+  "type": "module",
   "main": "./dist/Exports/index.js",
   "types": "./dist/Exports/index.d.ts",
   "publishConfig": {
@@ -27,19 +28,18 @@
       "types": "./dist/Exports/Validator.d.ts",
       "import": "./dist/Exports/Validator.js",
       "require": "./dist/Exports/Validator.js"
-    },
-    "./package.json": "./package.json"
+    }
   },
   "typesVersions": {
     "*": {
       "decorator": [
-        "dist/Exports/Decorators.d.ts"
+        "./dist/Exports/Decorators.d.ts"
       ],
       "cli": [
-        "dist/Exports/ComanndLine.d.ts"
+        "./dist/Exports/ComanndLine.d.ts"
       ],
       "validator": [
-        "dist/Exports/Validator.d.ts"
+        "./dist/Exports/Validator.d.ts"
       ]
     }
   },

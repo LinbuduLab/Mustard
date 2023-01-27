@@ -15,10 +15,11 @@
     "sourceMap": false,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "outDir": "dist"
   },
-  "include": ["source/index.ts"],
+  "include": ["source/index.mts"],
   "exclude": []
 }

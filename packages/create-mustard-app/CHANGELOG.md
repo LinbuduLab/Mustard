@@ -1,5 +1,16 @@
 # create-mustard-app
 
+## 0.2.0
+
+### Minor Changes
+
+- use module:es2022
+
+### Patch Changes
+
+- Updated dependencies
+  - mustard-cli@0.6.0
+
 ## 0.1.0
 
 ### Minor Changes

@@ -4,6 +4,13 @@
 
 ### Patch Changes
 
+- Updated dependencies
+  - mustard-cli@0.6.0
+
+## null
+
+### Patch Changes
+
 - Updated dependencies [4902a30]
 - Updated dependencies
 - Updated dependencies [7c32d55]

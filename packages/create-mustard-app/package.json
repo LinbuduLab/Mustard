@@ -1,8 +1,8 @@
 {
   "name": "create-mustard-app",
-  "version": "0.1.0",
-  "type": "module",
+  "version": "0.2.2",
   "main": "index.js",
+  "type": "module",
   "bin": {
     "create-mustard-app": "index.js"
   },
@@ -55,12 +55,10 @@
   "dependencies": {
     "fs-extra": "^11.1.0",
     "log-symbols": "^5.1.0",
-    "mustard-cli": "workspace:^0.5.0"
+    "mustard-cli": "workspace:*"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "chalk": "^4.0.0",
-    "execa": "^6.0.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
     "typescript": "5.0.0-beta"

@@ -1,5 +1,11 @@
 # ChangeLog for mustard-cli
 
+## 0.6.0
+
+### Minor Changes
+
+- use module:es2022
+
 ## 0.5.0
 
 ### Minor Changes

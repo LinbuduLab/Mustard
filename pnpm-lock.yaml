@@ -50,11 +50,9 @@ importers:
   packages/create-mustard-app:
     specifiers:
       '@types/fs-extra': ^11.0.1
-      chalk: ^4.0.0
-      execa: ^6.0.0
       fs-extra: ^11.1.0
       log-symbols: ^5.1.0
-      mustard-cli: workspace:^0.5.0
+      mustard-cli: workspace:^0.6.0
       ts-node: ^10.9.1
       tsconfig-paths: ^4.1.1
       typescript: 5.0.0-beta
@@ -64,8 +62,6 @@ importers:
       mustard-cli: link:../mustard-cli
     devDependencies:
       '@types/fs-extra': 11.0.1
-      chalk: 4.1.2
-      execa: 6.1.0
       ts-node: 10.9.1_typescript@5.0.0-beta
       tsconfig-paths: 4.1.1
       typescript: 5.0.0-beta
