@@ -1,5 +1,12 @@
 # create-mustard-app
 
+## 0.1.0
+
+### Minor Changes
+
+- initial release version
+- 0d1aa23: initial implementation
+
 ## 0.0.2
 
 ### Patch Changes

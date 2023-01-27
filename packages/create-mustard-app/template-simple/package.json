@@ -14,7 +14,7 @@
     "dist"
   ],
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "nodemon index.ts",
     "build": "tsc",
     "pub:check": "pnpx publint",
     "prepublishOnly": "pnpm run pub:check && pnpm run build"

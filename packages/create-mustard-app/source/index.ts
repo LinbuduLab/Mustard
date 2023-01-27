@@ -7,7 +7,7 @@ import { MustardFactory, MustardUtils } from "mustard-cli";
 import { RootCommand, Option, App, Utils, Input } from "mustard-cli/decorator";
 import { CommandStruct, MustardApp } from "mustard-cli/cli";
 
-const require = createRequire(import.meta.url); // construct the require method
+const require = createRequire(import.meta.url);
 
 type Template = "simple" | "complete";
 
@@ -33,13 +33,19 @@ class RootCommandHandle implements CommandStruct {
 
     const createDir = path.resolve(this.dir);
 
-    console.log(`Creating project in ${this.utils.colors.white(createDir)}...`);
+    console.log(
+      logSymbols.info,
+      `Creating project in ${this.utils.colors.white(createDir)}...`
+    );
 
     const template = ["simple", "complete"].includes(this.template)
       ? this.template
       : "simple";
 
-    console.log(`Using template ${this.utils.colors.white(template)}...`);
+    console.log(
+      logSymbols.info,
+      `Using template ${this.utils.colors.white(template)}...`
+    );
 
     const templatePath = path.resolve(`./template-${template}`);
 
@@ -47,7 +53,13 @@ class RootCommandHandle implements CommandStruct {
       fs.ensureDirSync(createDir);
       fs.copySync(templatePath, createDir, {});
 
-      console.log("\n", logSymbols.success, "Project created successfully!");
+      console.log(
+        "\n",
+        logSymbols.success,
+        `Project ${this.utils.colors.white(
+          this.dir
+        )} created successfully, enjoy!`
+      );
     } catch (error) {
       fs.removeSync(createDir);
       console.log(
