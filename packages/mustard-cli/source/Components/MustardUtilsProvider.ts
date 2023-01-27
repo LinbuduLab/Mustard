@@ -1,6 +1,8 @@
+import path from "path";
 import fs from "fs";
 import fsp from "fs/promises";
 import tty from "tty";
+import { fileURLToPath } from "url";
 import { EOL } from "os";
 
 import type { Nullable } from "../Typings/Shared.struct";

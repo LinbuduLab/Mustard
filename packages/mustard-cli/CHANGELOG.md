@@ -1,5 +1,12 @@
 # ChangeLog for mustard-cli
 
+## 0.6.3
+
+### Patch Changes
+
+- fixup \_\_dirname in es scope
+- 746ae49: Fix build config, use PURE ESM
+
 ## 0.6.0
 
 ### Minor Changes

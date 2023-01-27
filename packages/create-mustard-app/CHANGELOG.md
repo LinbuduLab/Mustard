@@ -1,5 +1,15 @@
 # create-mustard-app
 
+## 0.2.3
+
+### Patch Changes
+
+- fixup \_\_dirname in es scope
+- 746ae49: Fix build config, use PURE ESM
+- Updated dependencies
+- Updated dependencies [746ae49]
+  - mustard-cli@0.6.3
+
 ## 0.2.0
 
 ### Minor Changes

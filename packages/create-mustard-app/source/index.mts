@@ -1,6 +1,7 @@
 import { createRequire } from "module";
 import fs from "fs-extra";
 import path from "path";
+import { fileURLToPath } from "url";
 import logSymbols from "log-symbols";
 
 import { MustardFactory, MustardUtils } from "mustard-cli";
@@ -43,12 +44,10 @@ class RootCommandHandle implements CommandStruct {
       ? this.template
       : "simple";
 
-    console.log(
-      logSymbols.info,
-      `Using template ${this.utils.colors.white(template)}...`
+    const templatePath = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      `../template-${template}`
     );
-
-    const templatePath = path.resolve(`./template-${template}`);
 
     try {
       fs.ensureDirSync(createDir);
