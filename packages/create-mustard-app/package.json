@@ -60,7 +60,6 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.1",
     "typescript": "5.0.0-beta"
   }
 }

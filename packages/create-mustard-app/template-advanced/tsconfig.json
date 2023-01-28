@@ -2,20 +2,14 @@
   "ts-node": {
     "swc": false,
     "pretty": true,
-    "transpileOnly": true,
-    "require": ["tsconfig-paths/register"]
+    "transpileOnly": true
   },
   "compilerOptions": {
     "target": "ES6",
     "module": "ES2022",
     "moduleResolution": "node",
     "strict": true,
-    "skipLibCheck": true,
     "declaration": false,
-    "sourceMap": false,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "outDir": "dist"
   },
