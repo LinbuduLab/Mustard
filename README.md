@@ -1,9 +1,9 @@
-# Mustard
+<p align="center">
+<img width="400" src="./logo.png">
+</p>
 
 ![npm dev dependency version](https://img.shields.io/npm/dependency-version/mustard-cli/dev/typescript)
-
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/LinbuduLab/Mustard/workflow.yml)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/81dd4615-b494-4c11-a829-f5e34eca2f7b/deploy-status)](https://app.netlify.com/sites/mustard-cli/deploys)
 
 ![GitHub package.json version (subfolder of monorepo)](https://img.shields.io/github/package-json/v/LinbuduLab/Mustard?filename=packages%2Fmustard-cli%2Fpackage.json)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/mustard-cli)
