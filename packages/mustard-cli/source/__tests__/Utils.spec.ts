@@ -54,6 +54,18 @@ describe("Utils", () => {
     expect(MustardUtils.isConstructable([])).toBe(false);
   });
 
+  it("should check is promise", () => {
+    expect(MustardUtils.isPromise(Foo)).toBe(false);
+    expect(MustardUtils.isPromise(Array)).toBe(false);
+
+    expect(MustardUtils.isPromise("bar")).toBe(false);
+    expect(MustardUtils.isPromise({})).toBe(false);
+    expect(MustardUtils.isPromise([])).toBe(false);
+
+    expect(MustardUtils.isPromise(new Promise(() => {}))).toBe(true);
+    expect(MustardUtils.isPromise({ then: () => {} })).toBe(true);
+  });
+
   it("should handle levenshtein computation", () => {
     expect(MustardUtils.levenshtein("fo", ["foo", "fap", "baz"])).toBe("foo");
     expect(MustardUtils.levenshtein("fo", ["fap", "baz"])).toBe("fap");
@@ -97,6 +109,100 @@ describe("Utils.parseFromProcessArgs", () => {
       },
     });
     expect(parsed3).toEqual({ type: "yargs-parser" });
+  });
+});
+
+describe("Utils.filterDecoratedInstanceFields", () => {
+  it("should filter and decorated fields", () => {
+    class Foo implements CommandStruct {
+      option1 = {
+        type: "Option",
+      };
+      option2 = {
+        type: "Options",
+      };
+      option3 = {
+        type: "VariadicOption",
+      };
+      option4 = {
+        type: "Input",
+      };
+      option5 = {
+        type: "Context",
+      };
+      option6 = {
+        type: "Utils",
+      };
+      option7 = {
+        type: "Inject",
+      };
+      option8 = {
+        type: "Provide",
+      };
+      option9 = {
+        type: "Controller",
+      };
+      option10 = {
+        type: "Service",
+      };
+      run() {}
+    }
+
+    const foo = new Foo();
+    const fields = MustardUtils.filterDecoratedInstanceFields(foo);
+    expect(fields).toMatchInlineSnapshot(`
+      [
+        {
+          "key": "option1",
+          "type": "Option",
+          "value": {
+            "type": "Option",
+          },
+        },
+        {
+          "key": "option2",
+          "type": "Options",
+          "value": {
+            "type": "Options",
+          },
+        },
+        {
+          "key": "option3",
+          "type": "VariadicOption",
+          "value": {
+            "type": "VariadicOption",
+          },
+        },
+        {
+          "key": "option4",
+          "type": "Input",
+          "value": {
+            "type": "Input",
+          },
+        },
+        {
+          "key": "option5",
+          "type": "Context",
+          "value": {
+            "type": "Context",
+          },
+        },
+        {
+          "key": "option6",
+          "type": "Utils",
+          "value": {
+            "type": "Utils",
+          },
+        },
+        {
+          "key": "option7",
+          "type": "Inject",
+          "value": {
+            "type": "Inject",
+          },
+        },
+      ]
+    `);
   });
 });
 

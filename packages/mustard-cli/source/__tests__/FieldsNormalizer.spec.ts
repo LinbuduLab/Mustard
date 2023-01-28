@@ -5,7 +5,10 @@ import {
   DidYouMeanError,
 } from "../Errors/UnknownOptionsError";
 import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
-import { CommandStruct } from "../Typings/Command.struct";
+import {
+  CommandRegistryPayload,
+  CommandStruct,
+} from "../Typings/Command.struct";
 
 class Foo implements CommandStruct {
   field1: string;
@@ -21,6 +24,33 @@ beforeEach(() => {
   foo.field1 = "field1";
   foo.field2 = 599;
 });
+
+class RunCommand implements CommandStruct {
+  run() {}
+}
+
+const registration = {
+  commandInvokeName: "run",
+  Class: RunCommand,
+  root: false,
+  childCommandList: [],
+  commandAlias: "r",
+  description: "run command",
+  instance: new RunCommand(),
+  decoratedInstanceFields: [
+    {
+      key: "foo",
+      type: "Option",
+      value: {
+        type: "Option",
+        optionName: "foo",
+        optionAlias: "f",
+        description: "foo option",
+        initValue: "foo_default",
+      },
+    },
+  ],
+} satisfies CommandRegistryPayload;
 
 describe("FieldsNormalizer", () => {
   it("should throw or tip on unknown options", () => {
@@ -55,7 +85,225 @@ describe("FieldsNormalizer", () => {
     }
   });
 
-  it("should dispatch normalizer", () => {});
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("should dispatch normalizer", () => {
+    vi.spyOn(
+      DecoratedClassFieldsNormalizer,
+      "normalizeContextField"
+    ).mockImplementationOnce(() => {});
+    vi.spyOn(
+      DecoratedClassFieldsNormalizer,
+      "normalizeUtilField"
+    ).mockImplementationOnce(() => {});
+    vi.spyOn(
+      DecoratedClassFieldsNormalizer,
+      "normalizeInputField"
+    ).mockImplementationOnce(() => {});
+    vi.spyOn(
+      DecoratedClassFieldsNormalizer,
+      "normalizeInjectField"
+    ).mockImplementationOnce(() => {});
+    vi.spyOn(
+      DecoratedClassFieldsNormalizer,
+      "normalizeOption"
+    ).mockImplementationOnce(() => {});
+    vi.spyOn(
+      DecoratedClassFieldsNormalizer,
+      "normalizeOptions"
+    ).mockImplementationOnce(() => {});
+
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      {
+        ...registration,
+        decoratedInstanceFields: [
+          {
+            key: "ctx",
+            type: "Context",
+            value: {
+              type: "Context",
+            },
+          },
+        ],
+      },
+      [],
+      {},
+      {}
+    );
+
+    expect(
+      DecoratedClassFieldsNormalizer.normalizeContextField
+    ).toBeCalledTimes(1);
+
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      {
+        ...registration,
+        decoratedInstanceFields: [
+          {
+            key: "inject",
+            type: "Inject",
+            value: {
+              type: "Inject",
+              optionName: "inject",
+              optionAlias: "i",
+            },
+          },
+        ],
+      },
+      [],
+      {},
+      {}
+    );
+
+    expect(DecoratedClassFieldsNormalizer.normalizeInjectField).toBeCalledTimes(
+      1
+    );
+
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      {
+        ...registration,
+        decoratedInstanceFields: [
+          {
+            key: "input",
+            type: "Input",
+            value: {
+              type: "input",
+              optionName: "input",
+            },
+          },
+        ],
+      },
+      [],
+      {},
+      {}
+    );
+
+    expect(DecoratedClassFieldsNormalizer.normalizeInputField).toBeCalledTimes(
+      1
+    );
+
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      {
+        ...registration,
+        decoratedInstanceFields: [
+          {
+            key: "option",
+            type: "Option",
+            value: {
+              type: "option",
+              optionName: "option",
+            },
+          },
+        ],
+      },
+      [],
+      {},
+      {}
+    );
+
+    expect(DecoratedClassFieldsNormalizer.normalizeOption).toBeCalledTimes(1);
+
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      {
+        ...registration,
+        decoratedInstanceFields: [
+          {
+            key: "options",
+            type: "Options",
+            value: {
+              type: "options",
+              optionName: "options",
+            },
+          },
+        ],
+      },
+      [],
+      {},
+      {}
+    );
+
+    expect(DecoratedClassFieldsNormalizer.normalizeOptions).toBeCalledTimes(1);
+
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      {
+        ...registration,
+        decoratedInstanceFields: [
+          {
+            key: "vardicOption",
+            type: "VariadicOption",
+            value: {
+              type: "vardicOption",
+              optionName: "vardicOption",
+            },
+          },
+        ],
+      },
+      [],
+      {},
+      {}
+    );
+
+    expect(DecoratedClassFieldsNormalizer.normalizeOption).toBeCalledTimes(2);
+
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      {
+        ...registration,
+        decoratedInstanceFields: [
+          {
+            key: "utils",
+            type: "Utils",
+            value: {
+              type: "Utils",
+              optionName: "utils",
+            },
+          },
+        ],
+      },
+      [],
+      {},
+      {}
+    );
+
+    expect(DecoratedClassFieldsNormalizer.normalizeUtilField).toBeCalledTimes(
+      1
+    );
+
+    DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
+      {
+        ...registration,
+        decoratedInstanceFields: [
+          {
+            key: "unknown",
+            type: "Unknown",
+            value: {
+              type: "Unknown",
+              optionName: "unknown",
+            },
+          },
+        ],
+      },
+      [],
+      {},
+      {}
+    );
+
+    expect(DecoratedClassFieldsNormalizer.normalizeUtilField).toBeCalledTimes(
+      1
+    );
+    expect(
+      DecoratedClassFieldsNormalizer.normalizeContextField
+    ).toBeCalledTimes(1);
+    expect(DecoratedClassFieldsNormalizer.normalizeInputField).toBeCalledTimes(
+      1
+    );
+    expect(DecoratedClassFieldsNormalizer.normalizeOption).toBeCalledTimes(2);
+    expect(DecoratedClassFieldsNormalizer.normalizeOptions).toBeCalledTimes(1);
+    expect(DecoratedClassFieldsNormalizer.normalizeInjectField).toBeCalledTimes(
+      1
+    );
+  });
 
   it("should normalize @Context field", () => {
     DecoratedClassFieldsNormalizer.normalizeContextField(foo, "field1");

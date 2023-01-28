@@ -61,6 +61,7 @@ export class MustardUtils {
     instance: CommandStruct
   ): TaggedDecoratedInstanceFields[] {
     const fields = <string[]>MustardUtils.getInstanceFields(instance);
+
     return <TaggedDecoratedInstanceFields[]>fields
       .map((field: string) => {
         const value = <TaggedDecoratedInstanceFields>(
