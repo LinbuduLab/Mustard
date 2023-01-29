@@ -48,8 +48,7 @@ Before TypeScript 5.0 is released, you will need to configure the used TypeScrip
 > Complete documentation will be provided after TypeScript 5.0 is officially released.
 
 ```bash
-$ npm i typescript@beta
-$ npm i mustard-cli
+$ pnpx create-mustard-app
 ```
 
 You can find more samples in [Samples](packages/sample/samples/).
