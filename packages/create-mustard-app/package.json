@@ -1,14 +1,18 @@
 {
   "name": "create-mustard-app",
   "version": "0.2.3",
-  "main": "index.js",
+  "bugs": {
+    "url": "https://github.com/LinbuduLab/create-mustard-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LinbuduLab/Mustard.git",
+    "directory": "packages/create-mustard-app"
+  },
   "type": "module",
+  "main": "index.js",
   "bin": {
     "create-mustard-app": "index.js"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
   },
   "files": [
     "index.js",
@@ -16,13 +20,12 @@
     "template-*"
   ],
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "run-p start build:watch",
+    "start": "nodemon index.js",
     "build": "tsc",
+    "build:watch": "tsc --watch",
     "pub:check": "pnpx publint",
     "prepublishOnly": "pnpm run pub:check && pnpm run build"
-  },
-  "engines": {
-    "node": ">=16.0.0"
   },
   "nodemonConfig": {
     "delay": 500,
@@ -30,9 +33,10 @@
       "NODE_ENV": "development"
     },
     "execMap": {
+      "js": "node --experimental-specifier-resolution=node",
       "ts": "ts-node-esm"
     },
-    "ext": "ts,json",
+    "ext": "ts,mts,js,mjs,json",
     "ignore": [
       "**/test/**",
       "**/docs/**",
@@ -41,16 +45,11 @@
     "restartable": "rs",
     "verbose": true,
     "watch": [
-      "*.ts"
+      "*.ts",
+      "*.mts",
+      "*.js",
+      "*.mjs"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LinbuduLab/Mustard.git",
-    "directory": "packages/create-mustard-app"
-  },
-  "bugs": {
-    "url": "https://github.com/LinbuduLab/create-mustard-app/issues"
   },
   "dependencies": {
     "fs-extra": "^11.1.0",
@@ -59,7 +58,16 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.11.18",
+    "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.1",
     "typescript": "5.0.0-beta"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

@@ -74,12 +74,15 @@
       "*.ts"
     ]
   },
+  "peerDependencies": {
+    "typescript": "5.0.0-beta"
+  },
   "dependencies": {
+    "chalk": "^5.0.0",
     "debug": "^4.3.4",
     "fastest-levenshtein": "^1.0.16",
     "find-up": "^6.3.0",
     "lodash.groupby": "^4.6.0",
-    "lodash.uniq": "^4.5.0",
     "lodash.uniqby": "^4.7.0",
     "mri": "^1.2.0",
     "yargs-parser": "^21.1.1",
@@ -88,13 +91,11 @@
   "devDependencies": {
     "@types/debug": "^4.1.7",
     "@types/lodash.groupby": "^4.6.7",
-    "@types/lodash.uniq": "^4.5.7",
     "@types/lodash.uniqby": "^4.7.7",
     "@types/node": "^18.11.17",
     "@types/tmp": "^0.2.3",
     "@types/yargs-parser": "^21.0.0",
     "@vitest/coverage-c8": "^0.26.2",
-    "chalk": "^4.0.0",
     "cross-env": "^7.0.3",
     "execa": "^6.0.0",
     "lodash": "^4.17.21",
@@ -102,7 +103,6 @@
     "tmp": "^0.2.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
-    "typescript": "5.0.0-beta",
     "vitest": "^0.26.2"
   }
 }

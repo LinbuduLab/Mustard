@@ -2,20 +2,23 @@
   "name": "awesome-mustard-app",
   "version": "0.0.1",
   "type": "module",
-  "main": ".dist/index.js",
+  "main": "index.js",
   "bin": {
-    "awesome-mustard-app": "./dist/index.js"
+    "awesome-mustard-app": "index.js"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "files": [
-    "dist"
+    "dist",
+    "index.js"
   ],
   "scripts": {
-    "dev": "nodemon index.ts",
+    "dev": "run-p start build:watch",
+    "start": "nodemon index.js",
     "build": "tsc",
+    "build:watch": "tsc --watch",
     "pub:check": "pnpx publint",
     "prepublishOnly": "pnpm run pub:check && pnpm run build"
   },
@@ -28,9 +31,10 @@
       "NODE_ENV": "development"
     },
     "execMap": {
+      "js": "node --experimental-specifier-resolution=node",
       "ts": "ts-node-esm"
     },
-    "ext": "ts,json",
+    "ext": "ts,mts,js,mjs,json",
     "ignore": [
       "**/test/**",
       "**/docs/**",
@@ -39,13 +43,18 @@
     "restartable": "rs",
     "verbose": true,
     "watch": [
-      "*.ts"
+      "*.ts",
+      "*.mts",
+      "*.js",
+      "*.mjs"
     ]
   },
   "dependencies": {
     "mustard-cli": "latest"
   },
   "devDependencies": {
+    "@types/node": "latest",
+    "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.1",
     "typescript": "5.0.0-beta"
   }
