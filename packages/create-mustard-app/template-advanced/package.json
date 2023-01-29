@@ -15,10 +15,9 @@
     "index.js"
   ],
   "scripts": {
-    "dev": "run-p start build:watch",
-    "start": "nodemon index.js",
+    "dev": "nodemon src/index.mts",
+    "start": "npm run build && nodemon index.js",
     "build": "tsc",
-    "build:watch": "tsc --watch",
     "pub:check": "pnpx publint",
     "prepublishOnly": "pnpm run pub:check && pnpm run build"
   },
@@ -32,7 +31,8 @@
     },
     "execMap": {
       "js": "node --experimental-specifier-resolution=node",
-      "ts": "ts-node-esm"
+      "ts": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node-esm",
+      "mts": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node-esm"
     },
     "ext": "ts,mts,js,mjs,json",
     "ignore": [
@@ -54,7 +54,6 @@
   },
   "devDependencies": {
     "@types/node": "latest",
-    "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.1",
     "typescript": "5.0.0-beta"
   }

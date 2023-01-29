@@ -1,5 +1,25 @@
 # create-mustard-app
 
+## 0.4.0
+
+### Minor Changes
+
+- fix template dev workflow
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - mustard-cli@0.8.0
+
+## 0.3.1
+
+### Patch Changes
+
+- fixup package import path
+- Updated dependencies
+  - mustard-cli@0.7.1
+
 ## 0.3.0
 
 ### Minor Changes

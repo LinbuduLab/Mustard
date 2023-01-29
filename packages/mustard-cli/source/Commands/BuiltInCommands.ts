@@ -6,7 +6,7 @@ import { MustardConstanst } from "../Components/Constants";
 import type { Configurations } from "../Typings/Configuration.struct";
 import type { Arguments } from "yargs-parser";
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
-import type { MaybeFactory } from "../../source/Typings/Shared.struct";
+import type { MaybeFactory } from "../Typings/Shared.struct";
 
 export class BuiltInCommands {
   public static containsHelpFlag(parsedArgs: Arguments): boolean {

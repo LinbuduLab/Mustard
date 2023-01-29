@@ -98,10 +98,6 @@ class RootCommandHandle implements CommandStruct {
   },
 })
 class Project implements MustardApp {
-  onStart() {}
-
-  onComplete() {}
-
   onError(error: Error): void {
     console.log(error);
   }

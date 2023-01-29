@@ -10,6 +10,7 @@
     "moduleResolution": "node",
     "strict": true,
     "declaration": false,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "outDir": "dist"
   },
