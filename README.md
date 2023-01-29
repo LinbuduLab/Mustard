@@ -2,7 +2,7 @@
 <img width="400" src="./logo.png">
 </p>
 
-![npm dev dependency version](https://img.shields.io/npm/dependency-version/mustard-cli/dev/typescript)
+![npm dev dependency version](https://img.shields.io/npm/dependency-version/mustard-cli/peer/typescript)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/LinbuduLab/Mustard/workflow.yml)
 
 ![GitHub package.json version (subfolder of monorepo)](https://img.shields.io/github/package-json/v/LinbuduLab/Mustard?filename=packages%2Fmustard-cli%2Fpackage.json)
