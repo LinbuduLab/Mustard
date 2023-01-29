@@ -3,7 +3,7 @@ export default defineAppConfig({
     title: "MustardCLI",
     description: "IoC & Native ES Decorator based command-line app builder.",
     url: "https://github.com/LinbuduLab/Mustard",
-    image: "/social-card-preview.png",
+    image: "/logo.png",
     socials: {
       github: "LinbuduLab",
     },
