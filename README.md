@@ -15,22 +15,16 @@ IoC & [Native ECMAScript Decorator](https://github.com/tc39/proposal-decorators)
 
 ## Requires
 
-- Node.js >= 16.0.0
-- TypeScript >= 5.0.0
+- **Node.js >= 16.0.0**
+- **TypeScript >= 5.0.0**
 
-Before TypeScript 5.0 is released, you will need to configure the used TypeScript version like below in `.vscode/settings.json`:
+Before TypeScript 5.0 released, you may need to configure the used TypeScript version like below in `.vscode/settings.json`:
 
 ```json
 {
   "typescript.tsdk": "node_modules/typescript/lib"
 }
 ```
-
-## Resources
-
-- If you want to know more about the usage of new decorators(using TypeScript or Babel), please refer to [with-new-decorators](https://github.com/linbudu599/with-new-decorators).
-- For the development progress of the new decorators, please refer to [#50820](https://github.com/microsoft/TypeScript/pull/50820) and more issues.
-- Also, please check the [5.0 Iteration Plan](https://github.com/microsoft/TypeScript/issues/51362) for more information.
 
 ## Features
 
@@ -51,11 +45,38 @@ Before TypeScript 5.0 is released, you will need to configure the used TypeScrip
 $ pnpx create-mustard-app
 ```
 
-You can find more samples in [Samples](packages/sample/samples/).
+```typescript
+import { MustardFactory, MustardUtils } from "mustard-cli";
+import { RootCommand, App, Input } from "mustard-cli/decorator";
+import { CommandStruct, MustardApp } from "mustard-cli/cli";
+
+@RootCommand()
+class RootCommandHandle implements CommandStruct {
+  @Input()
+  public name: string = "Harold";
+
+  public run(): void {
+    console.log(`Hi, ${this.name}`);
+  }
+}
+
+@App({
+  name: "hi",
+  commands: [RootCommandHandle],
+})
+class Project implements MustardApp {}
+
+MustardFactory.init(Project).start();
+```
+
+```bash
+$ hi
+# Hi, Harold
+$ hi John
+# Hi, John
+```
 
 ```typescript
-#!/usr/bin/env node
-
 import { MustardFactory } from "mustard-cli";
 import {
   Command,
@@ -109,7 +130,7 @@ class UpdateCommand implements CommandStruct {
 }
 
 @App({
-  name: "LinbuduLab CLI",
+  name: "mm",
   commands: [RootCommandHandle, UpdateCommand],
   configurations: {
     allowUnknownOptions: true,
@@ -126,9 +147,9 @@ MustardFactory.init(Project).start();
 ```
 
 ```bash
-$ cli
+$ mm
 # Root command executed with: msg: default value of msg
-$ cli -m
+$ mm -m=hello
 # Root command executed with: msg: hello
 $ mm update
 # Update command executed with: depth: 10, dry: false, targetOption: undefined, input: [], packages: []
@@ -137,6 +158,10 @@ $ mm update --depth=1 --target=dep --packages p1 p2 p3
 $ mm update p1 p2 p3 -t=dev
 # Update command executed with: depth: 10, dry: false, targetOption: dev, input: ["p1","p2","p3"], packages: []
 ```
+
+## Samples
+
+You can find more samples [Here](packages/sample/samples/).
 
 ## License
 
