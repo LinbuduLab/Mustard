@@ -1,6 +1,6 @@
 {
   "name": "mustard-cli",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "type": "module",
   "main": "./dist/Exports/index.js",
   "types": "./dist/Exports/index.d.ts",

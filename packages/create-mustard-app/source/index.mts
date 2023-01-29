@@ -64,9 +64,12 @@ class RootCommandHandle implements CommandStruct {
       `../template-${template}`
     );
 
+    const gitIgnorePath = path.join(createDir, ".gitignore");
+
     try {
       fs.ensureDirSync(createDir);
       fs.copySync(templatePath, createDir, {});
+      fs.writeFileSync(gitIgnorePath, GitIgnoreContent);
 
       console.log(
         "\n",

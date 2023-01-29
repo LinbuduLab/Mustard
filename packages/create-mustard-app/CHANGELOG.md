@@ -1,5 +1,17 @@
 # create-mustard-app
 
+## 0.3.0
+
+### Minor Changes
+
+- 036f9b9: Fix starter dependencies
+
+### Patch Changes
+
+- 477db3f: Remove deps from templates
+- Updated dependencies [036f9b9]
+  - mustard-cli@0.7.0
+
 ## 0.2.3
 
 ### Patch Changes

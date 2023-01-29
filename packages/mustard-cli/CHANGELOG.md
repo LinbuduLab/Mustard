@@ -1,5 +1,11 @@
 # ChangeLog for mustard-cli
 
+## 0.7.0
+
+### Minor Changes
+
+- 036f9b9: Fix starter dependencies
+
 ## 0.6.3
 
 ### Patch Changes
