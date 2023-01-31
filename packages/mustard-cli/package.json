@@ -1,13 +1,13 @@
 {
   "name": "mustard-cli",
-  "version": "0.8.0",
-  "type": "module",
-  "main": "./dist/Exports/index.js",
-  "types": "./dist/Exports/index.d.ts",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+  "version": "0.8.1",
+  "homepage": "https://github.com/LinbuduLab/Mustard/tree/main/packages/mustard-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LinbuduLab/Mustard.git",
+    "directory": "packages/mustard-cli"
   },
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/Exports/index.d.ts",
@@ -30,6 +30,8 @@
       "require": "./dist/Exports/Validator.js"
     }
   },
+  "main": "./dist/Exports/index.js",
+  "types": "./dist/Exports/index.d.ts",
   "typesVersions": {
     "*": {
       "decorator": [
@@ -44,15 +46,15 @@
     }
   },
   "scripts": {
-    "local": "nodemon index.ts run sync --dry",
-    "dev": "tsc --watch",
     "build": "tsc",
-    "pub:check": "pnpx publint",
+    "dev": "tsc --watch",
+    "local": "nodemon index.ts run sync --dry",
     "prepublishOnly": "pnpm run pub:check && pnpm run build",
-    "test:unit": "cross-env TEST_TYPE=UNIT vitest",
+    "pub:check": "pnpx publint",
+    "test": "vitest",
     "test:ig": "cross-env TEST_TYPE=INTEGRATION vitest",
     "test:igu": "cross-env TEST_TYPE=INTEGRATION vitest -u",
-    "test": "vitest"
+    "test:unit": "cross-env TEST_TYPE=UNIT vitest"
   },
   "nodemonConfig": {
     "delay": 500,
@@ -73,9 +75,6 @@
     "watch": [
       "*.ts"
     ]
-  },
-  "peerDependencies": {
-    "typescript": "5.0.0-beta"
   },
   "dependencies": {
     "chalk": "^5.0.0",
@@ -104,5 +103,12 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
     "vitest": "^0.26.2"
+  },
+  "peerDependencies": {
+    "typescript": "5.0.0-beta"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

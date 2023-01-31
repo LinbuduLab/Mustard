@@ -1,5 +1,11 @@
 # ChangeLog for mustard-cli
 
+## 0.8.1
+
+### Patch Changes
+
+- Provide package-specified README
+
 ## 0.8.0
 
 ### Minor Changes

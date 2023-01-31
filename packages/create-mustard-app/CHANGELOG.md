@@ -1,5 +1,13 @@
 # create-mustard-app
 
+## 0.4.1
+
+### Patch Changes
+
+- Provide package-specified README
+- Updated dependencies
+  - mustard-cli@0.8.1
+
 ## 0.4.0
 
 ### Minor Changes
