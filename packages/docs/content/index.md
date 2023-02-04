@@ -8,6 +8,7 @@ layout: page
 
 ::block-hero
 ---
+
 cta:
   - Get Started →
   - /intro

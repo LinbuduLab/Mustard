@@ -198,11 +198,10 @@ export class DecoratedClassFieldsNormalizer {
       initValue,
       schema,
       optionAlias: injectSubKey,
+      restrictValues,
     } = <Required<OptionInitializerPlaceHolder>>value;
 
     const isCurrentFieldRequired = schema ? !schema.isOptional() : false;
-
-    // FIXME: refactor this
 
     // use value from parsed args
     if (injectKey in parsedArgs || injectSubKey in parsedArgs) {
@@ -240,10 +239,16 @@ export class DecoratedClassFieldsNormalizer {
         validatedValue = argValue;
       }
 
+      const restrictedValue = MustardUtils.applyRestrictions(
+        validatedValue,
+        initValue,
+        restrictValues
+      );
+
       MustardUtils.setInstanceFieldValue(
         instance,
         instanceField,
-        validatedValue
+        restrictedValue
       );
     } else if (isCurrentFieldRequired) {
       // required field but not specified in parsed args

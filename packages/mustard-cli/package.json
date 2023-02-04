@@ -52,8 +52,8 @@
     "prepublishOnly": "pnpm run pub:check && pnpm run build",
     "pub:check": "pnpx publint",
     "test": "vitest",
-    "test:ig": "cross-env TEST_TYPE=INTEGRATION vitest",
-    "test:igu": "cross-env TEST_TYPE=INTEGRATION vitest -u",
+    "test:ig": "cross-env TEST_TYPE=INTEGRATION NODE_OPTIONS='--experimental-specifier-resolution=node' vitest",
+    "test:igu": "cross-env TEST_TYPE=INTEGRATION NODE_OPTIONS='--experimental-specifier-resolution=node' vitest -u",
     "test:unit": "cross-env TEST_TYPE=UNIT vitest"
   },
   "nodemonConfig": {

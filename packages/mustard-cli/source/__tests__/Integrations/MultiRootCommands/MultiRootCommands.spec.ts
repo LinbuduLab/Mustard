@@ -1,14 +1,18 @@
 import { describe, it, expect } from "vitest";
 import { execaCommand } from "execa";
+import { TestHelper } from "../../Fixtures/TestHelper";
 import path from "path";
 
 const UsagePath = path.resolve(__dirname, "./Usage.ts");
 
 describe("IntegrationTesting:MultiRootCommands", () => {
   it.skip("should throw error", async () => {
-    const { stderr } = await execaCommand(`ts-node-esm ${UsagePath}`, {
-      reject: false,
-    });
+    const { stderr } = await execaCommand(
+      `${TestHelper.IntegrationExecutor} ${UsagePath}`,
+      {
+        reject: false,
+      }
+    );
     expect(stderr).toMatchInlineSnapshot(
       `
       "/Users/linbudu/Desktop/OPEN_SOURCE/Mustard/packages/mustard-cli/source/__tests__/Integrations/MultiRootCommands/Usage.ts:13

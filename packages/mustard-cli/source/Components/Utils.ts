@@ -11,6 +11,8 @@ import type {
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
 import type { Constructable, Dictionary } from "../Typings/Shared.struct";
+import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
+import { RestrictValueSet } from "../Typings/Controller.struct";
 
 export class MustardUtils {
   public static getInstanceFields(instance: CommandStruct): string[] {
@@ -173,5 +175,25 @@ export class MustardUtils {
     avaliableOptions: string[] = []
   ): string {
     return closest(unknownOption, avaliableOptions);
+  }
+
+  public static isOptionInitializer(
+    input: any
+  ): input is OptionInitializerPlaceHolder {
+    return typeof input === "object" && input.type === "Option";
+  }
+
+  public static applyRestrictions(
+    inputValue: unknown,
+    defaultValue: unknown,
+    restrictions?: RestrictValueSet
+  ) {
+    if (!restrictions) return inputValue;
+
+    const restrictValues = Array.isArray(restrictions)
+      ? restrictions
+      : Object.values(restrictions ?? {});
+
+    return restrictValues.includes(inputValue) ? inputValue : defaultValue;
   }
 }
