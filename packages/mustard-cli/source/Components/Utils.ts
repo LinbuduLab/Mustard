@@ -184,10 +184,12 @@ export class MustardUtils {
   }
 
   public static applyRestrictions(
-    restrictions: RestrictValueSet,
     inputValue: unknown,
-    defaultValue: unknown
+    defaultValue: unknown,
+    restrictions?: RestrictValueSet
   ) {
+    if (!restrictions) return inputValue;
+
     const restrictValues = Array.isArray(restrictions)
       ? restrictions
       : Object.values(restrictions ?? {});

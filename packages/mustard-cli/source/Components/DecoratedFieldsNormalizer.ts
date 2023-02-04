@@ -240,9 +240,9 @@ export class DecoratedClassFieldsNormalizer {
       }
 
       const restrictedValue = MustardUtils.applyRestrictions(
-        restrictValues,
         validatedValue,
-        initValue
+        initValue,
+        restrictValues
       );
 
       MustardUtils.setInstanceFieldValue(
