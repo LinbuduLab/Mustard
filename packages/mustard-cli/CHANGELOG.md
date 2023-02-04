@@ -1,5 +1,11 @@
 # ChangeLog for mustard-cli
 
+## 0.8.2
+
+### Patch Changes
+
+- 0479502: @Restrict support
+
 ## 0.8.1
 
 ### Patch Changes
