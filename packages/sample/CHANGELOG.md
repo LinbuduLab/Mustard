@@ -5,6 +5,35 @@
 ### Patch Changes
 
 - Updated dependencies
+  - mustard-cli@0.8.1
+
+## null
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - mustard-cli@0.8.0
+
+## null
+
+### Patch Changes
+
+- Updated dependencies
+  - mustard-cli@0.7.1
+
+## null
+
+### Patch Changes
+
+- Updated dependencies [036f9b9]
+  - mustard-cli@0.7.0
+
+## null
+
+### Patch Changes
+
+- Updated dependencies
 - Updated dependencies [746ae49]
   - mustard-cli@0.6.3
 

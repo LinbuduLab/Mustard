@@ -1,5 +1,30 @@
 # ChangeLog for mustard-cli
 
+## 0.8.1
+
+### Patch Changes
+
+- Provide package-specified README
+
+## 0.8.0
+
+### Minor Changes
+
+- fix template dev workflow
+- enhance dev workflow
+
+## 0.7.1
+
+### Patch Changes
+
+- fixup package import path
+
+## 0.7.0
+
+### Minor Changes
+
+- 036f9b9: Fix starter dependencies
+
 ## 0.6.3
 
 ### Patch Changes

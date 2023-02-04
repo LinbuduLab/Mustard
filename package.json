@@ -2,40 +2,40 @@
   "name": "mustard-project",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "build": "pnpm --filter mustard-* build",
+    "dev": "pnpm --filter mustard-cli dev",
+    "release": "pnpm --filter mustard-cli publish --no-git-checks"
+  },
+  "nodemonConfig": {
+    "delay": 500,
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "execMap": {
+      "ts": "ts-node-esm"
+    },
+    "ext": "ts,json",
+    "ignore": [
+      "**/test/**",
+      "**/docs/**",
+      "node_modules"
+    ],
+    "restartable": "rs",
+    "verbose": true,
+    "watch": [
+      "*.ts"
+    ]
+  },
+  "prettier": {},
+  "dependencies": {
+    "@changesets/cli": "^2.26.0"
+  },
   "devDependencies": {
     "@types/node": "^18.11.7",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
     "typescript": "5.0.0-beta"
-  },
-  "scripts": {
-    "dev": "pnpm --filter mustard-cli dev",
-    "build": "pnpm --filter mustard-* build",
-    "release": "pnpm --filter mustard-cli publish --no-git-checks"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "**/test/**",
-      "**/docs/**",
-      "node_modules"
-    ],
-    "verbose": true,
-    "restartable": "rs",
-    "execMap": {
-      "ts": "ts-node-esm"
-    },
-    "delay": 500,
-    "watch": [
-      "*.ts"
-    ],
-    "env": {
-      "NODE_ENV": "development"
-    },
-    "ext": "ts,json"
-  },
-  "prettier": {},
-  "dependencies": {
-    "@changesets/cli": "^2.26.0"
   }
 }

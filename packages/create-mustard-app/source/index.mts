@@ -11,6 +11,20 @@ import { CommandStruct, MustardApp } from "mustard-cli/cli";
 
 const require = createRequire(import.meta.url);
 
+const GitIgnoreContent = `
+.vscode
+.idea
+.DS_Store
+node_modules
+dist
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+`;
+
 type Template = "simple" | "complete";
 
 @RootCommand()
@@ -29,6 +43,7 @@ class RootCommandHandle implements CommandStruct {
 
   public run(): void {
     console.log(
+      logSymbols.info,
       "create-mustard-app",
       this.utils.colors.white(`v ${require("../package.json").version}\n`)
     );
@@ -49,9 +64,12 @@ class RootCommandHandle implements CommandStruct {
       `../template-${template}`
     );
 
+    const gitIgnorePath = path.join(createDir, ".gitignore");
+
     try {
       fs.ensureDirSync(createDir);
       fs.copySync(templatePath, createDir, {});
+      fs.writeFileSync(gitIgnorePath, GitIgnoreContent);
 
       console.log(
         "\n",
@@ -80,10 +98,6 @@ class RootCommandHandle implements CommandStruct {
   },
 })
 class Project implements MustardApp {
-  onStart() {}
-
-  onComplete() {}
-
   onError(error: Error): void {
     console.log(error);
   }
