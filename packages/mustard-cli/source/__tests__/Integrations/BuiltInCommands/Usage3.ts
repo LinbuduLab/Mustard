@@ -1,4 +1,4 @@
-import { MustardFactory } from "../../../Exports";
+import { MustardFactory } from "../../../Exports/index";
 import { RootCommand, App, Command, Option } from "../../../Exports/Decorators";
 import { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
 

@@ -180,7 +180,7 @@ export class MustardUtils {
   public static isOptionInitializer(
     input: any
   ): input is OptionInitializerPlaceHolder {
-    return typeof input === "function" && input.name === "Option";
+    return typeof input === "object" && input.type === "Option";
   }
 
   public static applyRestrictions(
@@ -188,11 +188,9 @@ export class MustardUtils {
     inputValue: unknown,
     defaultValue: unknown
   ) {
-    if (!restrictions?.length) return inputValue;
-
     const restrictValues = Array.isArray(restrictions)
       ? restrictions
-      : Object.values(restrictions);
+      : Object.values(restrictions ?? {});
 
     return restrictValues.includes(inputValue) ? inputValue : defaultValue;
   }

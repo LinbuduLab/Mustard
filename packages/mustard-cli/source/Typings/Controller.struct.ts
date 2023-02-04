@@ -1,1 +1,1 @@
-export type RestrictValueSet = unknown[] | Record<string, unknown>;
+export type RestrictValueSet = any[] | Record<string, any>;
