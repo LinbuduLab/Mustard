@@ -61,13 +61,15 @@ export class UsageInfoGenerator {
   }
 
   public static printHelp(registration?: CommandRegistryPayload) {
-    registration && !registration.root
+    registration && registration.root !== true
       ? console.log(
+          // provide specific command usage
           UsageInfoGenerator.formatCommandUsage(
             UsageInfoGenerator.collectSpecificCommandUsage(registration)
           )
         )
       : console.log(
+          // provide complete app usage
           UsageInfoGenerator.batchfFormatCommandUsage(
             UsageInfoGenerator.collectCompleteAppUsage()
           )
