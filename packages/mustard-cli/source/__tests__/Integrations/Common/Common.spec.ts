@@ -41,9 +41,9 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdoutWithRoot3).toMatchInlineSnapshot(
       `
       "Root Command
-      --pure option: default value of pure
-      --msg option: default value of msg
-      --projects option: []
+      --pure option: pureValue
+      --msg option: Hello
+      --projects option: [\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]
       inputs: [\\"input1\\",\\"input2\\",\\"input3\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
     `
@@ -69,8 +69,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout2).toMatchInlineSnapshot(
       `
       "Run Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
@@ -83,7 +83,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout3).toMatchInlineSnapshot(
       `
       "Update Command
-      --msg option: default value of msg
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
@@ -96,7 +96,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout4).toMatchInlineSnapshot(
       `
       "Update Command
-      --msg option: default value of msg
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
@@ -109,8 +109,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout5).toMatchInlineSnapshot(
       `
       "Update Dep Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
@@ -123,8 +123,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout6).toMatchInlineSnapshot(
       `
       "Update Dep Node Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
@@ -137,8 +137,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout7).toMatchInlineSnapshot(
       `
       "Update Sys Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
@@ -165,8 +165,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout9).toMatchInlineSnapshot(
       `
       "Run Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app\\"]}"
@@ -179,8 +179,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout10).toMatchInlineSnapshot(
       `
       "Update Dep Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
@@ -193,8 +193,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
     expect(stdout11).toMatchInlineSnapshot(
       `
       "Update Dep Node Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       --projects option: [object JSON]
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"

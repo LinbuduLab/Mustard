@@ -174,7 +174,7 @@ describe("Decorators.@Option", () => {
       type: "Options",
       initValue: undefined,
     });
-    // @ts-expect-error
+
     expect(Options()(undefined, { name: "optionsField" })(599)).toEqual({
       type: "Options",
       initValue: 599,
@@ -260,7 +260,6 @@ describe("Decorators.@Command", () => {
   });
 
   it("should handle root command", () => {
-    // @ts-expect-error
     RootCommand()({ type: "target" }, { name: "rootClassName" });
     expect(MustardRegistry.registerInit).toBeCalledWith("rootClassName", {
       Class: {

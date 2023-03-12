@@ -102,6 +102,7 @@
     "tmp": "^0.2.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
+    "typescript": "5.0.0-beta",
     "vitest": "^0.26.2"
   },
   "peerDependencies": {

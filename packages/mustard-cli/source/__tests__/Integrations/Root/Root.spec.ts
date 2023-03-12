@@ -24,7 +24,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout2).toMatchInlineSnapshot(
       `
-      "--msg option: default value of msg
+      "--msg option: Hello
       --projects option: 
       inputs: 
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[]}"
@@ -36,8 +36,8 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout3).toMatchInlineSnapshot(
       `
-      "--msg option: default value of msg
-      --projects option: 
+      "--msg option: Hello
+      --projects option: app1,app2,app3
       inputs: 
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\"]}"
     `
@@ -48,8 +48,8 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout4).toMatchInlineSnapshot(
       `
-      "--msg option: default value of msg
-      --projects option: 
+      "--msg option: Hello
+      --projects option: app1,app2,app3
       inputs: enhance
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\"]}"
     `
@@ -60,8 +60,8 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout5).toMatchInlineSnapshot(
       `
-      "--msg option: default value of msg
-      --projects option: 
+      "--msg option: Hello
+      --projects option: app1,app2,app3
       inputs: enhance
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[]}"
     `

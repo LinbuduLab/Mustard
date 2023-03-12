@@ -31,7 +31,6 @@
       "*.ts"
     ]
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^18.11.7",
     "nodemon": "^2.0.20",

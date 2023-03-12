@@ -39,8 +39,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdoutWithRoot3).toMatchInlineSnapshot(
       `
       "Root Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\",\\"input3\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
     `
@@ -65,8 +65,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout2).toMatchInlineSnapshot(
       `
       "Run Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
     `
@@ -78,7 +78,7 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout3).toMatchInlineSnapshot(
       `
       "Update Command
-      --msg option: default value of msg
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"msg\\":\\"Hello\\"}"
     `
@@ -90,7 +90,7 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout4).toMatchInlineSnapshot(
       `
       "Update Command
-      --msg option: default value of msg
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"msg\\":\\"Hello\\"}"
     `
@@ -102,8 +102,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout5).toMatchInlineSnapshot(
       `
       "Update Dep Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
     `
@@ -115,8 +115,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout6).toMatchInlineSnapshot(
       `
       "Update Dep Node Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
     `
@@ -128,8 +128,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout7).toMatchInlineSnapshot(
       `
       "Update Sys Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
     `
@@ -154,8 +154,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout9).toMatchInlineSnapshot(
       `
       "Run Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\",\\"app2\\",\\"app3\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
     `
@@ -167,8 +167,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout10).toMatchInlineSnapshot(
       `
       "Update Dep Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
     `
@@ -180,8 +180,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     expect(stdout11).toMatchInlineSnapshot(
       `
       "Update Dep Node Command
-      --pure option: default value of pure
-      --msg option: default value of msg
+      --pure option: pureValue
+      --msg option: Hello
       inputs: [\\"input1\\",\\"input2\\"]
       options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
     `

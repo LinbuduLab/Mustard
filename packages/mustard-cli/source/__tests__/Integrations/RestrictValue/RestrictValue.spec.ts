@@ -23,7 +23,7 @@ describe("IntegrationTesting:RestrictedValues", () => {
     );
     expect(stdoutWithRoot2).toMatchInlineSnapshot(`
       "Root Command
-      --notRestrict option: default value of notRestrict
+      --notRestrict option: foo
       --restrictedArrayTypeOption option: foo
       --restrictedObjectTypeOption option: foo
       --restrictedEnumTypeOption option: foo"
@@ -34,7 +34,7 @@ describe("IntegrationTesting:RestrictedValues", () => {
     );
     expect(stdoutWithRoot3).toMatchInlineSnapshot(`
       "Root Command
-      --notRestrict option: default value of notRestrict
+      --notRestrict option: foo
       --restrictedArrayTypeOption option: foo
       --restrictedObjectTypeOption option: foo
       --restrictedEnumTypeOption option: foo"
@@ -45,7 +45,7 @@ describe("IntegrationTesting:RestrictedValues", () => {
     );
     expect(stdoutWithRoot4).toMatchInlineSnapshot(`
       "Root Command
-      --notRestrict option: default value of notRestrict
+      --notRestrict option: qux
       --restrictedArrayTypeOption option: foo
       --restrictedObjectTypeOption option: foo
       --restrictedEnumTypeOption option: foo"
