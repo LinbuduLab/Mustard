@@ -60,7 +60,7 @@ export class CLI {
   private normalizeConfigurations() {
     const {
       allowUnknownOptions = false,
-      enableUsage,
+      enableUsage = true,
       enableVersion = false,
       lifeCycles = {},
       didYouMean = true,

@@ -51,7 +51,7 @@
     "local": "nodemon index.ts run sync --dry",
     "prepublishOnly": "pnpm run pub:check && pnpm run build",
     "pub:check": "pnpx publint",
-    "test": "vitest",
+    "test": "cross-env NODE_OPTIONS='--experimental-specifier-resolution=node' vitest",
     "test:ig": "cross-env TEST_TYPE=INTEGRATION NODE_OPTIONS='--experimental-specifier-resolution=node' vitest",
     "test:igu": "cross-env TEST_TYPE=INTEGRATION NODE_OPTIONS='--experimental-specifier-resolution=node' vitest -u",
     "test:unit": "cross-env TEST_TYPE=UNIT vitest"
@@ -103,7 +103,7 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
     "typescript": "5.0.0-beta",
-    "vitest": "^0.26.2"
+    "vitest": "^0.29.2"
   },
   "peerDependencies": {
     "typescript": "5.0.0-beta"

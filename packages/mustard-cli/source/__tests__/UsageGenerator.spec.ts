@@ -1,6 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeAll } from "vitest";
 import { MustardRegistry } from "../Components/Registry";
-import { Option } from "../Exports/Decorators";
 import {
   ParsedCommandUsage,
   UsageInfoGenerator,
@@ -9,8 +8,6 @@ import {
   CommandRegistryPayload,
   CommandStruct,
 } from "../Typings/Command.struct";
-
-UsageInfoGenerator.commandBinaryName = "cli";
 
 const collect = {
   name: "foo",
@@ -45,7 +42,12 @@ class StubCommand implements CommandStruct {
 class RunCommand implements CommandStruct {
   run() {}
 }
-const registration = {
+
+class UpdateCommand implements CommandStruct {
+  run() {}
+}
+
+const _RunCommandRegistration = {
   commandInvokeName: "run",
   Class: RunCommand,
   root: false,
@@ -68,33 +70,72 @@ const registration = {
   ],
 } satisfies CommandRegistryPayload;
 
+const _UpdateCommandRegistration = {
+  commandInvokeName: "update",
+  Class: UpdateCommand,
+  root: false,
+  childCommandList: [],
+  commandAlias: "u",
+  description: "this is update command",
+  instance: new UpdateCommand(),
+  decoratedInstanceFields: [
+    {
+      key: "foo",
+      type: "Option",
+      value: {
+        type: "Option",
+        optionName: "foo",
+        optionAlias: "f",
+        description: "foo option",
+        initValue: "foo_default",
+      },
+    },
+    {
+      key: "bar",
+      type: "Options",
+      value: {
+        type: "Options",
+        optionName: "bar",
+        optionAlias: "b",
+        description: "bar option",
+        initValue: [],
+      },
+    },
+  ],
+} satisfies CommandRegistryPayload;
+
+beforeAll(() => {
+  UsageInfoGenerator.commandBinaryName = "cli";
+
+  vi.spyOn(MustardRegistry, "provide").mockImplementationOnce(() => {
+    const map = new Map<string, CommandRegistryPayload>();
+
+    map.set("run", _RunCommandRegistration);
+    map.set("update", _UpdateCommandRegistration);
+
+    return map;
+  });
+});
+
 describe("UsageGenerator", () => {
   it("should collect complete app usage", () => {
-    // @ts-expect-error
-    vi.spyOn(MustardRegistry, "provide").mockImplementationOnce(() => {
-      const map = new Map<string, CommandRegistryPayload>();
-      map.set("foo", {
-        commandInvokeName: "stub",
-        childCommandList: [],
-        instance: new StubCommand(),
-        Class: StubCommand,
-        root: false,
-        commandAlias: "s",
-        decoratedInstanceFields: [],
-      } satisfies CommandRegistryPayload);
-
-      return map;
-    });
-
     const result = UsageInfoGenerator.collectCompleteAppUsage();
 
     expect(result).toMatchInlineSnapshot(`
       [
         {
-          "alias": "s",
-          "description": undefined,
+          "alias": "r",
+          "description": "run command",
           "input": undefined,
-          "name": "stub",
+          "name": "run",
+          "options": [],
+          "variadicOptions": [],
+        },
+        {
+          "alias": "u",
+          "description": "this is update command",
+          "input": undefined,
+          "name": "update",
           "options": [],
           "variadicOptions": [],
         },
@@ -189,13 +230,27 @@ describe("UsageGenerator", () => {
   });
 
   it("should collect specific command usage", () => {
-    expect(UsageInfoGenerator.collectSpecificCommandUsage(registration))
-      .toMatchInlineSnapshot(`
+    expect(
+      UsageInfoGenerator.collectSpecificCommandUsage(_RunCommandRegistration)
+    ).toMatchInlineSnapshot(`
       {
         "alias": "r",
         "description": "run command",
         "input": undefined,
         "name": "run",
+        "options": [],
+        "variadicOptions": [],
+      }
+    `);
+
+    expect(
+      UsageInfoGenerator.collectSpecificCommandUsage(_UpdateCommandRegistration)
+    ).toMatchInlineSnapshot(`
+      {
+        "alias": "u",
+        "description": "this is update command",
+        "input": undefined,
+        "name": "update",
         "options": [],
         "variadicOptions": [],
       }
@@ -233,7 +288,7 @@ describe("UsageGenerator", () => {
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(1);
 
     UsageInfoGenerator.printHelp("bin", {
-      ...registration,
+      ..._RunCommandRegistration,
       root: true,
     } as CommandRegistryPayload);
 
@@ -241,7 +296,7 @@ describe("UsageGenerator", () => {
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(1);
 
     UsageInfoGenerator.printHelp("bin", {
-      ...registration,
+      ..._RunCommandRegistration,
       root: false,
     } as CommandRegistryPayload);
 

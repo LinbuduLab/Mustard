@@ -21,8 +21,8 @@ enum RestrictEnum {
   Baz = "baz",
 }
 
-type RestrictArrayType = (typeof restrictArray)[number];
-type RestrictObjectType = (typeof restrictObject)[keyof typeof restrictObject];
+type RestrictArrayType = typeof restrictArray[number];
+type RestrictObjectType = typeof restrictObject[keyof typeof restrictObject];
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
