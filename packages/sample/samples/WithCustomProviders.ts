@@ -30,7 +30,7 @@ class SharedService {
 }
 
 @App({
-  name: "LinbuduLab CLI",
+  name: "create-mustard-app",
   commands: [UpdateCommand],
   configurations: {
     allowUnknownOptions: true,

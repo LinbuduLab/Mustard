@@ -39,6 +39,7 @@ export class MustardFactory {
       name,
       commands,
       configurations = {},
+
       providers = [],
     } = MustardFactory.FactoryOptions;
 

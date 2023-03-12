@@ -6,7 +6,7 @@ import { MustardConstanst } from "../Components/Constants";
 import type { Configurations } from "../Typings/Configuration.struct";
 import type { Arguments } from "yargs-parser";
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
-import type { MaybeFactory } from "../../source/Typings/Shared.struct";
+import type { MaybeFactory } from "../Typings/Shared.struct";
 
 export class BuiltInCommands {
   public static containsHelpFlag(parsedArgs: Arguments): boolean {
@@ -35,6 +35,7 @@ export class BuiltInCommands {
   }
 
   public static useHelpCommand(
+    bin: string,
     parsedArgs: Arguments | boolean,
     registration?: CommandRegistryPayload,
     controller?: Configurations["enableUsage"],
@@ -43,7 +44,8 @@ export class BuiltInCommands {
     const printHelp =
       typeof parsedArgs === "boolean"
         ? parsedArgs
-        : BuiltInCommands.containsHelpFlag(parsedArgs);
+        : // in ubuntu-latest image, yargs-parser returns undefined for parsedArgs instead of an empty object
+          BuiltInCommands.containsHelpFlag(parsedArgs ?? {});
 
     if (!printHelp) {
       return;
@@ -52,8 +54,8 @@ export class BuiltInCommands {
     controller
       ? typeof controller === "function"
         ? console.log(controller(registration))
-        : console.log(controller)
-      : UsageInfoGenerator.printHelp(registration);
+        : UsageInfoGenerator.printHelp(bin, registration)
+      : UsageInfoGenerator.printHelp(bin, registration);
 
     exit && process.exit(0);
   }

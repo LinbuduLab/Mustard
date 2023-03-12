@@ -1,12 +1,15 @@
 import { describe, it, expect } from "vitest";
 import { execaCommand } from "execa";
+import { TestHelper } from "../../Fixtures/TestHelper";
 import path from "path";
 
 const UsagePath1 = path.resolve(__dirname, "./Usage.ts");
 
 describe("IntegrationTesting:RootCommandHandle", () => {
   it("should use root command as handler", async () => {
-    const { stdout: stdout1 } = await execaCommand(`ts-node-esm ${UsagePath1}`);
+    const { stdout: stdout1 } = await execaCommand(
+      `${TestHelper.IntegrationExecutor} ${UsagePath1}`
+    );
     expect(stdout1).toMatchInlineSnapshot(
       `
       "--msg option: default value of msg
@@ -17,7 +20,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
 
     const { stdout: stdout2 } = await execaCommand(
-      `ts-node-esm ${UsagePath1} --msg Hello`
+      `${TestHelper.IntegrationExecutor} ${UsagePath1} --msg Hello`
     );
     expect(stdout2).toMatchInlineSnapshot(
       `
@@ -29,7 +32,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
 
     const { stdout: stdout3 } = await execaCommand(
-      `ts-node-esm ${UsagePath1} --msg Hello --projects app1 app2 app3`
+      `${TestHelper.IntegrationExecutor} ${UsagePath1} --msg Hello --projects app1 app2 app3`
     );
     expect(stdout3).toMatchInlineSnapshot(
       `
@@ -41,7 +44,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
 
     const { stdout: stdout4 } = await execaCommand(
-      `ts-node-esm ${UsagePath1} enhance --msg Hello --projects app1 app2 app3`
+      `${TestHelper.IntegrationExecutor} ${UsagePath1} enhance --msg Hello --projects app1 app2 app3`
     );
     expect(stdout4).toMatchInlineSnapshot(
       `
@@ -53,7 +56,7 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
 
     const { stdout: stdout5 } = await execaCommand(
-      `ts-node-esm ${UsagePath1} enhance -m Hello -p app1 app2 app3`
+      `${TestHelper.IntegrationExecutor} ${UsagePath1} enhance -m Hello -p app1 app2 app3`
     );
     expect(stdout5).toMatchInlineSnapshot(
       `

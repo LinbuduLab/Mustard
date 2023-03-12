@@ -394,7 +394,7 @@ export class OptionDecorators {
   /**
    * Register options value(complete parsed args merged with default values) inject
    *
-   * \@Options accept no args as it represents all options received
+   * `@Options` accept no args as it represents all options received
    * @example
    * class RunCommand {
    *  \@Options()

@@ -1,0 +1,23 @@
+{
+  "ts-node": {
+    "swc": false,
+    "pretty": true,
+    "transpileOnly": true
+  },
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "declaration": false,
+    "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "outDir": "dist"
+  },
+  "include": ["source/index.mts"],
+  "exclude": []
+}

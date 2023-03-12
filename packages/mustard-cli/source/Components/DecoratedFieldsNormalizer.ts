@@ -23,6 +23,8 @@ import type {
   BasePlaceholder,
   TaggedDecoratedInstanceFields,
 } from "../Typings/Utils.struct";
+import type { CLIInstantiationConfiguration } from "../Typings/Configuration.struct";
+import { z } from "zod";
 
 export class DecoratedClassFieldsNormalizer {
   public static throwOnUnknownOptions(
@@ -49,11 +51,16 @@ export class DecoratedClassFieldsNormalizer {
     }
   }
 
+  private static appOptions: CLIInstantiationConfiguration;
+
   public static normalizeDecoratedFields(
     command: CommandRegistryPayload,
     parsedInputs: string[],
-    parsedArgs: Dictionary
+    parsedArgs: Dictionary,
+    appOptions?: CLIInstantiationConfiguration
   ) {
+    DecoratedClassFieldsNormalizer.appOptions = appOptions ?? {};
+
     const { instance, decoratedInstanceFields = [] } = command;
 
     decoratedInstanceFields.forEach(({ key: instanceField, value, type }) => {
@@ -80,7 +87,8 @@ export class DecoratedClassFieldsNormalizer {
           DecoratedClassFieldsNormalizer.normalizeInputField(
             instance,
             instanceField,
-            parsedInputs
+            parsedInputs,
+            value
           );
           break;
         case "Option":
@@ -109,9 +117,17 @@ export class DecoratedClassFieldsNormalizer {
   public static normalizeInputField(
     instance: CommandStruct,
     instanceField: string,
-    inputs: string[] = []
+    inputs: string[] = [],
+    value: BasePlaceholder
   ) {
-    MustardUtils.setInstanceFieldValue(instance, instanceField, inputs);
+    const inputValue =
+      inputs.length === 0
+        ? value.initValue ?? []
+        : inputs.length === 1
+        ? inputs[0] ?? value.initValue
+        : inputs;
+
+    MustardUtils.setInstanceFieldValue(instance, instanceField, inputValue);
   }
 
   public static normalizeInjectField(
@@ -182,7 +198,10 @@ export class DecoratedClassFieldsNormalizer {
       initValue,
       schema,
       optionAlias: injectSubKey,
+      restrictValues,
     } = <Required<OptionInitializerPlaceHolder>>value;
+
+    const isCurrentFieldRequired = schema ? !schema.isOptional() : false;
 
     // use value from parsed args
     if (injectKey in parsedArgs || injectSubKey in parsedArgs) {
@@ -190,25 +209,58 @@ export class DecoratedClassFieldsNormalizer {
 
       let validatedValue = null;
 
+      // validator specified
       if (schema) {
         const validation = schema.safeParse(argValue);
-        if (!validation.success) {
-          throw new ValidationError(
-            injectKey ?? injectSubKey,
-            argValue,
-            validation.error
-          );
+        if (validation.success) {
+          // validation success
+          validatedValue = validation.data;
+        } else {
+          // validation failed
+          if (
+            DecoratedClassFieldsNormalizer.appOptions.ignoreValidationErrors
+          ) {
+            // ignore validation errors and keep the original value
+            validatedValue = argValue;
+          } else {
+            // throw validation error
+            throw new ValidationError(
+              injectKey ?? injectSubKey,
+              argValue,
+              ValidationError.formatError(
+                injectKey ?? injectSubKey,
+                validation.error
+              )
+            );
+          }
         }
-        validatedValue = validation.data;
       } else {
+        // no validator specified, only set the value
         validatedValue = argValue;
       }
+
+      const restrictedValue = MustardUtils.applyRestrictions(
+        validatedValue,
+        initValue,
+        restrictValues
+      );
 
       MustardUtils.setInstanceFieldValue(
         instance,
         instanceField,
-        validatedValue
+        restrictedValue
       );
+    } else if (isCurrentFieldRequired) {
+      // required field but not specified in parsed args
+      if (DecoratedClassFieldsNormalizer.appOptions.ignoreValidationErrors) {
+        void 0;
+      } else {
+        throw new ValidationError(
+          injectKey ?? injectSubKey,
+          undefined,
+          "Required field not specified in parsed args"
+        );
+      }
     } else {
       // use default value or mark as undefined
       // null should also be converted to undefined

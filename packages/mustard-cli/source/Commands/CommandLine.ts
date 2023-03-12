@@ -60,9 +60,11 @@ export class CLI {
   private normalizeConfigurations() {
     const {
       allowUnknownOptions = false,
+      enableUsage,
       enableVersion = false,
       lifeCycles = {},
       didYouMean = true,
+      ignoreValidationErrors = false,
     } = this.options ?? {};
 
     this.options = {
@@ -70,6 +72,8 @@ export class CLI {
       enableVersion,
       lifeCycles,
       didYouMean,
+      enableUsage,
+      ignoreValidationErrors,
     };
 
     debug("normalized configurations: %O", this.options);
@@ -149,7 +153,9 @@ export class CLI {
       throw new CommandNotFoundError(this.parsedArgs);
     }
 
+    // execute command with help flag
     BuiltInCommands.useHelpCommand(
+      this.identifier,
       this.parsedArgs,
       commandRegistration,
       this.options?.enableUsage
@@ -199,7 +205,10 @@ export class CLI {
     const rootCommandRegistration = MustardRegistry.provideRootCommand();
 
     if (rootCommandRegistration) {
+      // bin --help with root command specified
+      // print help info for root command only(even there're other commands)
       BuiltInCommands.useHelpCommand(
+        this.identifier,
         this.parsedArgs,
         rootCommandRegistration,
         this.options?.enableUsage
@@ -207,12 +216,16 @@ export class CLI {
 
       this.executeCommandFromRegistration(rootCommandRegistration);
     } else if (this.options?.enableUsage) {
+      // bin --help without root command specified
+      // print help info for cpmplete app
       BuiltInCommands.useHelpCommand(
+        this.identifier,
         true,
         undefined,
         this.options?.enableUsage
       );
     } else {
+      // no root command specified and options.enableUsage is disabled
       throw new NoRootHandlerError();
     }
   }

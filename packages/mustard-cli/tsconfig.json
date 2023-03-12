@@ -8,37 +8,30 @@
   "compilerOptions": {
     "lib": [],
     "target": "ES6",
-    "module": "CommonJS",
+    "module": "ES2022",
     "outDir": "dist",
     "skipLibCheck": true,
+    "moduleResolution": "node",
     "strictNullChecks": true,
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,
     "noEmitOnError": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
     "noUnusedParameters": false,
     "noImplicitThis": true,
     "noUnusedLocals": false,
     "strictPropertyInitialization": false,
-    "keyofStringsOnly": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "rootDir": "source",
-    "paths": {
-      "mustard-cli": ["./source/Exports/index.ts"],
-      "mustard-cli/*": ["./source/Exports/*"]
-    }
+    "rootDir": "source"
   },
-  "include": ["./**/*.ts"],
+  "include": ["source"],
   "exclude": [
     "dist",
     "samples",
-    "./source/__tests__",
+    "source/__tests__",
     "vitest.config.ts",
     "sample.ts"
   ]

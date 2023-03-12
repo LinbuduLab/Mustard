@@ -2,6 +2,7 @@ import type { ZodType } from "zod";
 
 import type { ClassStruct } from "./Shared.struct";
 import type { ValidatorFactory } from "../Validators/Factory";
+import type { RestrictValueSet } from "./Controller.struct";
 
 export type OptionInjectionType = "VariadicOption" | "Option" | "Options";
 
@@ -18,6 +19,7 @@ export type OptionInitializerPlaceHolder = {
   initValue?: unknown;
   description?: string;
   schema?: ZodType;
+  restrictValues?: RestrictValueSet;
 };
 
 export type OptionConfiguration = {
@@ -26,6 +28,8 @@ export type OptionConfiguration = {
   description?: string;
   validator?: Partial<ValidatorFactory>;
 };
+
+export type InputConfiguration = Pick<OptionConfiguration, "description">;
 
 export type VariadicOptionConfiguration = Omit<
   OptionConfiguration,

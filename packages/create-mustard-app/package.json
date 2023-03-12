@@ -1,0 +1,74 @@
+{
+  "name": "create-mustard-app",
+  "version": "0.4.1",
+  "homepage": "https://github.com/LinbuduLab/Mustard/tree/main/packages/create-mustard-app#readme",
+  "bugs": {
+    "url": "https://github.com/LinbuduLab/create-mustard-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LinbuduLab/Mustard.git",
+    "directory": "packages/create-mustard-app"
+  },
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "create-mustard-app": "index.js"
+  },
+  "files": [
+    "index.js",
+    "dist",
+    "template-*"
+  ],
+  "scripts": {
+    "dev": "run-p start build:watch",
+    "start": "nodemon index.js",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "pub:check": "pnpx publint",
+    "prepublishOnly": "pnpm run pub:check && pnpm run build"
+  },
+  "nodemonConfig": {
+    "delay": 500,
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "execMap": {
+      "js": "node --experimental-specifier-resolution=node",
+      "ts": "ts-node-esm"
+    },
+    "ext": "ts,mts,js,mjs,json",
+    "ignore": [
+      "**/test/**",
+      "**/docs/**",
+      "node_modules"
+    ],
+    "restartable": "rs",
+    "verbose": true,
+    "watch": [
+      "*.ts",
+      "*.mts",
+      "*.js",
+      "*.mjs"
+    ]
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.0",
+    "log-symbols": "^5.1.0",
+    "mustard-cli": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.11.18",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^10.9.1",
+    "typescript": "5.0.0-beta"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

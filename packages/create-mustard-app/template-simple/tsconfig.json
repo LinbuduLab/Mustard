@@ -1,0 +1,19 @@
+{
+  "ts-node": {
+    "swc": false,
+    "pretty": true,
+    "transpileOnly": true
+  },
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "strict": true,
+    "declaration": false,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "outDir": "dist"
+  },
+  "include": ["src"],
+  "exclude": []
+}

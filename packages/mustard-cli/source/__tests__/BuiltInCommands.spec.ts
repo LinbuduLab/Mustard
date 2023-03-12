@@ -70,13 +70,26 @@ describe("BuiltInCommands", () => {
   });
 
   it("should handle help command", () => {
-    BuiltInCommands.useHelpCommand(false, undefined, undefined, false);
+    BuiltInCommands.useHelpCommand("mm", false, undefined, undefined, false);
     expect(UsageInfoGenerator.printHelp).not.toBeCalled();
 
-    BuiltInCommands.useHelpCommand(true, undefined, false, false);
+    BuiltInCommands.useHelpCommand(
+      "mm",
+      {
+        _: [],
+        help: false,
+      },
+      undefined,
+      false,
+      false
+    );
+    expect(UsageInfoGenerator.printHelp).not.toBeCalled();
+
+    BuiltInCommands.useHelpCommand("mm", true, undefined, false, false);
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(1);
 
     BuiltInCommands.useHelpCommand(
+      "mm",
       { _: [], help: true },
       undefined,
       false,
@@ -84,19 +97,52 @@ describe("BuiltInCommands", () => {
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(2);
 
-    BuiltInCommands.useHelpCommand(true, registration, false, false);
+    BuiltInCommands.useHelpCommand("mm", true, registration, false, false);
 
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(3);
-    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
+    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(
+      "mm",
+      registration
+    );
 
     BuiltInCommands.useHelpCommand(
+      "mm",
       { _: [], help: true },
       registration,
       false,
       false
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(4);
-    expect(UsageInfoGenerator.printHelp).toBeCalledWith(registration);
+    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(
+      "mm",
+      registration
+    );
+
+    BuiltInCommands.useHelpCommand(
+      "mm",
+      { _: [], help: true },
+      registration,
+      true,
+      false
+    );
+    expect(UsageInfoGenerator.printHelp).toBeCalledTimes(5);
+    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(
+      "mm",
+      registration
+    );
+
+    vi.spyOn(console, "log").mockImplementationOnce(() => {});
+
+    BuiltInCommands.useHelpCommand(
+      "mm",
+      { _: [], help: true },
+      registration,
+      () => "FromController",
+      false
+    );
+    expect(UsageInfoGenerator.printHelp).toBeCalledTimes(5);
+
+    expect(console.log).toBeCalledWith("FromController");
   });
 
   it("should handle version command", () => {
@@ -105,6 +151,9 @@ describe("BuiltInCommands", () => {
 
     BuiltInCommands.useVersionCommand(false, controller, false);
     expect(controller).not.toBeCalled();
+
+    BuiltInCommands.useVersionCommand(false, false, false);
+    expect(console.log).toBeCalledTimes(0);
 
     BuiltInCommands.useVersionCommand(true, controller, false);
     expect(controller).toBeCalledTimes(1);

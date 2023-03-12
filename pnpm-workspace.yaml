@@ -2,6 +2,7 @@ packages:
   - packages/**
   - experimentals/**
   - "!**/test/**"
+  - "!**/template-**"
 link-workspace-packages: false
 prefer-workspace-packages: false
 shared-workspace-lockfile: true

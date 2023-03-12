@@ -1,4 +1,4 @@
-import { MustardFactory } from "../../../Exports";
+import { MustardFactory } from "../../../Exports/index";
 import { RootCommand, App } from "../../../Exports/Decorators";
 import { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
 
@@ -8,7 +8,7 @@ class RootCommandHandle implements CommandStruct {
 }
 
 @App({
-  name: "LinbuduLab CLI",
+  name: "create-mustard-app",
   commands: [RootCommandHandle],
   configurations: {
     allowUnknownOptions: true,
