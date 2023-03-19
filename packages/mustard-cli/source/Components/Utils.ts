@@ -1,4 +1,5 @@
 import mri from "mri";
+import uniqby from "lodash.uniqby";
 import parse from "yargs-parser";
 import { closest } from "fastest-levenshtein";
 import { MustardRegistry } from "./Registry";
@@ -12,7 +13,8 @@ import type {
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
 import type { Constructable, Dictionary } from "../Typings/Shared.struct";
 import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
-import { RestrictValueSet } from "../Typings/Controller.struct";
+import type { RestrictValueSet } from "../Typings/Controller.struct";
+import type { CommandList } from "../Typings/Configuration.struct";
 
 export class MustardUtils {
   public static getInstanceFields(instance: CommandStruct): string[] {
@@ -168,8 +170,6 @@ export class MustardUtils {
     return true;
   }
 
-  public static uniq() {}
-
   public static levenshtein(
     unknownOption: string,
     avaliableOptions: string[] = []
@@ -195,5 +195,24 @@ export class MustardUtils {
       : Object.values(restrictions ?? {});
 
     return restrictValues.includes(inputValue) ? inputValue : defaultValue;
+  }
+
+  public static matchFromCommandClass(
+    commandClassList: CommandList
+  ): CommandRegistryPayload[] {
+    const commandNameList = commandClassList.map((C) => C.name);
+
+    const completeRegistration = MustardRegistry.provide();
+
+    const matched = Array.from(completeRegistration.values()).filter(
+      (registration) => {
+        return (
+          typeof registration !== "undefined" &&
+          commandNameList.includes(registration.Class.name)
+        );
+      }
+    );
+
+    return uniqby(matched, (registration) => registration.Class.name);
   }
 }

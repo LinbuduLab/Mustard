@@ -66,7 +66,7 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       "
       Usage:
 
-        $ LinbuduLab CLI update
+        $ LinbuduLab CLI update  [options]
 
 
       Command:
@@ -87,7 +87,7 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
       "
       Usage:
 
-        $ LinbuduLab CLI sync
+        $ LinbuduLab CLI sync  [options]
 
 
       Command:
