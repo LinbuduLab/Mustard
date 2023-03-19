@@ -33,6 +33,7 @@ const collect = {
     defaultValue: ["p1", "p2", "p3", "p4"],
   },
   variadicOptions: [],
+  childCommandNames: [],
 } satisfies ParsedCommandUsage;
 
 class StubCommand implements CommandStruct {
@@ -105,8 +106,12 @@ const _UpdateCommandRegistration = {
 } satisfies CommandRegistryPayload;
 
 beforeAll(() => {
-  UsageInfoGenerator.commandBinaryName = "cli";
+  UsageInfoGenerator.initGenerator({
+    bin: "cli",
+    parsedInputs: [],
+  });
 
+  // @ts-expect-error
   vi.spyOn(MustardRegistry, "provide").mockImplementationOnce(() => {
     const map = new Map<string, CommandRegistryPayload>();
 
@@ -154,7 +159,6 @@ describe("UsageGenerator", () => {
 
         $ cli foo [projects] [options]
 
-
       Command:
         foo, f, foo command
 
@@ -163,6 +167,35 @@ describe("UsageGenerator", () => {
         --baz, -z, baz option, default: \\"baz\\"
       "
     `);
+  });
+
+  it("should assemble previous command inputs", () => {
+    UsageInfoGenerator.initGenerator({
+      bin: "cli",
+      parsedInputs: ["foo", "bar", "cmd"],
+    });
+
+    expect(UsageInfoGenerator.assemblePreviousInputsWithBinary("cmd")).toBe(
+      "cli foo bar cmd"
+    );
+
+    UsageInfoGenerator.initGenerator({
+      bin: "cli",
+      parsedInputs: [],
+    });
+
+    expect(UsageInfoGenerator.assemblePreviousInputsWithBinary("cmd")).toBe(
+      "cli cmd"
+    );
+
+    UsageInfoGenerator.initGenerator({
+      bin: "cli",
+      parsedInputs: ["foo", "bar", "cmd", "p1", "p2"],
+    });
+
+    expect(UsageInfoGenerator.assemblePreviousInputsWithBinary("cmd")).toBe(
+      "cli foo bar cmd"
+    );
   });
 
   it("should format root command usage", () => {
@@ -286,12 +319,12 @@ describe("UsageGenerator", () => {
       "batchfFormatCommandUsage"
     ).mockImplementationOnce(() => "batch command usage");
 
-    UsageInfoGenerator.printHelp("bin", undefined);
+    UsageInfoGenerator.printHelp(undefined);
 
     expect(UsageInfoGenerator.batchfFormatCommandUsage).toBeCalledTimes(1);
     expect(UsageInfoGenerator.collectCompleteAppUsage).toBeCalledTimes(1);
 
-    UsageInfoGenerator.printHelp("bin", {
+    UsageInfoGenerator.printHelp({
       ..._RunCommandRegistration,
       root: true,
     } as CommandRegistryPayload);
@@ -299,7 +332,7 @@ describe("UsageGenerator", () => {
     expect(UsageInfoGenerator.formatRootCommandUsage).toBeCalledTimes(1);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(1);
 
-    UsageInfoGenerator.printHelp("bin", {
+    UsageInfoGenerator.printHelp({
       ..._RunCommandRegistration,
       root: false,
     } as CommandRegistryPayload);

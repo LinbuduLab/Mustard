@@ -102,7 +102,7 @@ test("IntegrationTesting:UsageGenerator:NoRootCommandButMultipleCommandsRegister
   `);
 });
 
-test.only("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", async () => {
+test("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", async () => {
   const UsagePath = path.resolve(
     __dirname,
     "./RootAndNestedCommandsProvided.usage.ts"
@@ -133,11 +133,10 @@ test.only("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", asy
 
       $ mm update [these_are_inputs] [options]
 
-
     Command:
       update, u, update command
 
-    Child Command:
+    Child Command(s):
       account, a, update account commandxxx
       sys, s, update sys command
 
@@ -157,8 +156,7 @@ test.only("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", asy
     "
     Usage:
 
-      $ mm account [these_are_inputs] [options]
-
+      $ mm update account [these_are_inputs] [options]
 
     Command:
       account, a, update account commandxxx
@@ -205,8 +203,7 @@ test("IntegrationTesting:UsageGenerator:RootCommandAndCommonCommandsProvided", a
     "
     Usage:
 
-      $ mm update
-
+      $ mm update [these_are_inputs] [options]
 
     Command:
       update, u, update command

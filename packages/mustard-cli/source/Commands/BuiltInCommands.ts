@@ -51,11 +51,16 @@ export class BuiltInCommands {
       return;
     }
 
+    UsageInfoGenerator.initGenerator({
+      bin,
+      parsedInputs: typeof parsedArgs === "boolean" ? [] : parsedArgs["_"],
+    });
+
     controller
       ? typeof controller === "function"
         ? console.log(controller(registration))
-        : UsageInfoGenerator.printHelp(bin, registration)
-      : UsageInfoGenerator.printHelp(bin, registration);
+        : UsageInfoGenerator.printHelp(registration)
+      : UsageInfoGenerator.printHelp(registration);
 
     exit && process.exit(0);
   }

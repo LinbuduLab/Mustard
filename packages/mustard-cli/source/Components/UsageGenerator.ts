@@ -4,6 +4,7 @@ import uniqBy from "lodash.uniqby";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 import type { Nullable } from "../Typings/Shared.struct";
+import { Arguments } from "yargs-parser";
 
 interface SharedInfo {
   name: string;
@@ -22,7 +23,35 @@ interface ParsedOptionInfo extends SharedInfo {
   defaultValue: unknown;
 }
 
+interface UsageInfoGeneratorOptions {
+  bin: string;
+  parsedInputs: (string | number)[];
+}
+
 export class UsageInfoGenerator {
+  public static generatorOptions: UsageInfoGeneratorOptions = {
+    bin: "<cli>",
+    parsedInputs: [],
+  };
+
+  public static initGenerator(options: UsageInfoGeneratorOptions) {
+    UsageInfoGenerator.generatorOptions = options;
+  }
+
+  public static assemblePreviousInputsWithBinary(
+    currentCommandInvokeName: string
+  ): string {
+    const { parsedInputs } = UsageInfoGenerator.generatorOptions;
+
+    const previousInputs = parsedInputs
+      .slice(0, parsedInputs.indexOf(currentCommandInvokeName))
+      .join(" ");
+
+    return `${UsageInfoGenerator.generatorOptions.bin}${
+      previousInputs ? ` ${previousInputs} ` : " "
+    }${currentCommandInvokeName}`;
+  }
+
   public static collectCompleteAppUsage() {
     const completeRegistration = MustardRegistry.provide();
 
@@ -88,11 +117,7 @@ export class UsageInfoGenerator {
     return command;
   }
 
-  public static commandBinaryName: Nullable<string> = null;
-
-  public static printHelp(bin: string, registration?: CommandRegistryPayload) {
-    UsageInfoGenerator.commandBinaryName = bin;
-
+  public static printHelp(registration?: CommandRegistryPayload) {
     registration
       ? registration.root
         ? // print usage info for RootCommand only
@@ -119,14 +144,13 @@ export class UsageInfoGenerator {
     return `
 Usage:
 
-  $ ${UsageInfoGenerator.commandBinaryName} ${collect.name} ${
+  $ ${UsageInfoGenerator.assemblePreviousInputsWithBinary(collect.name)} ${
       collect.input ? `[${collect.input.name}]` : ""
     } ${
       collect.options.length || collect.variadicOptions.length
         ? "[options]"
         : ""
     }
-
 ${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
   }
 
@@ -138,7 +162,7 @@ ${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
     } ${collect.description ? collect.description + "\n" : "\n"}`;
 
     const childCommandsPart = collect.childCommandNames?.length
-      ? `\nChild Command:\n ${collect.childCommandNames
+      ? `\nChild Command(s):\n ${collect.childCommandNames
           .map(
             (c) =>
               ` ${c.name}${c.alias ? `, ${c.alias},` : ""} ${
@@ -146,7 +170,7 @@ ${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
               }`
           )
           .join(" ")}
-Run '${UsageInfoGenerator.commandBinaryName} ${
+Run '${UsageInfoGenerator.generatorOptions.bin} ${
           collect.name
         } [child command] --help' for more information on child command.\n`
       : "";
@@ -202,7 +226,7 @@ ${optionsPart}`;
     return `
 Usage:
 
-  $ ${UsageInfoGenerator.commandBinaryName} ${inputPrePart}
+  $ ${UsageInfoGenerator.generatorOptions.bin} ${inputPrePart}
 
 Options: ${optionsPart}`;
   }
@@ -210,8 +234,6 @@ Options: ${optionsPart}`;
   public static batchfFormatCommandUsage(
     collect: ParsedCommandUsage[]
   ): string {
-    const { commandBinaryName: bin } = UsageInfoGenerator;
-
     let result = "";
 
     collect.forEach((c) => {
@@ -221,7 +243,7 @@ Options: ${optionsPart}`;
     result = `
 Usage:
 
-  $ ${bin} [command] [--options]
+  $ ${UsageInfoGenerator.generatorOptions.bin} [command] [--options]
 ${result}`;
 
     return result;

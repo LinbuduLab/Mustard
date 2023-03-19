@@ -100,10 +100,7 @@ describe("BuiltInCommands", () => {
     BuiltInCommands.useHelpCommand("mm", true, registration, false, false);
 
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(3);
-    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(
-      "mm",
-      registration
-    );
+    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
 
     BuiltInCommands.useHelpCommand(
       "mm",
@@ -113,10 +110,7 @@ describe("BuiltInCommands", () => {
       false
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(4);
-    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(
-      "mm",
-      registration
-    );
+    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
 
     BuiltInCommands.useHelpCommand(
       "mm",
@@ -126,10 +120,7 @@ describe("BuiltInCommands", () => {
       false
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(5);
-    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(
-      "mm",
-      registration
-    );
+    expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
 
     vi.spyOn(console, "log").mockImplementationOnce(() => {});
 
