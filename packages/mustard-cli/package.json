@@ -1,6 +1,6 @@
 {
   "name": "mustard-cli",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "homepage": "https://github.com/LinbuduLab/Mustard/tree/main/packages/mustard-cli#readme",
   "repository": {
     "type": "git",
@@ -51,7 +51,7 @@
     "local": "nodemon index.ts run sync --dry",
     "prepublishOnly": "pnpm run pub:check && pnpm run build",
     "pub:check": "pnpx publint",
-    "test": "cross-env NODE_OPTIONS='--experimental-specifier-resolution=node' vitest",
+    "test": "NODE_OPTIONS='--experimental-specifier-resolution=node' vitest",
     "test:ig": "cross-env TEST_TYPE=INTEGRATION NODE_OPTIONS='--experimental-specifier-resolution=node' vitest",
     "test:igu": "cross-env TEST_TYPE=INTEGRATION NODE_OPTIONS='--experimental-specifier-resolution=node' vitest -u",
     "test:unit": "cross-env TEST_TYPE=UNIT vitest"
@@ -102,11 +102,11 @@
     "tmp": "^0.2.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
-    "typescript": "5.0.0-beta",
+    "typescript": "^5.0.0",
     "vitest": "^0.29.2"
   },
   "peerDependencies": {
-    "typescript": "5.0.0-beta"
+    "typescript": ">=5.0.0"
   },
   "publishConfig": {
     "access": "public",

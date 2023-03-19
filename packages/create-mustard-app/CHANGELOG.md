@@ -1,5 +1,14 @@
 # create-mustard-app
 
+## 0.4.2
+
+### Patch Changes
+
+- bump ts version
+- Updated dependencies [0479502]
+- Updated dependencies
+  - mustard-cli@0.8.2
+
 ## 0.4.1
 
 ### Patch Changes

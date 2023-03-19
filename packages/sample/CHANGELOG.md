@@ -4,6 +4,14 @@
 
 ### Patch Changes
 
+- Updated dependencies [0479502]
+- Updated dependencies
+  - mustard-cli@0.8.2
+
+## null
+
+### Patch Changes
+
 - Updated dependencies
   - mustard-cli@0.8.1
 
