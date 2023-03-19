@@ -8,6 +8,7 @@ import { MustardConstanst } from "../Components/Constants";
 import { UsageInfoGenerator } from "../Components/UsageGenerator";
 
 vi.spyOn(UsageInfoGenerator, "printHelp").mockImplementation(() => {});
+vi.spyOn(UsageInfoGenerator, "initGenerator").mockImplementation(() => {});
 
 class Foo implements CommandStruct {
   run() {}
@@ -73,6 +74,8 @@ describe("BuiltInCommands", () => {
     BuiltInCommands.useHelpCommand("mm", false, undefined, undefined, false);
     expect(UsageInfoGenerator.printHelp).not.toBeCalled();
 
+    expect(UsageInfoGenerator.initGenerator).not.toBeCalled();
+
     BuiltInCommands.useHelpCommand(
       "mm",
       {
@@ -84,9 +87,14 @@ describe("BuiltInCommands", () => {
       false
     );
     expect(UsageInfoGenerator.printHelp).not.toBeCalled();
+    expect(UsageInfoGenerator.initGenerator).not.toBeCalled();
 
     BuiltInCommands.useHelpCommand("mm", true, undefined, false, false);
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(1);
+    expect(UsageInfoGenerator.initGenerator).toHaveBeenLastCalledWith({
+      bin: "mm",
+      parsedInputs: [],
+    });
 
     BuiltInCommands.useHelpCommand(
       "mm",
@@ -96,11 +104,19 @@ describe("BuiltInCommands", () => {
       false
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(2);
+    expect(UsageInfoGenerator.initGenerator).toHaveBeenLastCalledWith({
+      bin: "mm",
+      parsedInputs: [],
+    });
 
     BuiltInCommands.useHelpCommand("mm", true, registration, false, false);
 
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(3);
     expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
+    expect(UsageInfoGenerator.initGenerator).toHaveBeenLastCalledWith({
+      bin: "mm",
+      parsedInputs: [],
+    });
 
     BuiltInCommands.useHelpCommand(
       "mm",
@@ -111,6 +127,10 @@ describe("BuiltInCommands", () => {
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(4);
     expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
+    expect(UsageInfoGenerator.initGenerator).toHaveBeenLastCalledWith({
+      bin: "mm",
+      parsedInputs: [],
+    });
 
     BuiltInCommands.useHelpCommand(
       "mm",
@@ -121,17 +141,25 @@ describe("BuiltInCommands", () => {
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(5);
     expect(UsageInfoGenerator.printHelp).toHaveBeenLastCalledWith(registration);
+    expect(UsageInfoGenerator.initGenerator).toHaveBeenLastCalledWith({
+      bin: "mm",
+      parsedInputs: [],
+    });
 
     vi.spyOn(console, "log").mockImplementationOnce(() => {});
 
     BuiltInCommands.useHelpCommand(
       "mm",
-      { _: [], help: true },
+      { _: ["foo"], help: true },
       registration,
       () => "FromController",
       false
     );
     expect(UsageInfoGenerator.printHelp).toBeCalledTimes(5);
+    expect(UsageInfoGenerator.initGenerator).toHaveBeenLastCalledWith({
+      bin: "mm",
+      parsedInputs: ["foo"],
+    });
 
     expect(console.log).toBeCalledWith("FromController");
   });
