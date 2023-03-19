@@ -16,6 +16,7 @@
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,
+    "declarationMap": true,
     "noEmitOnError": true,
     "noImplicitReturns": true,
     "noUnusedParameters": false,

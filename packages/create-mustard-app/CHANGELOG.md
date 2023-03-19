@@ -1,5 +1,13 @@
 # create-mustard-app
 
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies [d6aca87]
+- Updated dependencies [fdf73a3]
+  - mustard-cli@0.8.3
+
 ## 0.4.2
 
 ### Patch Changes

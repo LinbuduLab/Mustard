@@ -1,6 +1,6 @@
 {
   "name": "mustard-cli",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "homepage": "https://github.com/LinbuduLab/Mustard/tree/main/packages/mustard-cli#readme",
   "repository": {
     "type": "git",
@@ -46,7 +46,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --declarationMap false",
     "dev": "tsc --watch",
     "local": "nodemon index.ts run sync --dry",
     "prepublishOnly": "pnpm run pub:check && pnpm run build",

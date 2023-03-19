@@ -1,5 +1,12 @@
 # ChangeLog for mustard-cli
 
+## 0.8.3
+
+### Patch Changes
+
+- d6aca87: UsageGenerator enhancement
+- fdf73a3: fix usage generation in nested commands
+
 ## 0.8.2
 
 ### Patch Changes
