@@ -125,6 +125,7 @@ describe("UsageGenerator", () => {
       [
         {
           "alias": "r",
+          "childCommandNames": [],
           "description": "run command",
           "input": undefined,
           "name": "run",
@@ -133,6 +134,7 @@ describe("UsageGenerator", () => {
         },
         {
           "alias": "u",
+          "childCommandNames": [],
           "description": "this is update command",
           "input": undefined,
           "name": "update",
@@ -150,7 +152,7 @@ describe("UsageGenerator", () => {
       "
       Usage:
 
-        $ cli foo
+        $ cli foo [projects] [options]
 
 
       Command:
@@ -235,6 +237,7 @@ describe("UsageGenerator", () => {
     ).toMatchInlineSnapshot(`
       {
         "alias": "r",
+        "childCommandNames": [],
         "description": "run command",
         "input": undefined,
         "name": "run",
@@ -248,6 +251,7 @@ describe("UsageGenerator", () => {
     ).toMatchInlineSnapshot(`
       {
         "alias": "u",
+        "childCommandNames": [],
         "description": "this is update command",
         "input": undefined,
         "name": "update",

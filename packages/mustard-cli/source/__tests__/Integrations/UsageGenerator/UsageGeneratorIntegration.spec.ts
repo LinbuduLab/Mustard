@@ -131,16 +131,22 @@ test.only("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", asy
     "
     Usage:
 
-      $ mm update
+      $ mm update [these_are_inputs] [options]
 
 
     Command:
       update, u, update command
 
+    Child Command:
+      account, a, update account commandxxx
+      sys, s, update sys command
+
+    Run 'mm update [child command] --help' for more information on child command.
+
     Options:
       --msg, -m, default: \\"default value of msg\\"
       --notice, default: \\"default value of notice\\"
-      --projects, -p, default: []
+      --projects, -p, description of projects, default: []
     "
   `);
 
@@ -151,51 +157,11 @@ test.only("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", asy
     "
     Usage:
 
-      $ mm update
+      $ mm account [these_are_inputs] [options]
 
 
     Command:
-      update, u, update command
-
-    Options:
-      --msg, -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
-      --projects, -p, default: []
-    "
-  `);
-
-  const { stdout: stdout4 } = await execaCommand(
-    `${TestHelper.IntegrationExecutor} ${UsagePath} sync --help`
-  );
-  expect(stdout4).toMatchInlineSnapshot(`
-    "
-    Usage:
-
-      $ mm sync
-
-
-    Command:
-      sync, s, sync command
-
-    Options:
-      --msg, -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
-      --projects, -p, default: []
-    "
-  `);
-
-  const { stdout: stdout5 } = await execaCommand(
-    `${TestHelper.IntegrationExecutor} ${UsagePath} sync sys --help`
-  );
-  expect(stdout5).toMatchInlineSnapshot(`
-    "
-    Usage:
-
-      $ mm sys
-
-
-    Command:
-      sys, s, sync sys command
+      account, a, update account commandxxx
 
     Options:
       --msg, -m, default: \\"default value of msg\\"

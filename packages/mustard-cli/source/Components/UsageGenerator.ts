@@ -15,6 +15,7 @@ export interface ParsedCommandUsage extends SharedInfo {
   options: ParsedOptionInfo[];
   variadicOptions: ParsedOptionInfo[];
   input?: ParsedOptionInfo;
+  childCommandNames: SharedInfo[];
 }
 
 interface ParsedOptionInfo extends SharedInfo {
@@ -38,7 +39,17 @@ export class UsageInfoGenerator {
   public static collectSpecificCommandUsage(
     registration: CommandRegistryPayload
   ): ParsedCommandUsage {
-    const { commandInvokeName, instance } = registration;
+    const { commandInvokeName, instance, childCommandList = [] } = registration;
+
+    const childCommandNames = <SharedInfo[]>MustardUtils.matchFromCommandClass(
+      childCommandList
+    )
+      .map((r) => ({
+        name: r.commandInvokeName,
+        alias: r.commandAlias,
+        description: r.description,
+      }))
+      .filter(Boolean);
 
     const decoratedFields = MustardUtils.filterDecoratedInstanceFields(
       instance!
@@ -71,6 +82,7 @@ export class UsageInfoGenerator {
       options,
       input,
       variadicOptions,
+      childCommandNames,
     };
 
     return command;
@@ -78,7 +90,6 @@ export class UsageInfoGenerator {
 
   public static commandBinaryName: Nullable<string> = null;
 
-  // FIXME: if root command is registered, only usage info of root command will be displayed
   public static printHelp(bin: string, registration?: CommandRegistryPayload) {
     UsageInfoGenerator.commandBinaryName = bin;
 
@@ -108,7 +119,13 @@ export class UsageInfoGenerator {
     return `
 Usage:
 
-  $ ${UsageInfoGenerator.commandBinaryName} ${collect.name}
+  $ ${UsageInfoGenerator.commandBinaryName} ${collect.name} ${
+      collect.input ? `[${collect.input.name}]` : ""
+    } ${
+      collect.options.length || collect.variadicOptions.length
+        ? "[options]"
+        : ""
+    }
 
 ${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
   }
@@ -119,6 +136,20 @@ ${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
     const commandPart = `Command:\n  ${collect.name}${
       collect.alias ? `, ${collect.alias},` : ""
     } ${collect.description ? collect.description + "\n" : "\n"}`;
+
+    const childCommandsPart = collect.childCommandNames?.length
+      ? `\nChild Command:\n ${collect.childCommandNames
+          .map(
+            (c) =>
+              ` ${c.name}${c.alias ? `, ${c.alias},` : ""} ${
+                c.description ? c.description + "\n" : "\n"
+              }`
+          )
+          .join(" ")}
+Run '${UsageInfoGenerator.commandBinaryName} ${
+          collect.name
+        } [child command] --help' for more information on child command.\n`
+      : "";
 
     let optionsPart = "Options:\n";
 
@@ -134,7 +165,7 @@ ${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
     });
 
     return `
-${commandPart}
+${commandPart}${childCommandsPart}
 ${optionsPart}`;
   }
 

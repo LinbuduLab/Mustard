@@ -30,7 +30,7 @@ class RootCommandHandle implements CommandStruct {
   public run(): void {}
 }
 
-@Command("account", "a", "update account command")
+@Command("account", "a", "update account commandxxx")
 class UpdateAccountCommandHandle implements CommandStruct {
   @Option("msg", "m")
   public msg = "default value of msg";
@@ -50,7 +50,7 @@ class UpdateAccountCommandHandle implements CommandStruct {
   public run(): void {}
 }
 
-@Command("sys", "update sys command")
+@Command("sys", "s", "update sys command")
 class UpdateSysCommandHandle implements CommandStruct {
   @Option("msg", "m")
   public msg = "default value of msg";
@@ -81,70 +81,7 @@ class UpdateCommandHandle implements CommandStruct {
   @Option()
   public notice = "default value of notice";
 
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
-
-  @Input("description of inputs")
-  public these_are_inputs: string;
-
-  @Options()
-  public options: unknown;
-
-  public run(): void {}
-}
-
-@Command("account", "a", "sync account command")
-class SyncAccountCommandHandle implements CommandStruct {
-  @Option("msg", "m")
-  public msg = "default value of msg";
-
-  @Option()
-  public notice = "default value of notice";
-
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
-
-  @Input("description of inputs")
-  public these_are_inputs: string;
-
-  @Options()
-  public options: unknown;
-
-  public run(): void {}
-}
-
-@Command("sys", "s", "sync sys command")
-class SyncSysCommandHandle implements CommandStruct {
-  @Option("msg", "m")
-  public msg = "default value of msg";
-
-  @Option()
-  public notice = "default value of notice";
-
-  @VariadicOption({ alias: "p" })
-  public projects: string[] = [];
-
-  @Input("description of inputs")
-  public these_are_inputs: string;
-
-  @Options()
-  public options: unknown;
-
-  public run(): void {}
-}
-
-@Command("sync", "s", "sync command", [
-  SyncAccountCommandHandle,
-  SyncSysCommandHandle,
-])
-class SyncCommandHandle implements CommandStruct {
-  @Option("msg", "m")
-  public msg = "default value of msg";
-
-  @Option()
-  public notice = "default value of notice";
-
-  @VariadicOption({ alias: "p" })
+  @VariadicOption({ alias: "p", description: "description of projects" })
   public projects: string[] = [];
 
   @Input("description of inputs")
@@ -163,9 +100,6 @@ class SyncCommandHandle implements CommandStruct {
     UpdateCommandHandle,
     UpdateAccountCommandHandle,
     UpdateSysCommandHandle,
-    SyncCommandHandle,
-    SyncAccountCommandHandle,
-    SyncSysCommandHandle,
   ],
 })
 class Project {}
