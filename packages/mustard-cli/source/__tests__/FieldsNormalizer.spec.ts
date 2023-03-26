@@ -9,6 +9,8 @@ import {
   CommandRegistryPayload,
   CommandStruct,
 } from "../Typings/Command.struct";
+import { MustardUtils } from "../Components/Utils";
+import { MustardRegistry } from "../Components/Registry";
 
 class Foo implements CommandStruct {
   field1: string;
@@ -169,7 +171,7 @@ describe("FieldsNormalizer", () => {
             key: "input",
             type: "Input",
             value: {
-              type: "input",
+              type: "Input",
               optionName: "input",
             },
           },
@@ -192,7 +194,7 @@ describe("FieldsNormalizer", () => {
             key: "option",
             type: "Option",
             value: {
-              type: "option",
+              type: "Option",
               optionName: "option",
             },
           },
@@ -213,7 +215,7 @@ describe("FieldsNormalizer", () => {
             key: "options",
             type: "Options",
             value: {
-              type: "options",
+              type: "Options",
               optionName: "options",
             },
           },
@@ -234,7 +236,7 @@ describe("FieldsNormalizer", () => {
             key: "vardicOption",
             type: "VariadicOption",
             value: {
-              type: "vardicOption",
+              type: "VariadicOption",
               optionName: "vardicOption",
             },
           },
@@ -276,8 +278,10 @@ describe("FieldsNormalizer", () => {
         decoratedInstanceFields: [
           {
             key: "unknown",
+            // @ts-expect-error
             type: "Unknown",
             value: {
+              // @ts-expect-error
               type: "Unknown",
               optionName: "unknown",
             },
@@ -311,7 +315,58 @@ describe("FieldsNormalizer", () => {
     expect(typeof foo.field1).toBe("object");
   });
 
-  it("should normalize @Inject field", () => {});
+  it("should normalize @Inject field", async () => {
+    vi.spyOn(MustardUtils, "getInstanceFieldValue").mockReturnValue({
+      type: "Inject",
+      identifier: "foo",
+    });
+
+    // START --- Plain Injecttion ---
+    MustardRegistry.ExternalProviderRegistry = new Map().set("foo", {
+      value: "injected-foo-value",
+    });
+
+    DecoratedClassFieldsNormalizer.normalizeInjectField(foo, "field1");
+
+    expect(foo.field1).toEqual({
+      value: "injected-foo-value",
+    });
+
+    // END --- Plain Injecttion ---
+
+    // START --- Function Injecttion ---
+    MustardRegistry.ExternalProviderRegistry = new Map().set(
+      "foo",
+      () => "computed-injected-foo-value"
+    );
+
+    DecoratedClassFieldsNormalizer.normalizeInjectField(foo, "field1");
+
+    expect(foo.field1).toEqual("computed-injected-foo-value");
+    // END --- Function Injecttion ---
+
+    // START --- Async Function Injecttion ---
+    MustardRegistry.ExternalProviderRegistry = new Map().set(
+      "foo",
+      () =>
+        new Promise((resolve) => resolve("async-computed-injected-foo-value"))
+    );
+
+    await DecoratedClassFieldsNormalizer.normalizeInjectField(foo, "field1");
+
+    expect(foo.field1).toEqual("async-computed-injected-foo-value");
+    // END --- Async Function Injecttion ---
+
+    // START --- Class Injecttion ---
+    class InjectFoo {}
+
+    MustardRegistry.ExternalProviderRegistry = new Map().set("foo", InjectFoo);
+
+    DecoratedClassFieldsNormalizer.normalizeInjectField(foo, "field1");
+
+    expect(foo.field1).toEqual(new InjectFoo());
+    // END --- Class Injecttion ---
+  });
 
   it("should normalize @Utils field", () => {
     DecoratedClassFieldsNormalizer.normalizeUtilField(foo, "field1");

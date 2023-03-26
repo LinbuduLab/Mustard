@@ -12,7 +12,19 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout1).toMatchInlineSnapshot(
       `
-      "--msg option: default value of msg
+      "this.options:  {
+        allowUnknownOptions: true,
+        enableVersion: false,
+        lifeCycles: {
+          onStart: [Function: onStart],
+          onError: undefined,
+          onComplete: [Function: onComplete]
+        },
+        didYouMean: true,
+        enableUsage: true,
+        ignoreValidationErrors: false
+      }
+      --msg option: default value of msg
       --projects option: 
       inputs: 
       options: {\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
@@ -24,7 +36,19 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout2).toMatchInlineSnapshot(
       `
-      "--msg option: Hello
+      "this.options:  {
+        allowUnknownOptions: true,
+        enableVersion: false,
+        lifeCycles: {
+          onStart: [Function: onStart],
+          onError: undefined,
+          onComplete: [Function: onComplete]
+        },
+        didYouMean: true,
+        enableUsage: true,
+        ignoreValidationErrors: false
+      }
+      --msg option: Hello
       --projects option: 
       inputs: 
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[]}"
@@ -36,7 +60,19 @@ describe("IntegrationTesting:RootCommandHandle", () => {
     );
     expect(stdout3).toMatchInlineSnapshot(
       `
-      "--msg option: Hello
+      "this.options:  {
+        allowUnknownOptions: true,
+        enableVersion: false,
+        lifeCycles: {
+          onStart: [Function: onStart],
+          onError: undefined,
+          onComplete: [Function: onComplete]
+        },
+        didYouMean: true,
+        enableUsage: true,
+        ignoreValidationErrors: false
+      }
+      --msg option: Hello
       --projects option: app1,app2,app3
       inputs: 
       options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\"]}"

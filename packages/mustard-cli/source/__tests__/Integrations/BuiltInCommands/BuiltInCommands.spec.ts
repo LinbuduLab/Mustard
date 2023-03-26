@@ -24,7 +24,19 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     );
     expect(stdout3).toMatchInlineSnapshot(
       `
-      "
+      "this.options:  {
+        allowUnknownOptions: true,
+        enableVersion: [Function: enableVersion],
+        lifeCycles: {
+          onStart: [Function: onStart],
+          onError: undefined,
+          onComplete: [Function: onComplete]
+        },
+        didYouMean: true,
+        enableUsage: false,
+        ignoreValidationErrors: false
+      }
+
       Usage:
 
         $ create-mustard-app 
@@ -39,7 +51,19 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     );
     expect(stdout4).toMatchInlineSnapshot(
       `
-      "
+      "this.options:  {
+        allowUnknownOptions: true,
+        enableVersion: [Function: enableVersion],
+        lifeCycles: {
+          onStart: [Function: onStart],
+          onError: undefined,
+          onComplete: [Function: onComplete]
+        },
+        didYouMean: true,
+        enableUsage: false,
+        ignoreValidationErrors: false
+      }
+
       Usage:
 
         $ create-mustard-app 
@@ -54,7 +78,21 @@ describe("IntegrationTesting:BuiltInCommandsHandle", () => {
     const { stdout: stdout1 } = await execaCommand(
       `${TestHelper.IntegrationExecutor} ${UsagePath2} --help`
     );
-    expect(stdout1).toMatchInlineSnapshot('"Usage: root"');
+    expect(stdout1).toMatchInlineSnapshot(`
+      "this.options:  {
+        allowUnknownOptions: true,
+        enableVersion: [Function: enableVersion],
+        lifeCycles: {
+          onStart: [Function: onStart],
+          onError: undefined,
+          onComplete: [Function: onComplete]
+        },
+        didYouMean: true,
+        enableUsage: [Function: enableUsage],
+        ignoreValidationErrors: false
+      }
+      Usage: root"
+    `);
   });
 
   it("Usage 3", async () => {

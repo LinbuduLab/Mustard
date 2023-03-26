@@ -5,6 +5,7 @@ import { MustardRegistry } from "../Components/Registry";
 import { BuiltInCommands } from "../Commands/BuiltInCommands";
 import { MustardConstanst } from "../Components/Constants";
 import { MustardUtils } from "../Components/Utils";
+import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
 
 describe("CommandLine", () => {
   it("should register providers", () => {
@@ -230,7 +231,219 @@ describe("CommandLine", () => {
     `);
   });
 
-  it("should dispatch root handler", () => {});
+  it("should dispatch commands", () => {
+    const cli = new CLI("mm", []);
+    class RunCommand {
+      run() {}
+    }
 
-  it("should execute command", () => {});
+    vi.spyOn(MustardUtils, "findHandlerCommandWithInputs").mockReturnValueOnce({
+      command: {
+        commandInvokeName: "run",
+        Class: RunCommand,
+        commandAlias: "r",
+        root: false,
+        instance: new RunCommand(),
+        decoratedInstanceFields: [],
+        childCommandList: [],
+      },
+      inputs: ["bar"],
+    });
+
+    vi.spyOn(BuiltInCommands, "useHelpCommand").mockImplementationOnce(
+      () => {}
+    );
+
+    // @ts-expect-error
+    vi.spyOn(cli, "handleCommandExecution").mockImplementationOnce(() => {});
+
+    cli["parsedArgs"] = {
+      _: ["run", "bar"],
+    };
+
+    cli["dispatchCommand"]();
+
+    expect(MustardUtils.findHandlerCommandWithInputs).toBeCalledWith([
+      "run",
+      "bar",
+    ]);
+
+    expect(BuiltInCommands.useHelpCommand).toBeCalledTimes(1);
+    // @ts-expect-error
+    expect(cli.handleCommandExecution).toBeCalledTimes(1);
+
+    vi.spyOn(MustardUtils, "findHandlerCommandWithInputs").mockReturnValueOnce({
+      // @ts-expect-error
+      command: null,
+      inputs: ["bar"],
+    });
+
+    try {
+      cli["dispatchCommand"]();
+    } catch (error) {
+      expect(error).toMatchInlineSnapshot(`
+        [CommandNotFoundError: Command not found with parsed args: {
+          "_": [
+            "run",
+            "bar"
+          ]
+        }]
+      `);
+    }
+  });
+
+  it("should dispatch root handler", () => {
+    const cli = new CLI("mm", []);
+
+    vi.spyOn(BuiltInCommands, "useHelpCommand").mockImplementation(() => {});
+
+    // @ts-expect-error
+    vi.spyOn(cli, "executeCommandFromRegistration").mockResolvedValue();
+
+    class RootCommand {
+      run() {}
+    }
+
+    const rootRegistration = {
+      commandInvokeName: "root",
+      Class: RootCommand,
+      commandAlias: null,
+      root: true,
+      instance: new RootCommand(),
+      decoratedInstanceFields: [],
+      childCommandList: [],
+    };
+
+    vi.spyOn(MustardRegistry, "provideRootCommand").mockReturnValueOnce(
+      rootRegistration
+    );
+
+    cli["parsedArgs"] = {
+      _: ["p1", "p2", "p3"],
+    };
+
+    cli["dispatchRootHandler"]();
+
+    expect(BuiltInCommands.useHelpCommand).toBeCalledTimes(1);
+    expect(BuiltInCommands.useHelpCommand).toHaveBeenLastCalledWith(
+      "mm",
+      {
+        _: ["p1", "p2", "p3"],
+      },
+      rootRegistration,
+      true
+    );
+
+    // @ts-expect-error
+    expect(cli.executeCommandFromRegistration).toBeCalledWith(rootRegistration);
+
+    // @ts-expect-error
+    vi.spyOn(MustardRegistry, "provideRootCommand").mockReturnValueOnce(null);
+
+    cli.configure({
+      enableUsage: true,
+    });
+
+    cli["dispatchRootHandler"]();
+
+    expect(BuiltInCommands.useHelpCommand).toBeCalledTimes(2);
+    expect(BuiltInCommands.useHelpCommand).toHaveBeenLastCalledWith(
+      "mm",
+      true,
+      undefined,
+      true
+    );
+
+    // @ts-expect-error
+    vi.spyOn(MustardRegistry, "provideRootCommand").mockReturnValueOnce(null);
+
+    cli.configure({
+      enableUsage: false,
+    });
+
+    try {
+      cli["dispatchRootHandler"]();
+    } catch (error) {
+      expect(error).toMatchInlineSnapshot(
+        "[NoRootHandlerError: No root handler found, please provide command decorated with '@RootCommand' or enable option enableUsage for usage info generation.]"
+      );
+    }
+  });
+
+  it("should execute command", () => {
+    const cli = new CLI("mm", []);
+
+    cli["parsedArgs"] = {
+      _: ["p1", "p2", "p3"],
+    };
+
+    const executeStub = vi.fn();
+    class RootCommand {
+      run() {
+        executeStub();
+      }
+    }
+
+    const rootRegistration = {
+      commandInvokeName: "root",
+      Class: RootCommand,
+      commandAlias: null,
+      root: true,
+      instance: new RootCommand(),
+      decoratedInstanceFields: [],
+      childCommandList: [],
+    };
+
+    vi.spyOn(
+      DecoratedClassFieldsNormalizer,
+      "throwOnUnknownOptions"
+    ).mockImplementationOnce(() => {});
+
+    vi.spyOn(
+      DecoratedClassFieldsNormalizer,
+      "normalizeDecoratedFields"
+    ).mockImplementationOnce(() => {});
+
+    cli["executeCommandFromRegistration"](rootRegistration, ["p1", "p2", "p3"]);
+
+    cli.configure({
+      allowUnknownOptions: false,
+      didYouMean: true,
+    });
+
+    expect(
+      DecoratedClassFieldsNormalizer.throwOnUnknownOptions
+    ).toBeCalledTimes(1);
+
+    expect(DecoratedClassFieldsNormalizer.throwOnUnknownOptions).toBeCalledWith(
+      rootRegistration.instance,
+      {
+        _: ["p1", "p2", "p3"],
+      },
+      true
+    );
+
+    expect(
+      DecoratedClassFieldsNormalizer.normalizeDecoratedFields
+    ).toBeCalledTimes(1);
+
+    expect(
+      DecoratedClassFieldsNormalizer.normalizeDecoratedFields
+    ).toHaveBeenLastCalledWith(rootRegistration, ["p1", "p2", "p3"], {
+      _: ["p1", "p2", "p3"],
+    });
+
+    expect(executeStub).toBeCalledTimes(1);
+
+    cli.configure({
+      allowUnknownOptions: true,
+      didYouMean: true,
+    });
+
+    cli["executeCommandFromRegistration"](rootRegistration, ["p1", "p2", "p3"]);
+
+    expect(
+      DecoratedClassFieldsNormalizer.throwOnUnknownOptions
+    ).toBeCalledTimes(1);
+  });
 });
