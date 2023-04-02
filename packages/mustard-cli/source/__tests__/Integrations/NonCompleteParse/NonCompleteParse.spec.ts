@@ -12,19 +12,7 @@ describe("IntegrationTesting:NonCompleteParse", () => {
     );
     expect(stdoutWithRoot1).toMatchInlineSnapshot(
       `
-      "this.options:  {
-        allowUnknownOptions: true,
-        enableVersion: false,
-        lifeCycles: {
-          onStart: [Function: onStart],
-          onError: undefined,
-          onComplete: [Function: onComplete]
-        },
-        didYouMean: true,
-        enableUsage: true,
-        ignoreValidationErrors: false
-      }
-      Root Command
+      "Root Command
       --pure option: default value of pure
       --msg option: default value of msg
       inputs: []

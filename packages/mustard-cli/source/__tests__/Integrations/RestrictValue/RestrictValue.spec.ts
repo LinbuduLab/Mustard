@@ -11,19 +11,7 @@ describe("IntegrationTesting:RestrictedValues", () => {
       `${TestHelper.IntegrationExecutor} ${UsagePath}`
     );
     expect(stdoutWithRoot1).toMatchInlineSnapshot(`
-      "this.options:  {
-        allowUnknownOptions: false,
-        enableVersion: false,
-        lifeCycles: {
-          onStart: [Function: onStart],
-          onError: undefined,
-          onComplete: [Function: onComplete]
-        },
-        didYouMean: true,
-        enableUsage: true,
-        ignoreValidationErrors: false
-      }
-      Root Command
+      "Root Command
       --notRestrict option: default value of notRestrict
       --restrictedArrayTypeOption option: foo
       --restrictedObjectTypeOption option: foo
@@ -34,19 +22,7 @@ describe("IntegrationTesting:RestrictedValues", () => {
       `${TestHelper.IntegrationExecutor} ${UsagePath} --notRestrict foo --restrictedArrayTypeOption foo --restrictedObjectTypeOption foo --restrictedEnumTypeOption foo`
     );
     expect(stdoutWithRoot2).toMatchInlineSnapshot(`
-      "this.options:  {
-        allowUnknownOptions: false,
-        enableVersion: false,
-        lifeCycles: {
-          onStart: [Function: onStart],
-          onError: undefined,
-          onComplete: [Function: onComplete]
-        },
-        didYouMean: true,
-        enableUsage: true,
-        ignoreValidationErrors: false
-      }
-      Root Command
+      "Root Command
       --notRestrict option: foo
       --restrictedArrayTypeOption option: foo
       --restrictedObjectTypeOption option: foo
@@ -57,19 +33,7 @@ describe("IntegrationTesting:RestrictedValues", () => {
       `${TestHelper.IntegrationExecutor} ${UsagePath} --notRestrict foo --restrictedArrayTypeOption foo --restrictedObjectTypeOption foo --restrictedEnumTypeOption foo`
     );
     expect(stdoutWithRoot3).toMatchInlineSnapshot(`
-      "this.options:  {
-        allowUnknownOptions: false,
-        enableVersion: false,
-        lifeCycles: {
-          onStart: [Function: onStart],
-          onError: undefined,
-          onComplete: [Function: onComplete]
-        },
-        didYouMean: true,
-        enableUsage: true,
-        ignoreValidationErrors: false
-      }
-      Root Command
+      "Root Command
       --notRestrict option: foo
       --restrictedArrayTypeOption option: foo
       --restrictedObjectTypeOption option: foo
@@ -80,19 +44,7 @@ describe("IntegrationTesting:RestrictedValues", () => {
       `${TestHelper.IntegrationExecutor} ${UsagePath} --notRestrict qux --restrictedArrayTypeOption qux --restrictedObjectTypeOption qux --restrictedEnumTypeOption qux`
     );
     expect(stdoutWithRoot4).toMatchInlineSnapshot(`
-      "this.options:  {
-        allowUnknownOptions: false,
-        enableVersion: false,
-        lifeCycles: {
-          onStart: [Function: onStart],
-          onError: undefined,
-          onComplete: [Function: onComplete]
-        },
-        didYouMean: true,
-        enableUsage: true,
-        ignoreValidationErrors: false
-      }
-      Root Command
+      "Root Command
       --notRestrict option: qux
       --restrictedArrayTypeOption option: foo
       --restrictedObjectTypeOption option: foo
