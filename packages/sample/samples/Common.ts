@@ -17,7 +17,7 @@ import path from "path";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
-  @Option("d")
+  @Option("m")
   public msg = "default value of msg";
 
   public run(): void {

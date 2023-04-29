@@ -10,7 +10,7 @@ import {
   Input,
 } from "mustard-cli/decorator";
 import { Validator } from "mustard-cli/validator";
-import { CommandStruct, MustardApp } from "mustard-cli/cli";
+import type { CommandStruct, MustardApp } from "mustard-cli/cli";
 
 import path from "path";
 

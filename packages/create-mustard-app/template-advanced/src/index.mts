@@ -9,7 +9,7 @@ import {
   Utils,
   Input,
 } from "mustard-cli/decorator";
-import { CommandStruct, MustardApp } from "mustard-cli/cli";
+import type { CommandStruct, MustardApp } from "mustard-cli/cli";
 
 const require = createRequire(import.meta.url); // construct the require method
 
