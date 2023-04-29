@@ -1,3 +1,5 @@
+import { createRequire } from "module";
+
 import { MustardFactory } from "mustard-cli";
 import {
   Command,
@@ -11,6 +13,8 @@ import { Validator } from "mustard-cli/validator";
 import { CommandStruct, MustardApp } from "mustard-cli/cli";
 
 import path from "path";
+
+const require = createRequire(import.meta.url);
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
@@ -72,8 +76,7 @@ class SyncCommand implements CommandStruct {
 
 @App({
   name: "create-mustard-app",
-  commands: [RootCommandHandle],
-  // commands: [UpdateCommand, SyncCommand],
+  commands: [RootCommandHandle, UpdateCommand, SyncCommand],
   configurations: {
     allowUnknownOptions: true,
     enableUsage: true,

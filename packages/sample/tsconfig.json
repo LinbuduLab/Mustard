@@ -2,33 +2,18 @@
   "ts-node": {
     "swc": false,
     "pretty": true,
-    "transpileOnly": true,
-    "require": ["tsconfig-paths/register"]
+    "transpileOnly": true
   },
   "compilerOptions": {
-    "lib": [],
     "target": "ES6",
-    "module": "CommonJS",
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "declaration": true,
+    "module": "ES2022",
+    "moduleResolution": "node",
     "strict": true,
-    "noImplicitAny": true,
-    "noEmitOnError": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedParameters": false,
-    "noImplicitThis": true,
-    "noUnusedLocals": false,
-    "strictPropertyInitialization": false,
-    "keyofStringsOnly": false,
+    "declaration": false,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "rootDir": "."
+    "outDir": "dist"
   },
-  "include": ["./**/*.ts"],
+  "include": ["src"],
   "exclude": []
 }

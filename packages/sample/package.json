@@ -2,38 +2,39 @@
   "name": "mustard-sample",
   "private": true,
   "scripts": {
-    "local": "nodemon index.ts"
+    "dev": "nodemon index.mts"
   },
+  "type": "module",
   "nodemonConfig": {
     "delay": 500,
-    "env": {
-      "NODE_ENV": "development"
-    },
     "execMap": {
-      "ts": "ts-node-esm"
+      "js": "node --experimental-specifier-resolution=node",
+      "ts": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node-esm",
+      "mts": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node-esm"
     },
-    "ext": "ts,json",
+    "ext": "ts,mts,js,mjs,json",
     "ignore": [
       "**/test/**",
       "**/docs/**",
       "node_modules"
     ],
-    "restartable": "rs",
     "verbose": true,
     "watch": [
-      "*.ts"
+      "*.ts",
+      "*.mts",
+      "*.js",
+      "*.mjs"
     ]
   },
   "devDependencies": {
-    "@types/node": "^18.11.17",
-    "chalk": "^4.0.0",
-    "nodemon": "^2.0.20",
+    "@types/node": "^18.16.2",
+    "chalk": "^5.2.0",
+    "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.1",
-    "typescript": "^5.0.0"
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "mustard-cli": "workspace:*"
-  },
-  "version": null
+  }
 }
