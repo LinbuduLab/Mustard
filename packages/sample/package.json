@@ -36,5 +36,6 @@
   },
   "dependencies": {
     "mustard-cli": "workspace:*"
-  }
+  },
+  "version": null
 }

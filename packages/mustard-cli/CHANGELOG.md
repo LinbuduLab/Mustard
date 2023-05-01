@@ -1,5 +1,11 @@
 # ChangeLog for mustard-cli
 
+## 1.0.0
+
+### Major Changes
+
+- 292778d: 1.0.0 release
+
 ## 0.8.3
 
 ### Patch Changes

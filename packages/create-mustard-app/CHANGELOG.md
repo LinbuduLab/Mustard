@@ -1,5 +1,16 @@
 # create-mustard-app
 
+## 1.0.0
+
+### Major Changes
+
+- 292778d: 1.0.0 release
+
+### Patch Changes
+
+- Updated dependencies [292778d]
+  - mustard-cli@1.0.0
+
 ## 0.4.3
 
 ### Patch Changes
