@@ -19,7 +19,7 @@ snippet: npx create-mustard-app
 ---
 
 #title
-Mustard CLI :badge[v0.6.3]
+Mustard CLI :badge[v1.0.0]
 
 #description
 [IoC](https://en.wikipedia.org/wiki/Inversion_of_control) & [Native ES Decorator](https://github.com/tc39/proposal-decorators) based command-line app builder.
