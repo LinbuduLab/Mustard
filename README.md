@@ -9,22 +9,12 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/mustard-cli)
 [![codecov](https://codecov.io/gh/LinbuduLab/Mustard/branch/main/graph/badge.svg?token=ceNVnMTgmM)](https://codecov.io/gh/LinbuduLab/Mustard)
 
-> **This is an incubating project of [@LinbuduLab](https://github.com/LinbuduLab), which also means it's still under development.**
-
 IoC & [Native ECMAScript Decorator](https://github.com/tc39/proposal-decorators) based command line app builder.
 
 ## Requires
 
 - **Node.js >= 16.0.0**
 - **TypeScript >= 5.0.0**
-
-Before TypeScript 5.0 released, you may need to configure the used TypeScript version like below in `.vscode/settings.json`:
-
-```json
-{
-  "typescript.tsdk": "node_modules/typescript/lib"
-}
-```
 
 ## Features
 
@@ -39,11 +29,11 @@ Before TypeScript 5.0 released, you may need to configure the used TypeScript ve
 
 - [Documentation](https://mustard-cli.netlify.app/)
 
-> Complete documentation will be provided after TypeScript 5.0 is officially released.
-
 ```bash
 $ pnpx create-mustard-app
 ```
+
+Sample with root command only:
 
 ```typescript
 import { MustardFactory, MustardUtils } from "mustard-cli";
@@ -75,6 +65,8 @@ $ hi
 $ hi John
 # Hi, John
 ```
+
+Sample with root command and sub commands:
 
 ```typescript
 import { MustardFactory } from "mustard-cli";
