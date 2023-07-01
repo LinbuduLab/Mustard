@@ -1,5 +1,16 @@
 # create-mustard-app
 
+## 1.1.0
+
+### Minor Changes
+
+- bump typescript version
+
+### Patch Changes
+
+- Updated dependencies
+  - mustard-cli@1.1.0
+
 ## 1.0.0
 
 ### Major Changes
