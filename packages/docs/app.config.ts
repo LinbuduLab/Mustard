@@ -2,7 +2,7 @@ export default defineAppConfig({
   docus: {
     title: "MustardCLI",
     description: "IoC & Native ES Decorator based command-line app builder.",
-    url: "https://mustard-cli.netlify.app",
+    url: "https://github.com/LinbuduLab",
     image: "/logo.png",
     socials: {
       github: "LinbuduLab/Mustard",
