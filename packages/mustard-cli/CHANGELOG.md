@@ -1,5 +1,11 @@
 # ChangeLog for mustard-cli
 
+## 1.1.1
+
+### Patch Changes
+
+- bump typescript version to 5.3.3
+
 ## 1.1.0
 
 ### Minor Changes
