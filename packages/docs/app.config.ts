@@ -8,6 +8,9 @@ export default defineAppConfig({
       github: "LinbuduLab/Mustard",
     },
     github: {
+      owner: "LinbuduLab",
+      repo: "Mustard",
+      branch: "main",
       edit: true,
     },
     header: {

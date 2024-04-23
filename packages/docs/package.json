@@ -9,10 +9,11 @@
     "preview": "nuxi preview"
   },
   "devDependencies": {
-    "@nuxt-themes/docus": "^1.15.0",
-    "nuxt": "^3.11.2",
+    "@nuxt-themes/docus": "^1.4.7",
+    "consola": "^3.2.3",
+    "nuxt": "^3.0.0",
     "pinceau": "0.15.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18"
