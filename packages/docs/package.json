@@ -9,9 +9,9 @@
     "preview": "nuxi preview"
   },
   "devDependencies": {
-    "@nuxt-themes/docus": "^1.4.7",
-    "nuxt": "^3.0.0",
-    "typescript": "^5.3.3"
+    "@nuxt-themes/docus": "^1.15.0",
+    "nuxt": "^3.11.2",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18"
