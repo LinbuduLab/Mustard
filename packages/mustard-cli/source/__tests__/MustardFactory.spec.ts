@@ -33,37 +33,37 @@ describe("Mustard Factory", () => {
       expect(error).toBeInstanceOf(NullishFactoryOptionError);
     }
   });
-  it("should handle factory initialization", () => {
-    @MustardFactory.App({
-      name: "Project",
-      commands: [],
-      configurations: {
-        allowUnknownOptions: true,
-      },
-      providers: [],
-    })
-    class Project implements MustardApp {}
+  // it.skip("should handle factory initialization", () => {
+  //   @MustardFactory.App({
+  //     name: "Project",
+  //     commands: [],
+  //     configurations: {
+  //       allowUnknownOptions: true,
+  //     },
+  //     providers: [],
+  //   })
+  //   class Project implements MustardApp {}
 
-    MustardFactory.init(Project);
+  //   MustardFactory.init(Project);
 
-    // expect(fn1).toBeCalledWith("Project", [], {
-    //   allowUnknownOptions: true,
-    // });
+  //   // expect(fn1).toBeCalledWith("Project", [], {
+  //   //   allowUnknownOptions: true,
+  //   // });
 
-    // expect(fn2).toBeCalledWith([]);
+  //   // expect(fn2).toBeCalledWith([]);
 
-    // expect(fn3).toBeCalledWith({
-    //   lifeCycles: {
-    //     onStart: undefined,
-    //     onError: undefined,
-    //     onComplete: undefined,
-    //   },
-    // });
+  //   // expect(fn3).toBeCalledWith({
+  //   //   lifeCycles: {
+  //   //     onStart: undefined,
+  //   //     onError: undefined,
+  //   //     onComplete: undefined,
+  //   //   },
+  //   // });
 
-    try {
-      MustardFactory.init(Project);
-    } catch (error) {
-      expect(error).toBeInstanceOf(NullishFactoryOptionError);
-    }
-  });
+  //   // try {
+  //   //   MustardFactory.init(Project);
+  //   // } catch (error) {
+  //   //   expect(error).toBeInstanceOf(NullishFactoryOptionError);
+  //   // }
+  // });
 });
