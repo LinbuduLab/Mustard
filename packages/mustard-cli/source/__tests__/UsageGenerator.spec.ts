@@ -163,8 +163,8 @@ describe("UsageGenerator", () => {
         foo, f, foo command
 
       Options:
-        --bar, -b, bar option, default: \\"bar\\"
-        --baz, -z, baz option, default: \\"baz\\"
+        --bar, -b, bar option, default: "bar"
+        --baz, -z, baz option, default: "baz"
       "
     `);
   });
@@ -206,15 +206,15 @@ describe("UsageGenerator", () => {
       Usage:
 
         $ cli [projects, projects to collect, default: [
-        \\"p1\\",
-        \\"p2\\",
-        \\"p3\\",
-        \\"p4\\"
+        "p1",
+        "p2",
+        "p3",
+        "p4"
       ]]
 
       Options: 
-        --bar -b, bar option, default: \\"bar\\"
-        --baz -z, baz option, default: \\"baz\\"
+        --bar -b, bar option, default: "bar"
+        --baz -z, baz option, default: "baz"
       "
     `);
   });
@@ -244,22 +244,22 @@ describe("UsageGenerator", () => {
         foo, f, foo command
 
       Options:
-        --bar, -b, bar option, default: \\"bar\\"
-        --baz, -z, baz option, default: \\"baz\\"
+        --bar, -b, bar option, default: "bar"
+        --baz, -z, baz option, default: "baz"
 
       Command:
         bar, f, foo command
 
       Options:
-        --bar, -b, bar option, default: \\"bar\\"
-        --baz, -z, baz option, default: \\"baz\\"
+        --bar, -b, bar option, default: "bar"
+        --baz, -z, baz option, default: "baz"
 
       Command:
         foo, f, foo command
 
       Options:
-        --bar, -b, bar option, default: \\"bar\\"
-        --baz, -z, baz option, default: \\"baz\\"
+        --bar, -b, bar option, default: "bar"
+        --baz, -z, baz option, default: "baz"
       "
     `);
   });

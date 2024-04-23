@@ -61,8 +61,8 @@ test("IntegrationTesting:UsageGenerator:NoRootCommandButAtLeastOneCommandProvide
       update, u, update command
 
     Options:
-      --msg, -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg, -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects, -p, default: []
     "
   `);
@@ -87,16 +87,16 @@ test("IntegrationTesting:UsageGenerator:NoRootCommandButMultipleCommandsRegister
       update, u, update command
 
     Options:
-      --msg, -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg, -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects, -p, default: []
 
     Command:
       sync, s, sync command
 
     Options:
-      --msg, -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg, -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects, -p, default: []
     "
   `);
@@ -118,8 +118,8 @@ test("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", async ()
       $ mm [these_are_inputs, description of inputs]
 
     Options: 
-      --msg -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects -p, default: []
     "
   `);
@@ -143,8 +143,8 @@ test("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", async ()
     Run 'mm update [child command] --help' for more information on child command.
 
     Options:
-      --msg, -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg, -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects, -p, description of projects, default: []
     "
   `);
@@ -162,8 +162,8 @@ test("IntegrationTesting:UsageGenerator:RootAndNestedCommandsProvided", async ()
       account, a, update account commandxxx
 
     Options:
-      --msg, -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg, -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects, -p, default: []
     "
   `);
@@ -190,8 +190,8 @@ test("IntegrationTesting:UsageGenerator:RootCommandAndCommonCommandsProvided", a
       $ mm [these_are_inputs, description of inputs]
 
     Options: 
-      --msg -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects -p, default: []
     "
   `);
@@ -209,8 +209,8 @@ test("IntegrationTesting:UsageGenerator:RootCommandAndCommonCommandsProvided", a
       update, u, update command
 
     Options:
-      --msg, -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg, -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects, -p, default: []
     "
   `);
@@ -229,8 +229,8 @@ test("IntegrationTesting:UsageGenerator:RootCommandOnly", async () => {
       $ mm [these_are_inputs, description of inputs]
 
     Options: 
-      --msg -m, default: \\"default value of msg\\"
-      --notice, default: \\"default value of notice\\"
+      --msg -m, default: "default value of msg"
+      --notice, default: "default value of notice"
       --projects -p, default: []
     "
   `);

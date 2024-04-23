@@ -13,7 +13,7 @@ describe("Mustard Errors", () => {
     expect(error.name).toBe("CommandNotFoundError");
     expect(error.message).toMatchInlineSnapshot(`
       "Command not found with parsed args: {
-        \\"_\\": []
+        "_": []
       }"
     `);
   });

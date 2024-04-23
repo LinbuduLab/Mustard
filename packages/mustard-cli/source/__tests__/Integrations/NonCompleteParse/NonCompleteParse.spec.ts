@@ -16,7 +16,7 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       --pure option: default value of pure
       --msg option: default value of msg
       inputs: []
-      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\"}"
+      options: {"pure":"default value of pure","msg":"default value of msg"}"
     `
     );
 
@@ -28,8 +28,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Root Command
       --pure option: default value of pure
       --msg option: default value of msg
-      inputs: [\\"input1\\",\\"input2\\",\\"input3\\"]
-      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\"}"
+      inputs: ["input1","input2","input3"]
+      options: {"pure":"default value of pure","msg":"default value of msg"}"
     `
     );
 
@@ -41,8 +41,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Root Command
       --pure option: pureValue
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\",\\"input3\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2","input3"]
+      options: {"pure":"pureValue","msg":"Hello"}"
     `
     );
 
@@ -55,7 +55,7 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       --pure option: default value of pure
       --msg option: default value of msg
       inputs: []
-      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\"}"
+      options: {"pure":"default value of pure","msg":"default value of msg"}"
     `
     );
 
@@ -67,8 +67,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Run Command
       --pure option: pureValue
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello"}"
     `
     );
 
@@ -79,8 +79,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       `
       "Update Command
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2"]
+      options: {"msg":"Hello"}"
     `
     );
 
@@ -91,8 +91,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       `
       "Update Command
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2"]
+      options: {"msg":"Hello"}"
     `
     );
 
@@ -104,8 +104,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Update Dep Command
       --pure option: pureValue
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello"}"
     `
     );
 
@@ -117,8 +117,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Update Dep Node Command
       --pure option: pureValue
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello"}"
     `
     );
 
@@ -130,8 +130,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Update Sys Command
       --pure option: pureValue
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello"}"
     `
     );
 
@@ -144,7 +144,7 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       --pure option: default value of pure
       --msg option: default value of msg
       inputs: []
-      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\"}"
+      options: {"pure":"default value of pure","msg":"default value of msg"}"
     `
     );
 
@@ -156,8 +156,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Run Command
       --pure option: pureValue
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\",\\"app2\\",\\"app3\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2","app2","app3"]
+      options: {"pure":"pureValue","msg":"Hello"}"
     `
     );
 
@@ -169,8 +169,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Update Dep Command
       --pure option: pureValue
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello"}"
     `
     );
 
@@ -182,8 +182,8 @@ describe("IntegrationTesting:NonCompleteParse", () => {
       "Update Dep Node Command
       --pure option: pureValue
       --msg option: Hello
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\"}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello"}"
     `
     );
   });

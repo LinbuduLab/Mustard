@@ -46,9 +46,9 @@ describe("IntegrationTesting:RestrictedValues", () => {
     expect(stdoutWithRoot4).toMatchInlineSnapshot(`
       "Root Command
       --notRestrict option: qux
-      --restrictedArrayTypeOption option: foo
-      --restrictedObjectTypeOption option: foo
-      --restrictedEnumTypeOption option: foo"
+      --restrictedArrayTypeOption option: qux
+      --restrictedObjectTypeOption option: qux
+      --restrictedEnumTypeOption option: qux"
     `);
   });
 });

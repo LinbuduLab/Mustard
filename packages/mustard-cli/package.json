@@ -95,6 +95,7 @@
     "@types/tmp": "^0.2.6",
     "@types/yargs-parser": "^21.0.3",
     "@vitest/coverage-c8": "^0.29.3",
+    "@vitest/coverage-v8": "^1.5.0",
     "cross-env": "^7.0.3",
     "execa": "^8.0.1",
     "lodash": "^4.17.21",

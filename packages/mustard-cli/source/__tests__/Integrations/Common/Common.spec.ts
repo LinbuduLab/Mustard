@@ -17,7 +17,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: default value of msg
       --projects option: []
       inputs: []
-      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
+      options: {"pure":"default value of pure","msg":"default value of msg","projects":[]}"
     `
     );
 
@@ -30,8 +30,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --pure option: default value of pure
       --msg option: default value of msg
       --projects option: []
-      inputs: [\\"input1\\",\\"input2\\",\\"input3\\"]
-      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
+      inputs: ["input1","input2","input3"]
+      options: {"pure":"default value of pure","msg":"default value of msg","projects":[]}"
     `
     );
 
@@ -43,9 +43,9 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       "Root Command
       --pure option: pureValue
       --msg option: Hello
-      --projects option: [\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]
-      inputs: [\\"input1\\",\\"input2\\",\\"input3\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      --projects option: ["app1","app2","app3","app4"]
+      inputs: ["input1","input2","input3"]
+      options: {"pure":"pureValue","msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
 
@@ -59,7 +59,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: default value of msg
       --projects option: [object JSON]
       inputs: []
-      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
+      options: {"pure":"default value of pure","msg":"default value of msg","projects":[]}"
     `
     );
 
@@ -72,8 +72,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --pure option: pureValue
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
 
@@ -85,8 +85,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       "Update Command
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      inputs: ["input1","input2"]
+      options: {"msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
 
@@ -98,8 +98,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       "Update Command
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      inputs: ["input1","input2"]
+      options: {"msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
 
@@ -112,8 +112,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --pure option: pureValue
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
 
@@ -126,8 +126,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --pure option: pureValue
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
 
@@ -140,8 +140,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --pure option: pureValue
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
 
@@ -155,7 +155,7 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --msg option: default value of msg
       --projects option: [object JSON]
       inputs: []
-      options: {\\"pure\\":\\"default value of pure\\",\\"msg\\":\\"default value of msg\\",\\"projects\\":[]}"
+      options: {"pure":"default value of pure","msg":"default value of msg","projects":[]}"
     `
     );
 
@@ -168,8 +168,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --pure option: pureValue
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app\\"]}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello","projects":["app1","app2","app3","app"]}"
     `
     );
 
@@ -182,8 +182,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --pure option: pureValue
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
 
@@ -196,8 +196,8 @@ describe("IntegrationTesting:CommonCommandHandle", () => {
       --pure option: pureValue
       --msg option: Hello
       --projects option: [object JSON]
-      inputs: [\\"input1\\",\\"input2\\"]
-      options: {\\"pure\\":\\"pureValue\\",\\"msg\\":\\"Hello\\",\\"projects\\":[\\"app1\\",\\"app2\\",\\"app3\\",\\"app4\\"]}"
+      inputs: ["input1","input2"]
+      options: {"pure":"pureValue","msg":"Hello","projects":["app1","app2","app3","app4"]}"
     `
     );
   });
