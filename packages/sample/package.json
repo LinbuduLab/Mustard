@@ -10,7 +10,7 @@
     "execMap": {
       "js": "node --experimental-specifier-resolution=node",
       "ts": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node-esm",
-      "mts": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node-esm"
+      "mts": "NODE_OPTIONS='--loader ts-node/esm --experimental-specifier-resolution=node' ts-node-esm"
     },
     "ext": "ts,mts,js,mjs,json",
     "ignore": [
@@ -37,5 +37,5 @@
   "dependencies": {
     "mustard-cli": "workspace:*"
   },
-  "version": null
+  "version": "0.0.0"
 }

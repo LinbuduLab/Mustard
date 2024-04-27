@@ -1,5 +1,5 @@
 import { z } from "zod";
-import chalk from "chalk";
+import picocolors from "picocolors";
 
 import type { ZodInvalidTypeIssue } from "zod";
 
@@ -16,8 +16,8 @@ export class ValidationError extends Error {
   }
 
   get message(): string {
-    return chalk.yellow(
-      `Invalid input for option ${chalk.bold(this.invalidOptionName)}`
+    return picocolors.yellow(
+      `Invalid input for option ${picocolors.bold(this.invalidOptionName)}`
     );
   }
 
@@ -27,9 +27,9 @@ export class ValidationError extends Error {
     const { expected, received, message } = <ZodInvalidTypeIssue>issue;
 
     if (expected && received) {
-      return `Invalid input for argument '${argName}', expected: ${chalk.green(
+      return `Invalid input for argument '${argName}', expected: ${picocolors.green(
         expected
-      )}, received: ${chalk.yellow(received)}`;
+      )}, received: ${picocolors.yellow(received)}`;
     } else {
       return message ?? `Invalid input for argument '${argName}`;
     }

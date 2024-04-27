@@ -1,3 +1,4 @@
+import path from "path";
 import { createRequire } from "module";
 
 import { MustardFactory } from "mustard-cli";
@@ -11,8 +12,6 @@ import {
 } from "mustard-cli/decorator";
 import { Validator } from "mustard-cli/validator";
 import type { CommandStruct, MustardApp } from "mustard-cli/cli";
-
-import path from "path";
 
 const require = createRequire(import.meta.url);
 

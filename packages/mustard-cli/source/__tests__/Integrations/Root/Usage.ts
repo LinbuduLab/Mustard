@@ -1,4 +1,4 @@
-import { MustardFactory } from "../../../Exports/index";
+import { MustardFactory } from "../../../index";
 import {
   RootCommand,
   Option,
@@ -7,7 +7,7 @@ import {
   Input,
   Options,
 } from "../../../Exports/Decorators";
-import { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
+import type { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {

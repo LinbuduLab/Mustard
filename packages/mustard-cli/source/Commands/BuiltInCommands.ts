@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import picocolors from "picocolors";
 
 import { UsageInfoGenerator } from "../Components/UsageGenerator";
 import { MustardConstanst } from "../Components/Constants";
@@ -81,7 +81,9 @@ export class BuiltInCommands {
 
     if (!controller) return;
 
-    console.log(`V ${chalk.bold(BuiltInCommands.useController(controller))}`);
+    console.log(
+      `V ${picocolors.bold(BuiltInCommands.useController(controller))}`
+    );
 
     exit && process.exit(0);
   }

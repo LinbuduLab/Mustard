@@ -1,11 +1,11 @@
-import { MustardFactory } from "../../../Exports/index";
+import { MustardFactory } from "../../../index";
 import {
   RootCommand,
   Option,
   Restrict,
   App,
 } from "../../../Exports/Decorators";
-import { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
+import type { CommandStruct, MustardApp } from "../../../Exports/ComanndLine";
 
 const restrictArray = ["foo", "bar", "baz"] as const;
 
@@ -21,8 +21,8 @@ enum RestrictEnum {
   Baz = "baz",
 }
 
-type RestrictArrayType = typeof restrictArray[number];
-type RestrictObjectType = typeof restrictObject[keyof typeof restrictObject];
+type RestrictArrayType = (typeof restrictArray)[number];
+type RestrictObjectType = (typeof restrictObject)[keyof typeof restrictObject];
 
 @RootCommand()
 class RootCommandHandle implements CommandStruct {
