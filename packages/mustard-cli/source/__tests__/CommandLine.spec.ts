@@ -186,6 +186,45 @@ describe("CommandLine", () => {
       "r",
       MustardRegistry.provideInit("RunCommand")
     );
+
+    class ChildCommand {
+      run() {}
+    }
+    class ParentCommand {
+      run() {}
+    }
+
+    vi.spyOn(MustardRegistry, "provideInit").mockImplementation(
+      (requestName) => {
+        if (requestName === ParentCommand.name) {
+          return {
+            commandInvokeName: "parent",
+            Class: ParentCommand,
+            commandAlias: "p",
+            root: false,
+            childCommandList: [ChildCommand],
+            instance: new ParentCommand(),
+            decoratedInstanceFields: [],
+          };
+        }
+
+        return {
+          commandInvokeName: "child",
+          Class: ChildCommand,
+          commandAlias: "c",
+          root: false,
+          childCommandList: [],
+          instance: new ChildCommand(),
+          decoratedInstanceFields: [],
+        };
+      }
+    );
+
+    cli.registerCommand([ParentCommand]);
+    expect(MustardRegistry.register).toBeCalledWith(
+      "child",
+      MustardRegistry.provideInit("ChildCommand")
+    );
   });
 
   it("should instantiate and parse args", () => {
@@ -445,5 +484,30 @@ describe("CommandLine", () => {
     expect(
       DecoratedClassFieldsNormalizer.throwOnUnknownOptions
     ).toBeCalledTimes(1);
+  });
+
+  it("should handle command execution lifecycle", async () => {
+    const onComplete = vi.fn();
+    const onError = vi.fn();
+    const cli: any = new CLI("mm", [], {
+      lifeCycles: {
+        onComplete,
+        onError,
+      },
+    });
+
+    const executeSpy = vi
+      .spyOn(cli, "executeCommandFromRegistration")
+      .mockResolvedValueOnce(undefined)
+      .mockRejectedValueOnce(new Error("boom"));
+
+    cli["handleCommandExecution"]({} as any, []);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(executeSpy).toBeCalledTimes(1);
+    expect(onComplete).toBeCalledTimes(1);
+
+    cli["handleCommandExecution"]({} as any, []);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(onError).toBeCalledTimes(1);
   });
 });

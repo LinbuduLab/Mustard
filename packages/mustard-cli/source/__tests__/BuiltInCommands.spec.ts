@@ -162,6 +162,22 @@ describe("BuiltInCommands", () => {
     });
 
     expect(console.log).toBeCalledWith("FromController");
+
+    BuiltInCommands.useHelpCommand(
+      "mm",
+      undefined as unknown as any,
+      registration,
+      false,
+      false
+    );
+    expect(UsageInfoGenerator.printHelp).toBeCalledTimes(5);
+
+    const exitSpy = vi
+      .spyOn(process, "exit")
+      .mockImplementation(((code?: number) => code as never) as any);
+    BuiltInCommands.useHelpCommand("mm", true, registration, true, true);
+    expect(exitSpy).toBeCalledWith(0);
+    exitSpy.mockRestore();
   });
 
   it("should handle version command", () => {
@@ -189,5 +205,15 @@ describe("BuiltInCommands", () => {
     BuiltInCommands.useVersionCommand(true, "1.2.0", false);
     expect(controller).toBeCalledTimes(2);
     expect(console.log).toBeCalledTimes(3);
+
+    BuiltInCommands.useVersionCommand(true, undefined, false);
+    expect(console.log).toBeCalledTimes(3);
+
+    const exitSpy = vi
+      .spyOn(process, "exit")
+      .mockImplementation(((code?: number) => code as never) as any);
+    BuiltInCommands.useVersionCommand(true, "1.2.0", true);
+    expect(exitSpy).toBeCalledWith(0);
+    exitSpy.mockRestore();
   });
 });

@@ -9,19 +9,22 @@ test("IntegrationTesting:UsageGenerator:NoRootAndCommonCommandsProvidedAndDisabl
     "./NoRootAndCommonCommandsProvidedAndDisableUsageInfo.usage.ts"
   );
 
+  expect.hasAssertions();
   try {
     await execaCommand(`${TestHelper.IntegrationExecutor} ${UsagePath}`);
-  } catch (error) {
-    expect(error.stderr).toMatchInlineSnapshot(`
-      "file:///Users/linbudu/Desktop/OpenSource/Mustard/packages/mustard-cli/source/Commands/CommandLine.ts:229
-            throw new NoRootHandlerError();
-                  ^
-      NoRootHandlerError: No root handler found, please provide command decorated with '@RootCommand' or enable option enableUsage for usage info generation.
-          at CLI.dispatchRootHandler (file:///Users/linbudu/Desktop/OpenSource/Mustard/packages/mustard-cli/source/Commands/CommandLine.ts:229:13)
-          at CLI.start (file:///Users/linbudu/Desktop/OpenSource/Mustard/packages/mustard-cli/source/Commands/CommandLine.ts:142:26)
-          at file:///Users/linbudu/Desktop/OpenSource/Mustard/packages/mustard-cli/source/__tests__/Integrations/UsageGenerator/NoRootAndCommonCommandsProvidedAndDisableUsageInfo.usage.ts:13:30
-          at ModuleJob.run (node:internal/modules/esm/module_job:194:25)"
-    `);
+  } catch (error: unknown) {
+    expect(error).toBeInstanceOf(Error);
+
+    const execaError = error as Error & {
+      failed?: boolean;
+      exitCode?: number;
+      stderr?: string;
+    };
+
+    expect(execaError.failed).toBe(true);
+    expect(execaError.exitCode).toBe(1);
+    expect(execaError.stderr).toContain("NoRootHandlerError");
+    expect(execaError.stderr).toContain("No root handler found");
   }
 });
 test("IntegrationTesting:UsageGenerator:NoRootAndCommonCommandsProvided", async () => {

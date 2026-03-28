@@ -4,7 +4,10 @@ import { CommandNotFoundError } from "../Errors/CommandNotFoundError";
 import { MultiRootCommandError } from "../Errors/MultiRootCommandError";
 import { NoRootHandlerError } from "../Errors/NoRootHandlerError";
 import { NullishFactoryOptionError } from "../Errors/NullishFactoryOptionError";
-import { UnknownOptionsError } from "../Errors/UnknownOptionsError";
+import {
+  DidYouMeanError,
+  UnknownOptionsError,
+} from "../Errors/UnknownOptionsError";
 import { ValidationError } from "../Errors/ValidationError";
 
 describe("Mustard Errors", () => {
@@ -51,5 +54,11 @@ describe("Mustard Errors", () => {
     expect(error.message).toMatchInlineSnapshot(
       '"Unknown options: foo, bar. See --help for usage."'
     );
+  });
+
+  it("should produce DidYouMeanError", () => {
+    const error = new DidYouMeanError("helo", "help");
+    expect(error.name).toBe("DidYouMeanError");
+    expect(error.message).toBe("Unknown option --helo, did you mean --help?");
   });
 });

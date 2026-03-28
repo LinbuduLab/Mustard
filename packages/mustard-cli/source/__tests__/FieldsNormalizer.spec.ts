@@ -11,6 +11,8 @@ import {
 } from "../Typings/Command.struct";
 import { MustardUtils } from "../Components/Utils";
 import { MustardRegistry } from "../Components/Registry";
+import { Validator } from "../Validators";
+import { ValidationError } from "../Errors/ValidationError";
 
 class Foo implements CommandStruct {
   field1: string;
@@ -536,5 +538,108 @@ describe("FieldsNormalizer", () => {
       bar: "bar-value",
       baz: ["baz-value"],
     });
+  });
+
+  it("should handle validation failure and required option branches", () => {
+    (DecoratedClassFieldsNormalizer as any).appOptions = {
+      ignoreValidationErrors: true,
+    };
+
+    DecoratedClassFieldsNormalizer.normalizeOption(
+      foo,
+      "field1",
+      {
+        foo: 123,
+      },
+      {
+        type: "Option",
+        optionName: "foo",
+        initValue: "foo-init-value",
+        schema: Validator.String().schema,
+      }
+    );
+
+    expect(foo.field1).toBe(123);
+
+    (DecoratedClassFieldsNormalizer as any).appOptions = {
+      ignoreValidationErrors: false,
+    };
+
+    expect(() =>
+      DecoratedClassFieldsNormalizer.normalizeOption(
+        foo,
+        "field1",
+        {
+          foo: 123,
+        },
+        {
+          type: "Option",
+          optionName: "foo",
+          initValue: "foo-init-value",
+          schema: Validator.String().schema,
+        }
+      )
+    ).toThrow(ValidationError);
+
+    (DecoratedClassFieldsNormalizer as any).appOptions = {
+      ignoreValidationErrors: true,
+    };
+    DecoratedClassFieldsNormalizer.normalizeOption(
+      foo,
+      "field1",
+      {},
+      {
+        type: "Option",
+        optionName: "requiredField",
+        initValue: undefined,
+        schema: Validator.Required().String().schema,
+      }
+    );
+
+    (DecoratedClassFieldsNormalizer as any).appOptions = {
+      ignoreValidationErrors: false,
+    };
+    expect(() =>
+      DecoratedClassFieldsNormalizer.normalizeOption(
+        foo,
+        "field1",
+        {},
+        {
+          type: "Option",
+          optionName: "requiredField",
+          initValue: undefined,
+          schema: Validator.Required().String().schema,
+        }
+      )
+    ).toThrow(ValidationError);
+  });
+
+  it("should skip options with undefined init values", () => {
+    DecoratedClassFieldsNormalizer.normalizeOptions(
+      foo,
+      "field1",
+      { foo: "foo-value", _: ["x"] },
+      [
+        {
+          key: "bar",
+          type: "Option",
+          value: {
+            type: "Option",
+            optionName: "bar",
+            initValue: undefined,
+          },
+        },
+        {
+          key: "noop",
+          type: "Input",
+          value: {
+            type: "Input",
+            optionName: "noop",
+          },
+        },
+      ] as any
+    );
+
+    expect(foo.field1).toEqual({});
   });
 });

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
 import { MustardRegistry } from "../Components/Registry";
+import { MustardUtils } from "../Components/Utils";
 import {
   ParsedCommandUsage,
   UsageInfoGenerator,
@@ -339,5 +340,141 @@ describe("UsageGenerator", () => {
 
     expect(UsageInfoGenerator.formatCommandUsage).toBeCalledTimes(1);
     expect(UsageInfoGenerator.collectSpecificCommandUsage).toBeCalledTimes(2);
+  });
+
+  it("should collect child command and decorated option details", () => {
+    class Child implements CommandStruct {
+      run() {}
+    }
+
+    const withChild = {
+      ..._RunCommandRegistration,
+      childCommandList: [Child],
+    } satisfies CommandRegistryPayload;
+
+    vi.spyOn(MustardUtils, "matchFromCommandClass").mockReturnValueOnce([
+      {
+        ..._RunCommandRegistration,
+        commandInvokeName: "child",
+        commandAlias: "c",
+        description: "child command",
+      },
+    ]);
+
+    vi.spyOn(MustardUtils, "filterDecoratedInstanceFields").mockReturnValueOnce(
+      [
+        {
+          key: "flag",
+          type: "Option",
+          value: {
+            type: "Option",
+            optionName: "flag",
+            optionAlias: "f",
+            description: "flag option",
+            initValue: false,
+          },
+        },
+        {
+          key: "list",
+          type: "VariadicOption",
+          value: {
+            type: "VariadicOption",
+            optionName: "list",
+            optionAlias: "l",
+            description: "list option",
+            initValue: [],
+          },
+        },
+        {
+          key: "input",
+          type: "Input",
+          value: {
+            type: "Input",
+            optionName: "input",
+            description: "input desc",
+            initValue: "",
+          },
+        },
+      ] as any
+    );
+
+    const result = UsageInfoGenerator.collectSpecificCommandUsage(withChild);
+
+    expect(result.childCommandNames).toEqual([
+      {
+        name: "child",
+        alias: "c",
+        description: "child command",
+      },
+    ]);
+    expect(result.options[0]?.name).toBe("flag");
+    expect(result.variadicOptions[0]?.name).toBe("list");
+    expect(result.input?.name).toBe("input");
+  });
+
+  it("should format usages for commands without option defaults", () => {
+    UsageInfoGenerator.initGenerator({
+      bin: "mm",
+      parsedInputs: [],
+    });
+
+    const usage = UsageInfoGenerator.formatCommandUsage({
+      name: "empty",
+      alias: null,
+      description: null,
+      options: [],
+      variadicOptions: [],
+      childCommandNames: [],
+      input: undefined,
+    });
+
+    expect(usage).not.toContain("[options]");
+
+    const rootUsage = UsageInfoGenerator.formatRootCommandUsage({
+      name: "root",
+      alias: null,
+      description: null,
+      options: [
+        {
+          name: "disabled",
+          alias: "d",
+          description: null,
+          defaultValue: false,
+        },
+      ],
+      variadicOptions: [],
+      childCommandNames: [],
+      input: {
+        name: "arg",
+        alias: null,
+        description: null,
+        defaultValue: "",
+      },
+    });
+
+    expect(rootUsage).toContain("--disabled -d");
+    expect(rootUsage).not.toContain("default:");
+    expect(rootUsage).not.toContain("[arg,");
+
+    const commandWithChild = UsageInfoGenerator.formatCommandUsage({
+      name: "parent",
+      alias: "p",
+      description: "desc",
+      options: [],
+      variadicOptions: [],
+      childCommandNames: [
+        {
+          name: "child",
+          alias: null,
+          description: null,
+        },
+      ],
+      input: undefined,
+    });
+
+    expect(commandWithChild).toContain("Child Command(s):");
+    expect(commandWithChild).toContain(
+      "Run 'mm parent [child command] --help' for more information on child command."
+    );
   });
 });

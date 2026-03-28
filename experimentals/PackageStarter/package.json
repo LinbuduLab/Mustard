@@ -17,7 +17,7 @@
       "NODE_ENV": "development"
     },
     "execMap": {
-      "ts": "ts-node-esm"
+      "ts": "tsx"
     },
     "ext": "ts,json",
     "ignore": [
@@ -36,6 +36,7 @@
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
+    "tsx": "^4.20.6",
     "typescript": "5.3.3"
   }
 }

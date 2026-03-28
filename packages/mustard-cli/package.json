@@ -51,9 +51,9 @@
     "local": "nodemon index.ts run sync --dry",
     "prepublishOnly": "pnpm run pub:check && pnpm run build",
     "pub:check": "pnpx publint",
-    "test": "NODE_OPTIONS='--experimental-specifier-resolution=node' vitest",
-    "test:ig": "cross-env TEST_TYPE=INTEGRATION NODE_OPTIONS='--experimental-specifier-resolution=node' vitest",
-    "test:igu": "cross-env TEST_TYPE=INTEGRATION NODE_OPTIONS='--experimental-specifier-resolution=node' vitest -u",
+    "test": "vitest",
+    "test:ig": "cross-env TEST_TYPE=INTEGRATION vitest",
+    "test:igu": "cross-env TEST_TYPE=INTEGRATION vitest -u",
     "test:unit": "cross-env TEST_TYPE=UNIT vitest"
   },
   "nodemonConfig": {
@@ -62,7 +62,7 @@
       "NODE_ENV": "development"
     },
     "execMap": {
-      "ts": "ts-node-esm"
+      "ts": "tsx"
     },
     "ext": "ts,json",
     "ignore": [
@@ -102,6 +102,7 @@
     "tmp": "^0.2.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
+    "tsx": "^4.20.6",
     "typescript": "^5.3.3",
     "vitest": "^0.29.3"
   },

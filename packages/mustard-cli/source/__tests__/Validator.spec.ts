@@ -180,6 +180,18 @@ describe("Validators.Number", () => {
   });
 });
 
+describe("Validators.Boolean", () => {
+  it("should produce schema and support addValidation calls", () => {
+    expect(Validator.Boolean().schema.isOptional()).toBeTruthy();
+    expect(Validator.Required().Boolean().schema.isOptional()).toBeFalsy();
+
+    const boolValidator = Validator.Boolean();
+    boolValidator.addValidation("refine" as any, [(v: unknown) => !!v]);
+
+    expect(boolValidator.validate(true)).toBe(true);
+  });
+});
+
 describe("Validators.Enum", () => {
   it("should produce schema", () => {
     expect(Validator.Enum(VE).schema.isOptional()).toBeTruthy();

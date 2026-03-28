@@ -28,17 +28,20 @@ export class ControllerDecorators {
   public static Restrict(
     restrictValues: RestrictValueSet
   ): AnyClassFieldDecoratorReturnType {
-    return (_, _context) => {
-      return (initialValue) => {
-        if (MustardUtils.isOptionInitializer(initialValue)) {
-          return {
-            ...initialValue,
-            restrictValues,
-          };
-        }
+    return (_, context) => {
+      context.addInitializer(function () {
+        const instanceField = String(context.name);
+        const currentValue = Reflect.get(this, instanceField);
 
-        return initialValue;
-      };
+        if (MustardUtils.isOptionInitializer(currentValue)) {
+          Reflect.set(this, instanceField, {
+            ...currentValue,
+            restrictValues,
+          });
+        }
+      });
+
+      return (initialValue) => initialValue;
     };
   }
 }

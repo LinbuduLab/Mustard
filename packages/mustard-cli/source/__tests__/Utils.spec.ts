@@ -70,6 +70,63 @@ describe("Utils", () => {
     expect(MustardUtils.levenshtein("fo", ["foo", "fap", "baz"])).toBe("foo");
     expect(MustardUtils.levenshtein("fo", ["fap", "baz"])).toBe("fap");
   });
+
+  it("should handle option initializer and restrictions", () => {
+    expect(MustardUtils.isOptionInitializer({ type: "Option" })).toBe(true);
+    expect(MustardUtils.isOptionInitializer("foo")).toBe(false);
+
+    expect(MustardUtils.applyRestrictions("foo", "bar")).toBe("foo");
+    expect(MustardUtils.applyRestrictions("foo", "bar", ["foo"])).toBe("foo");
+    expect(MustardUtils.applyRestrictions("baz", "bar", ["foo"])).toBe("bar");
+    expect(
+      MustardUtils.applyRestrictions("foo", "bar", { foo: "foo", baz: "baz" })
+    ).toBe("foo");
+    expect(
+      MustardUtils.applyRestrictions("xxx", "bar", { foo: "foo", baz: "baz" })
+    ).toBe("bar");
+  });
+
+  it("should match command registrations by class names", () => {
+    class C1 implements CommandStruct {
+      run() {}
+    }
+    class C2 implements CommandStruct {
+      run() {}
+    }
+    class C3 implements CommandStruct {
+      run() {}
+    }
+
+    vi.spyOn(MustardRegistry, "provide").mockReturnValueOnce(
+      new Map<any, any>([
+        [
+          "c1",
+          {
+            Class: C1,
+            commandInvokeName: "c1",
+          },
+        ],
+        [
+          "c2",
+          {
+            Class: C2,
+            commandInvokeName: "c2",
+          },
+        ],
+        ["bad", undefined],
+        [
+          "dup",
+          {
+            Class: C1,
+            commandInvokeName: "c1-dup",
+          },
+        ],
+      ])
+    );
+
+    const matched = MustardUtils.matchFromCommandClass([C1, C3]);
+    expect(matched.map((item) => item.Class.name)).toEqual(["C1"]);
+  });
 });
 
 describe("Utils.parseFromProcessArgs", () => {

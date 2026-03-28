@@ -1,9 +1,18 @@
 packages:
   - packages/**
   - experimentals/**
-  - "!**/test/**"
-  - "!**/template-**"
+  - '!**/test/**'
+  - '!**/template-**'
+
 link-workspace-packages: false
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
+  - vue-demi
+
 prefer-workspace-packages: false
-shared-workspace-lockfile: true
+
 save-workspace-protocol: true
+
+shared-workspace-lockfile: true
