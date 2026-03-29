@@ -1,4 +1,6 @@
-export class NoRootHandlerError extends Error {
+import { MustardError } from "../Typings/MustardError.struct";
+
+export class NoRootHandlerError extends MustardError implements MustardError {
   public name = "NoRootHandlerError";
 
   constructor() {
@@ -7,5 +9,9 @@ export class NoRootHandlerError extends Error {
 
   get message(): string {
     return `No root handler found, please provide command decorated with '@RootCommand' or enable option enableUsage for usage info generation.`;
+  }
+
+  get messageForAgent() {
+    return ``;
   }
 }

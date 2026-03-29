@@ -13,7 +13,7 @@ export class BuiltInDecorators {
    * @example
    * class RunCommand {
    *  \@Utils()
-   *   public utils: MustardUtils;
+   *   public utils: MustardInternalUtils;
    *
    *   run() {
    *     this.utils.json.read();

@@ -5,7 +5,7 @@ export * from "./ComanndLine";
 export { Validator } from "./Validator";
 export { MustardApp } from "../Core/MustardApp";
 
-export type MustardUtils = Omit<typeof MustardUtilsProvider, "produce">;
+export type MustardInternalUtils = Omit<typeof MustardUtilsProvider, "produce">;
 export type { Context } from "../Typings/Context.struct";
 
 export type * from "../Typings/Command.struct";

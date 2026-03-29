@@ -1,11 +1,11 @@
 import { MustardRegistry } from "../Core/Registry";
-import { MustardUtils } from "../Utils/Utils";
+import { MustardInternalUtils } from "../Utils/Utils";
 import uniqBy from "lodash.uniqby";
+
+import { InstanceFieldDecorationTypes } from "../Utils/Constants";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 import type { Nullable } from "../Typings/Shared.struct";
-import { InstanceFieldDecorationTypes } from "../Utils/Constants";
-import { SchemaExtractor } from "./SchemaExtractor";
 
 interface SharedInfo {
   name: string;
@@ -71,17 +71,17 @@ export class UsageInfoGenerator {
   ): ParsedCommandUsage {
     const { commandInvokeName, instance, childCommandList = [] } = registration;
 
-    const childCommandNames = <SharedInfo[]>MustardUtils.matchFromCommandClass(
-      childCommandList
-    )
-      .map((r) => ({
-        name: r.commandInvokeName,
-        alias: r.commandAlias,
-        description: r.description,
-      }))
-      .filter(Boolean);
+    const childCommandNames = <SharedInfo[]>(
+      MustardInternalUtils.matchFromCommandClass(childCommandList)
+        .map((r) => ({
+          name: r.commandInvokeName,
+          alias: r.commandAlias,
+          description: r.description,
+        }))
+        .filter(Boolean)
+    );
 
-    const decoratedFields = MustardUtils.filterDecoratedInstanceFields(
+    const decoratedFields = MustardInternalUtils.filterDecoratedInstanceFields(
       instance!
     ).map((option) => {
       return {
@@ -120,6 +120,10 @@ export class UsageInfoGenerator {
   }
 
   public static printHelp(registration?: CommandRegistryPayload) {
+    // const completed = UsageInfoGenerator.collectCompleteAppUsage();
+
+    // console.log(completed);
+
     registration
       ? registration.root
         ? // print usage info for RootCommand only

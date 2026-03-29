@@ -1,9 +1,11 @@
 import { z } from "zod";
 import chalk from "chalk";
 
+import { MustardError } from "../Typings/MustardError.struct";
+
 import type { ZodInvalidTypeIssue } from "zod";
 
-export class ValidationError extends Error {
+export class ValidationError extends MustardError implements MustardError {
   public name = "ValidationError";
 
   constructor(
@@ -19,6 +21,10 @@ export class ValidationError extends Error {
     return chalk.yellow(
       `Invalid input for option ${chalk.bold(this.invalidOptionName)}`
     );
+  }
+
+  get messageForAgent() {
+    return ``;
   }
 
   public static formatError(argName: string, error: z.ZodError) {

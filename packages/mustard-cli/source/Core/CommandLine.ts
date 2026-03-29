@@ -3,7 +3,7 @@ import _debug from "debug";
 import { MustardRegistry } from "./Registry";
 import { MustardConstanst } from "../Utils/Constants";
 import { DecoratedClassFieldsNormalizer } from "./DecoratedFieldsNormalizer";
-import { MustardUtils } from "../Utils/Utils";
+import { MustardInternalUtils } from "../Utils/Utils";
 
 import { BuiltInCommands } from "./BuiltInCommands";
 
@@ -11,7 +11,7 @@ import { CommandNotFoundError } from "../Errors/CommandNotFoundError";
 import { NoRootHandlerError } from "../Errors/NoRootHandlerError";
 
 import type { Arguments } from "yargs-parser";
-import type {
+import {
   CommandInput,
   CommandRegistryPayload,
   MustardCommand,
@@ -21,7 +21,9 @@ import type {
   CommandList,
 } from "../Typings/Configuration.struct";
 import type { Provider } from "../Typings/DIService.struct";
-import type { MaybeArray } from "../Typings/Shared.struct";
+import type { Dictionary, MaybeArray } from "../Typings/Shared.struct";
+import { DidYouMeanOptionError } from "../Errors/DidYouMeanOptionError";
+import { UnknownOptionsError } from "../Errors/UnknownOptionsError";
 
 const debug = _debug("mustard:command-line");
 
@@ -43,12 +45,12 @@ export class MustardCommandLine {
   }
 
   public registerProvider(providers: MaybeArray<Provider>) {
-    const providerList = MustardUtils.ensureArray(providers);
+    const providerList = MustardInternalUtils.ensureArray(providers);
 
     if (!providerList.length) return;
 
     providerList.forEach((provider) => {
-      MustardUtils.isConstructable(provider)
+      MustardInternalUtils.isConstructable(provider)
         ? MustardRegistry.ExternalProviderRegistry.set(provider.name, provider)
         : MustardRegistry.ExternalProviderRegistry.set(
             provider.identifier,
@@ -114,12 +116,12 @@ export class MustardCommandLine {
       const instance = new commandRegistration.Class();
 
       const decoratedInstanceFields =
-        MustardUtils.filterDecoratedInstanceFields(instance);
+        MustardInternalUtils.filterDecoratedInstanceFields(instance);
 
       MustardRegistry.upsert(key, { instance, decoratedInstanceFields });
     });
 
-    this.parsedArgs = MustardUtils.parseFromProcessArgs(
+    this.parsedArgs = MustardInternalUtils.parseFromProcessArgs(
       Array.from(MustardRegistry.VariadicOptions),
       MustardRegistry.OptionAliasMap
     );
@@ -144,7 +146,7 @@ export class MustardCommandLine {
 
   private dispatchCommand() {
     const { command: commandRegistration, inputs: commandInput } =
-      MustardUtils.findHandlerCommandWithInputs(
+      MustardInternalUtils.findHandlerCommandWithInputs(
         <CommandInput>this.parsedArgs._
       );
 
@@ -178,6 +180,34 @@ export class MustardCommandLine {
       );
   }
 
+  private static throwOnUnknownOption(
+    instance: MustardCommand,
+    parsedArgs: Dictionary,
+    useDidYouMean: boolean
+  ) {
+    const instanceDeclaredOptions =
+      MustardInternalUtils.getInstanceFields(instance);
+
+    const unknownOptions = Object.keys(parsedArgs).filter(
+      (key) => !instanceDeclaredOptions.includes(key) && key !== "_"
+    );
+
+    if (unknownOptions.length > 0) {
+      const firstUnknownOption = unknownOptions[0]!;
+      if (useDidYouMean) {
+        throw new DidYouMeanOptionError(
+          firstUnknownOption,
+          MustardInternalUtils.levenshtein(
+            firstUnknownOption,
+            instanceDeclaredOptions
+          )
+        );
+      }
+
+      throw new UnknownOptionsError(unknownOptions);
+    }
+  }
+
   private async executeCommandFromRegistration(
     command: CommandRegistryPayload,
     inputs: string[] = []
@@ -185,7 +215,7 @@ export class MustardCommandLine {
     const handler: MustardCommand = command.instance!;
 
     this.options?.allowUnknownOptions === false
-      ? DecoratedClassFieldsNormalizer.throwOnUnknownOptions(
+      ? MustardCommandLine.throwOnUnknownOption(
           handler,
           this.parsedArgs,
           this.options?.didYouMean ?? true

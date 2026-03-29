@@ -16,7 +16,7 @@ import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
 import type { RestrictValueSet } from "../Typings/Controller.struct";
 import type { CommandList } from "../Typings/Configuration.struct";
 
-export class MustardUtils {
+export class MustardInternalUtils {
   public static getInstanceFields(instance: MustardCommand): string[] {
     return <string[]>Reflect.ownKeys(instance);
   }
@@ -35,7 +35,7 @@ export class MustardUtils {
   ) {
     Reflect.set(instance, field, value);
 
-    return MustardUtils.getInstanceFieldValue<T>(instance, field);
+    return MustardInternalUtils.getInstanceFieldValue<T>(instance, field);
   }
 
   public static parseFromProcessArgs(
@@ -64,12 +64,12 @@ export class MustardUtils {
   public static filterDecoratedInstanceFields(
     instance: MustardCommand
   ): TaggedDecoratedInstanceFields[] {
-    const fields = <string[]>MustardUtils.getInstanceFields(instance);
+    const fields = <string[]>MustardInternalUtils.getInstanceFields(instance);
 
     return <TaggedDecoratedInstanceFields[]>fields
       .map((field: string) => {
         const value = <TaggedDecoratedInstanceFields>(
-          MustardUtils.getInstanceFieldValue(instance, field)
+          MustardInternalUtils.getInstanceFieldValue(instance, field)
         );
 
         if (isInstanceFieldDecorationType(value.type)) {
@@ -140,7 +140,7 @@ export class MustardUtils {
     }
 
     // do this recursively till no more inputs
-    return MustardUtils.findHandlerCommandWithInputs(
+    return MustardInternalUtils.findHandlerCommandWithInputs(
       rest,
       childCommands.concat([...rest]),
       matchFromFirstInput

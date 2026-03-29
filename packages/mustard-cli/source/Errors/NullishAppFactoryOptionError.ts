@@ -1,4 +1,9 @@
-export class NullishAppFactoryOptionError extends Error {
+import { MustardError } from "../Typings/MustardError.struct";
+
+export class NullishAppFactoryOptionError
+  extends MustardError
+  implements MustardError
+{
   public name = "NullishAppFactoryOptionError";
 
   constructor() {
@@ -7,5 +12,9 @@ export class NullishAppFactoryOptionError extends Error {
 
   get message(): string {
     return `Mustard factory option not initialized, use @App to initialize entry class`;
+  }
+
+  get messageForAgent() {
+    return ``;
   }
 }

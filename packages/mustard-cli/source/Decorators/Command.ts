@@ -3,7 +3,7 @@ import _debug from "debug";
 import { MustardRegistry } from "../Core/Registry";
 import { MustardConstanst } from "../Utils/Constants";
 
-import { MultiRootCommandError } from "../Errors/MultiRootCommandError";
+import { MultipleRootCommandError } from "../Errors/MultipleRootCommandError";
 
 import type { CommandList } from "../Typings/Configuration.struct";
 import type { ClassStruct, Nullable } from "../Typings/Shared.struct";
@@ -213,7 +213,7 @@ export class CommandDecorators {
   public static RootCommand(): ClassDecoratorImpl {
     return (target, context) => {
       if (CommandDecorators.RootCommandTargetClass) {
-        throw new MultiRootCommandError(
+        throw new MultipleRootCommandError(
           CommandDecorators.RootCommandTargetClass,
           target
         );
@@ -247,5 +247,26 @@ export class CommandDecorators {
         childCommandList,
       });
     };
+  }
+
+  /**
+   * Mark command as dangerous
+   */
+  public static Dangerous(): ClassDecoratorImpl {
+    return (target, context) => {};
+  }
+
+  /**
+   * Mark command as require approval
+   */
+  public static RequireApproval(): ClassDecoratorImpl {
+    return (target, context) => {};
+  }
+
+  /**
+   * Mark command as safe
+   */
+  public static Safe(): ClassDecoratorImpl {
+    return (target, context) => {};
   }
 }

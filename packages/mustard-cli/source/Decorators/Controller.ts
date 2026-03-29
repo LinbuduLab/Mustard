@@ -1,4 +1,4 @@
-import { MustardUtils } from "../Utils/Utils";
+import { MustardInternalUtils } from "../Utils/Utils";
 
 import type { RestrictValueSet } from "../Typings/Controller.struct";
 import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
@@ -33,7 +33,7 @@ export class ControllerDecorators {
         const instanceField = String(context.name);
         const currentValue = Reflect.get(this as object, instanceField);
 
-        if (MustardUtils.isOptionInitializer(currentValue)) {
+        if (MustardInternalUtils.isOptionInitializer(currentValue)) {
           Reflect.set(this as object, instanceField, {
             ...currentValue,
             restrictValues,
