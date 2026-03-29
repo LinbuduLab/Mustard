@@ -1,4 +1,4 @@
-import type { InstanceFieldDecorationTypesUnion } from "../Components/Constants";
+import type { InstanceFieldDecorationTypesUnion } from "../Utils/Constants";
 
 export interface BasePlaceholder {
   type: InstanceFieldDecorationTypesUnion;

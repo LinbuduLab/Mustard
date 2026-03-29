@@ -1,4 +1,4 @@
-import { MustardUtils } from "../Components/Utils";
+import { MustardUtils } from "../Utils/Utils";
 
 import type { RestrictValueSet } from "../Typings/Controller.struct";
 import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";

@@ -1,4 +1,4 @@
-import { CLI } from "../Commands/CommandLine";
+import { CLI } from "./CommandLine";
 import { NullishFactoryOptionError } from "../Errors/NullishFactoryOptionError";
 
 import type { MustardApp } from "../Typings/Factory.struct";

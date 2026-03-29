@@ -1,5 +1,5 @@
 import { MustardRegistry } from "./Registry";
-import { MustardUtils } from "./Utils";
+import { MustardUtils } from "../Utils/Utils";
 import { MustardUtilsProvider } from "./MustardUtilsProvider";
 import groupBy from "lodash.groupby";
 
@@ -24,7 +24,7 @@ import type {
   TaggedDecoratedInstanceFields,
 } from "../Typings/Utils.struct";
 import type { CLIInstantiationConfiguration } from "../Typings/Configuration.struct";
-import { z } from "zod";
+import { SchemaExtractor } from "../Schema/SchemaExtractor";
 
 export class DecoratedClassFieldsNormalizer {
   public static throwOnUnknownOptions(
@@ -200,6 +200,8 @@ export class DecoratedClassFieldsNormalizer {
       optionAlias: injectSubKey,
       restrictValues,
     } = <Required<OptionInitializerPlaceHolder>>value;
+
+    console.log(SchemaExtractor.extractOptionConstraints(schema));
 
     const isCurrentFieldRequired = schema ? !schema.isOptional() : false;
 

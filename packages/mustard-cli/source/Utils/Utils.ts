@@ -2,7 +2,7 @@ import mri from "mri";
 import uniqby from "lodash.uniqby";
 import parse from "yargs-parser";
 import { closest } from "fastest-levenshtein";
-import { MustardRegistry } from "./Registry";
+import { MustardRegistry } from "../Core/Registry";
 import { MustardConstanst } from "./Constants";
 
 import type {

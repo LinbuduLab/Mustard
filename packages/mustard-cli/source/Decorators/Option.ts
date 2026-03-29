@@ -1,6 +1,6 @@
 import _debug from "debug";
 
-import { MustardRegistry } from "../Components/Registry";
+import { MustardRegistry } from "../Core/Registry";
 import { ValidatorFactory } from "../Validators/Factory";
 
 import type {

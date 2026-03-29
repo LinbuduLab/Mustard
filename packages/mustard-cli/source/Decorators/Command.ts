@@ -1,7 +1,7 @@
 import _debug from "debug";
 
-import { MustardRegistry } from "../Components/Registry";
-import { MustardConstanst } from "../Components/Constants";
+import { MustardRegistry } from "../Core/Registry";
+import { MustardConstanst } from "../Utils/Constants";
 
 import { MultiRootCommandError } from "../Errors/MultiRootCommandError";
 

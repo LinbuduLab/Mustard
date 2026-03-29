@@ -1,4 +1,4 @@
-import { MustardRegistry } from "../Components/Registry";
+import { MustardRegistry } from "../Core/Registry";
 
 import type { InjectInitializerPlaceHolder } from "../Typings/Context.struct";
 import type {

@@ -1,9 +1,9 @@
 import _debug from "debug";
 
-import { MustardRegistry } from "../Components/Registry";
-import { MustardConstanst } from "../Components/Constants";
-import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNormalizer";
-import { MustardUtils } from "../Components/Utils";
+import { MustardRegistry } from "./Registry";
+import { MustardConstanst } from "../Utils/Constants";
+import { DecoratedClassFieldsNormalizer } from "./DecoratedFieldsNormalizer";
+import { MustardUtils } from "../Utils/Utils";
 
 import { BuiltInCommands } from "./BuiltInCommands";
 

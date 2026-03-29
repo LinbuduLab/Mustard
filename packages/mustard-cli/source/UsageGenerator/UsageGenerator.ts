@@ -1,5 +1,5 @@
-import { MustardRegistry } from "./Registry";
-import { MustardUtils } from "./Utils";
+import { MustardRegistry } from "../Core/Registry";
+import { MustardUtils } from "../Utils/Utils";
 import uniqBy from "lodash.uniqby";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";

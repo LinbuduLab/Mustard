@@ -5,7 +5,7 @@ import { OptionDecorators } from "../Decorators/Option";
 import { DIServiceDecorators } from "../Decorators/DIService";
 import { ControllerDecorators } from "../Decorators/Controller";
 
-import { MustardFactory } from "../Components/MustardFactory";
+import { MustardFactory } from "../Core/MustardFactory";
 
 export const { App } = MustardFactory;
 export const { Command, RootCommand } = CommandDecorators;

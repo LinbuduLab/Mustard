@@ -1,11 +1,11 @@
 import {
   CommandRegistryPayload,
   CommandStruct,
-} from "../Typings/Command.struct";
+} from "../source/Typings/Command.struct";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { BuiltInCommands } from "../Commands/BuiltInCommands";
-import { MustardConstanst } from "../Components/Constants";
-import { UsageInfoGenerator } from "../Components/UsageGenerator";
+import { BuiltInCommands } from "../source/Commands/BuiltInCommands";
+import { MustardConstanst } from "../source/Components/Constants";
+import { UsageInfoGenerator } from "../source/Components/UsageGenerator/UsageGenerator";
 
 vi.spyOn(UsageInfoGenerator, "printHelp").mockImplementation(() => {});
 vi.spyOn(UsageInfoGenerator, "initGenerator").mockImplementation(() => {});

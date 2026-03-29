@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
-import { UsageInfoGenerator } from "../Components/UsageGenerator";
-import { MustardConstanst } from "../Components/Constants";
+import { UsageInfoGenerator } from "../UsageGenerator/UsageGenerator";
+import { MustardConstanst } from "../Utils/Constants";
 
 import type { Configurations } from "../Typings/Configuration.struct";
 import type { Arguments } from "yargs-parser";
