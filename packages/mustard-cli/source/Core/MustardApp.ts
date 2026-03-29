@@ -1,4 +1,4 @@
-import { CLI } from "./CommandLine";
+import { MustardCommandLine } from "./CommandLine";
 import { NullishAppFactoryOptionError } from "../Errors/NullishAppFactoryOptionError";
 
 import type { MustardLifecycle } from "../Typings/Lifecycle.struct";
@@ -28,7 +28,9 @@ export class MustardApp {
    * @param Cls
    * @returns
    */
-  public static start(Cls: Constructable<MustardLifecycle>): CLI {
+  public static start(
+    Cls: Constructable<MustardLifecycle>
+  ): MustardCommandLine {
     if (!MustardApp.AppFactoryOptions) throw new NullishAppFactoryOptionError();
 
     const ins = new Cls();
@@ -41,7 +43,7 @@ export class MustardApp {
       providers = [],
     } = MustardApp.AppFactoryOptions;
 
-    const cli = new CLI(name ?? "", commands, configurations);
+    const cli = new MustardCommandLine(name ?? "", commands, configurations);
 
     cli.registerProvider(providers);
 

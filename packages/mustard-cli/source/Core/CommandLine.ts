@@ -25,7 +25,7 @@ import type { MaybeArray } from "../Typings/Shared.struct";
 
 const debug = _debug("mustard:command-line");
 
-export class CLI {
+export class MustardCommandLine {
   constructor(
     readonly identifier: string,
     Commands: CommandList,

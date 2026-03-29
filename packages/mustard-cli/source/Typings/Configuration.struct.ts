@@ -2,9 +2,29 @@ import type { CommandRegistryPayload, MustardCommand } from "./Command.struct";
 import type { Provider } from "./DIService.struct";
 import type { MaybeFactory } from "./Shared.struct";
 
-export interface Configurations {
+export interface MustardConfigurations {
+  /**
+   * Allow unknown options to be passed to the command. If this is set to `false`, Mustard will throw an error when it encounters an unknown option during parse stage.
+   *
+   * @default false
+   */
   allowUnknownOptions?: boolean;
-  debug: boolean;
+
+  /**
+   * Allow Mustard to generate usage information for commands when `--help` or `-h` option is passed.
+   *
+   * You can also specify a custom usage generator:
+   *
+   * Example:
+   *
+   * ```typescript
+   * \@App({
+   *   configurations: {
+   *     enableUsage: (command) => `Help info for ${command.commandInvokeName}.`
+   *   }
+   * })
+   * ```
+   */
   enableUsage: boolean | ((registration?: CommandRegistryPayload) => string);
   enableVersion: false | MaybeFactory<string>;
   ignoreValidationErrors: boolean;
@@ -21,13 +41,13 @@ export interface LifeCycles {
 }
 
 export interface CLIInstantiationConfiguration
-  extends Partial<Configurations> {}
+  extends Partial<MustardConfigurations> {}
 
 export type CommandList = (typeof MustardCommand)[];
 
 export interface AppFactoryOptions {
   name?: string;
   commands: CommandList;
-  configurations?: Partial<Configurations>;
+  configurations?: Partial<MustardConfigurations>;
   providers?: Provider[];
 }

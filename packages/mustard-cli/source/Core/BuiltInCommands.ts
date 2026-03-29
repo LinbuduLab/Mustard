@@ -3,7 +3,7 @@ import chalk from "chalk";
 import { UsageInfoGenerator } from "../UsageGenerator/UsageGenerator";
 import { MustardConstanst } from "../Utils/Constants";
 
-import type { Configurations } from "../Typings/Configuration.struct";
+import type { MustardConfigurations } from "../Typings/Configuration.struct";
 import type { Arguments } from "yargs-parser";
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 import type { MaybeFactory } from "../Typings/Shared.struct";
@@ -38,7 +38,7 @@ export class BuiltInCommands {
     bin: string,
     parsedArgs: Arguments | boolean,
     registration?: CommandRegistryPayload,
-    controller?: Configurations["enableUsage"],
+    controller?: MustardConfigurations["enableUsage"],
     exit = true
   ) {
     const printHelp =
@@ -67,7 +67,7 @@ export class BuiltInCommands {
 
   public static useVersionCommand(
     parsedArgs: Arguments | boolean,
-    controller?: Configurations["enableVersion"],
+    controller?: MustardConfigurations["enableVersion"],
     exit = true
   ) {
     const printVersion =
