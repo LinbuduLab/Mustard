@@ -1,5 +1,5 @@
-export class NullishFactoryOptionError extends Error {
-  public name = "NullishFactoryOptionError";
+export class NullishAppFactoryOptionError extends Error {
+  public name = "NullishAppFactoryOptionError";
 
   constructor() {
     super();

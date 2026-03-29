@@ -1,4 +1,4 @@
-import type { CommandRegistryPayload, CommandStruct } from "./Command.struct";
+import type { CommandRegistryPayload, MustardCommand } from "./Command.struct";
 import type { Provider } from "./DIService.struct";
 import type { MaybeFactory } from "./Shared.struct";
 
@@ -23,7 +23,7 @@ export interface LifeCycles {
 export interface CLIInstantiationConfiguration
   extends Partial<Configurations> {}
 
-export type CommandList = (typeof CommandStruct)[];
+export type CommandList = (typeof MustardCommand)[];
 
 export interface AppFactoryOptions {
   name?: string;

@@ -14,7 +14,7 @@ import type { Arguments } from "yargs-parser";
 import type {
   CommandInput,
   CommandRegistryPayload,
-  CommandStruct,
+  MustardCommand,
 } from "../Typings/Command.struct";
 import type {
   CLIInstantiationConfiguration,
@@ -127,7 +127,7 @@ export class CLI {
     debug("parsed arguments: %O", this.parsedArgs);
   }
 
-  public start() {
+  public startCommandLine() {
     this.options?.lifeCycles?.onStart?.();
 
     this.instantiateWithParse();
@@ -182,7 +182,7 @@ export class CLI {
     command: CommandRegistryPayload,
     inputs: string[] = []
   ) {
-    const handler: CommandStruct = command.instance!;
+    const handler: MustardCommand = command.instance!;
 
     this.options?.allowUnknownOptions === false
       ? DecoratedClassFieldsNormalizer.throwOnUnknownOptions(

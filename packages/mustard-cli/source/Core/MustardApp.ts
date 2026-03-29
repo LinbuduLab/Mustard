@@ -1,26 +1,26 @@
 import { CLI } from "./CommandLine";
-import { NullishFactoryOptionError } from "../Errors/NullishFactoryOptionError";
+import { NullishAppFactoryOptionError } from "../Errors/NullishAppFactoryOptionError";
 
-import type { MustardApp } from "../Typings/Factory.struct";
+import type { MustardLifecycle } from "../Typings/Lifecycle.struct";
 import type { AppFactoryOptions } from "../Typings/Configuration.struct";
 import type { Constructable, Nullable } from "../Typings/Shared.struct";
 import type { ClassDecoratorImpl } from "../Typings/Decorator.struct";
 
-export class MustardFactory {
-  private static FactoryOptions: Nullable<AppFactoryOptions> = null;
+export class MustardApp {
+  private static AppFactoryOptions: Nullable<AppFactoryOptions> = null;
 
   /**
    * Register application entry handler
    * @returns
    */
-  public static App(configuration: AppFactoryOptions): ClassDecoratorImpl {
+  public static App(appFactoryOptions: AppFactoryOptions): ClassDecoratorImpl {
     return () => {
-      MustardFactory.FactoryOptions = configuration;
+      MustardApp.AppFactoryOptions = appFactoryOptions;
     };
   }
 
   private static flush(): void {
-    MustardFactory.FactoryOptions = null;
+    MustardApp.AppFactoryOptions = null;
   }
 
   /**
@@ -28,8 +28,8 @@ export class MustardFactory {
    * @param Cls
    * @returns
    */
-  public static init(Cls: Constructable<MustardApp>): CLI {
-    if (!MustardFactory.FactoryOptions) throw new NullishFactoryOptionError();
+  public static start(Cls: Constructable<MustardLifecycle>): CLI {
+    if (!MustardApp.AppFactoryOptions) throw new NullishAppFactoryOptionError();
 
     const ins = new Cls();
 
@@ -39,7 +39,7 @@ export class MustardFactory {
       configurations = {},
 
       providers = [],
-    } = MustardFactory.FactoryOptions;
+    } = MustardApp.AppFactoryOptions;
 
     const cli = new CLI(name ?? "", commands, configurations);
 
@@ -53,7 +53,9 @@ export class MustardFactory {
       },
     });
 
-    MustardFactory.flush();
+    MustardApp.flush();
+
+    cli.startCommandLine();
 
     return cli;
   }

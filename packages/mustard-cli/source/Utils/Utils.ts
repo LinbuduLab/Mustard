@@ -3,12 +3,12 @@ import uniqby from "lodash.uniqby";
 import parse from "yargs-parser";
 import { closest } from "fastest-levenshtein";
 import { MustardRegistry } from "../Core/Registry";
-import { MustardConstanst } from "./Constants";
+import { MustardConstanst, isInstanceFieldDecorationType } from "./Constants";
 
 import type {
   CommandInput,
   CommandRegistryPayload,
-  CommandStruct,
+  MustardCommand,
 } from "../Typings/Command.struct";
 import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
 import type { Constructable, Dictionary } from "../Typings/Shared.struct";
@@ -17,19 +17,19 @@ import type { RestrictValueSet } from "../Typings/Controller.struct";
 import type { CommandList } from "../Typings/Configuration.struct";
 
 export class MustardUtils {
-  public static getInstanceFields(instance: CommandStruct): string[] {
+  public static getInstanceFields(instance: MustardCommand): string[] {
     return <string[]>Reflect.ownKeys(instance);
   }
 
   public static getInstanceFieldValue<TExpected>(
-    instance: CommandStruct,
+    instance: MustardCommand,
     field: string
   ): TExpected {
     return <TExpected>Reflect.get(instance, field);
   }
 
   public static setInstanceFieldValue<T>(
-    instance: CommandStruct,
+    instance: MustardCommand,
     field: string,
     value: T
   ) {
@@ -62,7 +62,7 @@ export class MustardUtils {
   }
 
   public static filterDecoratedInstanceFields(
-    instance: CommandStruct
+    instance: MustardCommand
   ): TaggedDecoratedInstanceFields[] {
     const fields = <string[]>MustardUtils.getInstanceFields(instance);
 
@@ -72,9 +72,7 @@ export class MustardUtils {
           MustardUtils.getInstanceFieldValue(instance, field)
         );
 
-        if (
-          MustardConstanst.InstanceFieldDecorationTypes.includes(value.type)
-        ) {
+        if (isInstanceFieldDecorationType(value.type)) {
           return {
             key: field,
             type: value.type,

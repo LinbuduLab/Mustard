@@ -4,7 +4,8 @@ import uniqBy from "lodash.uniqby";
 
 import type { CommandRegistryPayload } from "../Typings/Command.struct";
 import type { Nullable } from "../Typings/Shared.struct";
-import { Arguments } from "yargs-parser";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants";
+import { SchemaExtractor } from "./SchemaExtractor";
 
 interface SharedInfo {
   name: string;
@@ -83,25 +84,33 @@ export class UsageInfoGenerator {
     const decoratedFields = MustardUtils.filterDecoratedInstanceFields(
       instance!
     ).map((option) => {
+      // experimental
+      const schema = option.value.schema;
+      if (schema) {
+        const description = SchemaExtractor.parseSchemaConstraints(schema);
+        console.log("03-29 description: ", description);
+      }
+
       return {
         name: option.key,
         alias: option.value.optionAlias,
         description: option.value.description,
         defaultValue: option.value.initValue,
         type: option.type,
+        schema: option.value.schema,
       };
     });
 
     const options: ParsedOptionInfo[] = decoratedFields.filter(
-      (o) => o.type === "Option"
+      (o) => o.type === InstanceFieldDecorationTypes.Option
     ) as ParsedOptionInfo[];
 
     const variadicOptions: ParsedOptionInfo[] = decoratedFields.filter(
-      (o) => o.type === "VariadicOption"
+      (o) => o.type === InstanceFieldDecorationTypes.VariadicOption
     ) as ParsedOptionInfo[];
 
     const input: ParsedOptionInfo = decoratedFields.find(
-      (o) => o.type === "Input"
+      (o) => o.type === InstanceFieldDecorationTypes.Input
     ) as ParsedOptionInfo;
 
     const command: ParsedCommandUsage = {

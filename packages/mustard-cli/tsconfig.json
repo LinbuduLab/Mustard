@@ -28,6 +28,6 @@
     "baseUrl": ".",
     "rootDir": "source"
   },
-  "include": ["source", "__tests__"],
-  "exclude": ["dist", "samples", "__tests__", "vitest.config.ts", "sample.ts"]
+  "include": ["source"],
+  "exclude": ["dist", "tests"]
 }

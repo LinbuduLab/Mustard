@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 
-import { MustardFactory } from "mustard-cli";
+import { MustardApp } from "mustard-cli";
 import {
   Command,
   RootCommand,
@@ -10,16 +10,30 @@ import {
   Input,
 } from "mustard-cli/decorator";
 import { Validator } from "mustard-cli/validator";
-import type { CommandStruct, MustardApp } from "mustard-cli/cli";
+
+import type { MustardCommand } from "mustard-cli/cli";
 
 import path from "path";
 
 const require = createRequire(import.meta.url);
 
 @RootCommand()
-class RootCommandHandle implements CommandStruct {
-  @Option("msg", "m", Validator.Required().String().MinLength(5))
+class RootCommandHandle implements MustardCommand {
+  @Option(
+    "msg",
+    "m",
+    Validator.Required().String().Email().MinLength(5).EndsWith(".com")
+  )
   public msg = "default value of msg";
+
+  @Option("msg2", Validator.Number())
+  public msg2 = "default value of msg";
+
+  @Option("msg3", Validator.Boolean())
+  public msg3 = false;
+
+  @Option("msg4", Validator.Date())
+  public msg4 = false;
 
   public run(): void {
     console.log(`Root command executed with: msg: ${this.msg}`);
@@ -27,7 +41,7 @@ class RootCommandHandle implements CommandStruct {
 }
 
 @Command("update", "u", "update project dependencies")
-class UpdateCommand implements CommandStruct {
+class UpdateCommand implements MustardCommand {
   @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
   public depth = 10;
 
@@ -55,7 +69,7 @@ class UpdateCommand implements CommandStruct {
 }
 
 @Command("sync", "s", "sync project")
-class SyncCommand implements CommandStruct {
+class SyncCommand implements MustardCommand {
   @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
   public depth = 10;
 
@@ -83,10 +97,6 @@ class SyncCommand implements CommandStruct {
     enableVersion: require(path.resolve("./package.json")).version,
   },
 })
-class Project implements MustardApp {
-  onStart() {}
+class SampleApp {}
 
-  onComplete() {}
-}
-
-MustardFactory.init(Project).start();
+MustardApp.start(SampleApp);

@@ -1,15 +1,17 @@
-import type { InstanceFieldDecorationTypesUnion } from "../Utils/Constants";
+import type { z } from "zod";
+import type { InstanceFieldDecorationTypes } from "../Utils/Constants";
 
 export interface BasePlaceholder {
-  type: InstanceFieldDecorationTypesUnion;
+  type: InstanceFieldDecorationTypes;
   optionName?: string;
   optionAlias?: string;
   description?: string;
   initValue?: unknown;
+  schema?: z.Schema;
 }
 
 export type TaggedDecoratedInstanceFields = {
   key: string;
-  type: InstanceFieldDecorationTypesUnion;
+  type: InstanceFieldDecorationTypes;
   value: BasePlaceholder;
 };

@@ -4,17 +4,17 @@ import type { TaggedDecoratedInstanceFields } from "./Utils.struct";
 
 export type CommandRegistryPayload = {
   commandInvokeName: string;
-  Class: Constructable<CommandStruct>;
+  Class: Constructable<MustardCommand>;
   root: boolean;
   childCommandList: CommandList;
 
   commandAlias?: Nullable<string>;
   description?: Nullable<string>;
-  instance: CommandStruct;
+  instance: MustardCommand;
   decoratedInstanceFields: TaggedDecoratedInstanceFields[];
 };
 
-export abstract class CommandStruct {
+export abstract class MustardCommand {
   abstract example?: () => string;
 
   abstract run(): MaybePromise<void>;

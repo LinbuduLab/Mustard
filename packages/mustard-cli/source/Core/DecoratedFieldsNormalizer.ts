@@ -17,18 +17,17 @@ import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
 import type { Dictionary } from "../Typings/Shared.struct";
 import type {
   CommandRegistryPayload,
-  CommandStruct,
+  MustardCommand,
 } from "../Typings/Command.struct";
 import type {
   BasePlaceholder,
   TaggedDecoratedInstanceFields,
 } from "../Typings/Utils.struct";
 import type { CLIInstantiationConfiguration } from "../Typings/Configuration.struct";
-import { SchemaExtractor } from "../Schema/SchemaExtractor";
 
 export class DecoratedClassFieldsNormalizer {
   public static throwOnUnknownOptions(
-    instance: CommandStruct,
+    instance: MustardCommand,
     parsedArgs: Dictionary,
     useDidYouMean: boolean
   ) {
@@ -115,7 +114,7 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeInputField(
-    instance: CommandStruct,
+    instance: MustardCommand,
     instanceField: string,
     inputs: string[] = [],
     value: BasePlaceholder
@@ -131,7 +130,7 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeInjectField(
-    instance: CommandStruct,
+    instance: MustardCommand,
     instanceField: string
   ) {
     const injectValue = <InjectInitializerPlaceHolder>(
@@ -165,7 +164,7 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeContextField(
-    instance: CommandStruct,
+    instance: MustardCommand,
     instanceField: string
   ) {
     MustardUtils.setInstanceFieldValue(instance, instanceField, {
@@ -177,7 +176,7 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeUtilField(
-    instance: CommandStruct,
+    instance: MustardCommand,
     instanceField: string
   ) {
     MustardUtils.setInstanceFieldValue(
@@ -188,7 +187,7 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeOption(
-    instance: CommandStruct,
+    instance: MustardCommand,
     instanceField: string,
     parsedArgs: Dictionary,
     value: BasePlaceholder
@@ -200,8 +199,6 @@ export class DecoratedClassFieldsNormalizer {
       optionAlias: injectSubKey,
       restrictValues,
     } = <Required<OptionInitializerPlaceHolder>>value;
-
-    console.log(SchemaExtractor.extractOptionConstraints(schema));
 
     const isCurrentFieldRequired = schema ? !schema.isOptional() : false;
 
@@ -275,7 +272,7 @@ export class DecoratedClassFieldsNormalizer {
   }
 
   public static normalizeOptions(
-    instance: CommandStruct,
+    instance: MustardCommand,
     instanceField: string,
     parsedArgs: Dictionary,
     commonFields: TaggedDecoratedInstanceFields[]
