@@ -2,15 +2,15 @@ import { MustardRegistry } from "../Components/Registry";
 
 import type { InjectInitializerPlaceHolder } from "../Typings/Context.struct";
 import type {
-  AnyClassDecoratorReturnType,
-  AnyClassFieldDecoratorReturnType,
-} from "../Typings/Temp";
+  ClassDecoratorImpl,
+  ClassFieldDecoratorImpl,
+} from "../Typings/Decorator.struct";
 
 /**
  * DI related decorators
  */
 export class DIServiceDecorators {
-  public static Inject(identifier?: string): AnyClassFieldDecoratorReturnType {
+  public static Inject(identifier?: string): ClassFieldDecoratorImpl {
     return (_, context) => () =>
       <InjectInitializerPlaceHolder>{
         type: "Inject",
@@ -18,7 +18,7 @@ export class DIServiceDecorators {
       };
   }
 
-  public static Provide(identifier?: string): AnyClassDecoratorReturnType {
+  public static Provide(identifier?: string): ClassDecoratorImpl {
     return (target, context) => () => {
       MustardRegistry.ExternalProviderRegistry.set(
         identifier ?? context.name,

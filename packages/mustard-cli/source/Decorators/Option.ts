@@ -8,7 +8,7 @@ import type {
   OptionConfiguration,
   VariadicOptionConfiguration,
 } from "../Typings/Option.struct";
-import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
 import type { Nullable } from "../Typings/Shared.struct";
 
 const debug = _debug("mustard:decorator:option");
@@ -25,7 +25,7 @@ export class OptionDecorators {
    *   public dry: boolean;
    * }
    */
-  public static Option(): AnyClassFieldDecoratorReturnType;
+  public static Option(): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
    * @example
@@ -34,7 +34,7 @@ export class OptionDecorators {
    *   public dry: boolean;
    * }
    */
-  public static Option(optionName: string): AnyClassFieldDecoratorReturnType;
+  public static Option(optionName: string): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
    * @example
@@ -45,7 +45,7 @@ export class OptionDecorators {
    */
   public static Option(
     validator: Partial<ValidatorFactory>
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
    * @example
@@ -56,7 +56,7 @@ export class OptionDecorators {
    */
   public static Option(
     optionConfig: OptionConfiguration
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
    * @example
@@ -71,7 +71,7 @@ export class OptionDecorators {
   public static Option(
     optionName: string,
     aliasOrDescription: string
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
    * @example
@@ -83,7 +83,7 @@ export class OptionDecorators {
   public static Option(
     optionName: string,
     validator: Partial<ValidatorFactory>
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
    * @example
@@ -99,7 +99,7 @@ export class OptionDecorators {
     optionName: string,
     aliasOrDescription: string,
     validator: Partial<ValidatorFactory>
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
    * @example
@@ -112,7 +112,7 @@ export class OptionDecorators {
     optionName: string,
     alias: string,
     description: string
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
    * @example
@@ -126,7 +126,7 @@ export class OptionDecorators {
     alias: string,
     description: string,
     validator: Partial<ValidatorFactory>
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   public static Option(
     optionNameOrValidatorOrCompleteConfig?:
       | string
@@ -135,7 +135,7 @@ export class OptionDecorators {
     aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
     descriptionOrValidator?: string | Partial<ValidatorFactory>,
     validator?: Partial<ValidatorFactory>
-  ): AnyClassFieldDecoratorReturnType {
+  ): ClassFieldDecoratorImpl {
     if (
       !optionNameOrValidatorOrCompleteConfig &&
       !aliasOrDescriptionOrValidator &&
@@ -243,7 +243,7 @@ export class OptionDecorators {
     alias?: Nullable<string>,
     description?: Nullable<string>,
     validator?: Nullable<Partial<ValidatorFactory>>
-  ): AnyClassFieldDecoratorReturnType {
+  ): ClassFieldDecoratorImpl {
     return (_, { name }) =>
       (initValue) => {
         const applyOptionName = optionName ?? String(name);
@@ -273,7 +273,7 @@ export class OptionDecorators {
    *   public packages: string[];
    * }
    */
-  public static VariadicOption(): AnyClassFieldDecoratorReturnType;
+  public static VariadicOption(): ClassFieldDecoratorImpl;
   /**
    * Register variadic option value inject
    * @example
@@ -282,9 +282,7 @@ export class OptionDecorators {
    *   public packages: string[];
    * }
    */
-  public static VariadicOption(
-    optionName: string
-  ): AnyClassFieldDecoratorReturnType;
+  public static VariadicOption(optionName: string): ClassFieldDecoratorImpl;
   /**
    * Register variadic option value inject
    * @example
@@ -295,7 +293,7 @@ export class OptionDecorators {
    */
   public static VariadicOption(
     config: VariadicOptionConfiguration
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   /**
    * Register variadic option value inject
    * @example
@@ -310,7 +308,7 @@ export class OptionDecorators {
   public static VariadicOption(
     optionName: string,
     aliasOrDescription?: string
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   /**
    * Register variadic option value inject
    * @example
@@ -323,12 +321,12 @@ export class OptionDecorators {
     optionName: string,
     alias: string,
     description: string
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   public static VariadicOption(
     optionNameOrCompleteConfig?: string | VariadicOptionConfiguration,
     aliasOrDescription?: string,
     description?: string
-  ): AnyClassFieldDecoratorReturnType {
+  ): ClassFieldDecoratorImpl {
     if (typeof optionNameOrCompleteConfig === "object") {
       const {
         name = null,
@@ -371,7 +369,7 @@ export class OptionDecorators {
     optionName?: Nullable<string>,
     alias?: Nullable<string>,
     description?: Nullable<string>
-  ): AnyClassFieldDecoratorReturnType {
+  ): ClassFieldDecoratorImpl {
     return (_, context) => (initValue) => {
       const applyOptionName = optionName ?? String(context.name);
 
@@ -402,7 +400,7 @@ export class OptionDecorators {
    * }
    * @returns
    */
-  public static Options(): AnyClassFieldDecoratorReturnType {
+  public static Options(): ClassFieldDecoratorImpl {
     return (_, context) => (initValue) => {
       debug("Options registered in %s field", context.name);
       return <OptionInitializerPlaceHolder>{

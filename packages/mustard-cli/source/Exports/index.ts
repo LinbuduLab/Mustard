@@ -15,5 +15,5 @@ export type * from "../Typings/DIService.struct";
 export type * from "../Typings/Factory.struct";
 export type * from "../Typings/Option.struct";
 export type * from "../Typings/Shared.struct";
-export type * from "../Typings/Temp";
+export type * from "../Typings/Decorator.struct";
 export type * from "../Typings/Utils.struct";

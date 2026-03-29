@@ -7,7 +7,7 @@ import { MultiRootCommandError } from "../Errors/MultiRootCommandError";
 
 import type { CommandList } from "../Typings/Configuration.struct";
 import type { ClassStruct, Nullable } from "../Typings/Shared.struct";
-import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
+import type { ClassDecoratorImpl } from "../Typings/Decorator.struct";
 import type { CommandConfiguration } from "../Typings/Command.struct";
 
 const debug = _debug("mustard:decorator:command");
@@ -24,16 +24,14 @@ export class CommandDecorators {
    * \@Command('run')
    * class RunCommand {}
    */
-  public static Command(commandName: string): AnyClassDecoratorReturnType;
+  public static Command(commandName: string): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
    * \@Command({ name: 'run', alias: 'r' })
    * class RunCommand {}
    */
-  public static Command(
-    config: CommandConfiguration
-  ): AnyClassDecoratorReturnType;
+  public static Command(config: CommandConfiguration): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -46,7 +44,7 @@ export class CommandDecorators {
   public static Command(
     commandName: string,
     aliasOrDescription: string
-  ): AnyClassDecoratorReturnType;
+  ): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -59,7 +57,7 @@ export class CommandDecorators {
   public static Command(
     commandName: string,
     childCommandList: CommandList
-  ): AnyClassDecoratorReturnType;
+  ): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -70,7 +68,7 @@ export class CommandDecorators {
     commandName: string,
     alias: string,
     description: string
-  ): AnyClassDecoratorReturnType;
+  ): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -87,7 +85,7 @@ export class CommandDecorators {
     commandName: string,
     aliasOrDescription: string,
     childCommandList: CommandList
-  ): AnyClassDecoratorReturnType;
+  ): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -102,13 +100,13 @@ export class CommandDecorators {
     alias: string,
     description: string,
     childCommandList: CommandList
-  ): AnyClassDecoratorReturnType;
+  ): ClassDecoratorImpl;
   public static Command(
     commandNameOrConfig: string | CommandConfiguration,
     aliasOrDescriptionOrChildComnandList?: string | CommandList,
     descriptionOrChildComnandList?: string | CommandList,
     childCommandList?: CommandList
-  ): AnyClassDecoratorReturnType {
+  ): ClassDecoratorImpl {
     //  @Command(config: CommandConfiguration)
     if (typeof commandNameOrConfig === "object") {
       const { name, alias, description, childCommandList } =
@@ -212,7 +210,7 @@ export class CommandDecorators {
    * Register root command handler class
    * @returns
    */
-  public static RootCommand(): AnyClassDecoratorReturnType {
+  public static RootCommand(): ClassDecoratorImpl {
     return (target, context) => {
       if (CommandDecorators.RootCommandTargetClass) {
         throw new MultiRootCommandError(
@@ -236,7 +234,7 @@ export class CommandDecorators {
     commandAlias?: Nullable<string>,
     description?: Nullable<string>,
     childCommandList: CommandList = []
-  ): AnyClassDecoratorReturnType {
+  ): ClassDecoratorImpl {
     return (target, context) => {
       debug("Command %s registered", commandInvokeName);
 

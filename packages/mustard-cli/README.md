@@ -4,18 +4,14 @@
 
 IoC & [Native ECMAScript Decorator](https://github.com/tc39/proposal-decorators) based command line app builder.
 
+## First-class agent support
+
+-
+
 ## Requires
 
-- **Node.js >= 16.0.0**
+- **Node.js >= 24.0.0**
 - **TypeScript >= 5.0.0**
-
-Before TypeScript 5.0 released, you may need to configure the used TypeScript version like below in `.vscode/settings.json`:
-
-```json
-{
-  "typescript.tsdk": "node_modules/typescript/lib"
-}
-```
 
 ## Features
 

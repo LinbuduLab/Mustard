@@ -2,7 +2,7 @@ import type {
   ContextInitializerPlaceHolder,
   UtilsInitializerPlaceHolder,
 } from "../Typings/Context.struct";
-import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
 
 /**
  * Built-in providers related decorators
@@ -20,7 +20,7 @@ export class BuiltInDecorators {
    *   };
    * }
    */
-  public static Utils(): AnyClassFieldDecoratorReturnType {
+  public static Utils(): ClassFieldDecoratorImpl {
     return (_, context) => () =>
       <UtilsInitializerPlaceHolder>{
         type: "Utils",
@@ -39,7 +39,7 @@ export class BuiltInDecorators {
    *   };
    * }
    */
-  public static Ctx(): AnyClassFieldDecoratorReturnType {
+  public static Ctx(): ClassFieldDecoratorImpl {
     return (_, context) => () =>
       <ContextInitializerPlaceHolder>{
         type: "Context",

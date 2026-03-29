@@ -4,7 +4,7 @@ import { NullishFactoryOptionError } from "../Errors/NullishFactoryOptionError";
 import type { MustardApp } from "../Typings/Factory.struct";
 import type { AppFactoryOptions } from "../Typings/Configuration.struct";
 import type { Constructable, Nullable } from "../Typings/Shared.struct";
-import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
+import type { ClassDecoratorImpl } from "../Typings/Decorator.struct";
 
 export class MustardFactory {
   private static FactoryOptions: Nullable<AppFactoryOptions> = null;
@@ -13,9 +13,7 @@ export class MustardFactory {
    * Register application entry handler
    * @returns
    */
-  public static App(
-    configuration: AppFactoryOptions
-  ): AnyClassDecoratorReturnType {
+  public static App(configuration: AppFactoryOptions): ClassDecoratorImpl {
     return () => {
       MustardFactory.FactoryOptions = configuration;
     };

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "pnpm --filter mustard-* build",
+    "build": "pnpm --recursive --filter mustard-* build",
     "dev": "pnpm --filter mustard-cli dev",
     "release": "pnpm --filter mustard-cli publish --no-git-checks",
     "test": "pnpm --filter mustard-cli test -- -u"

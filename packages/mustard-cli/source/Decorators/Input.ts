@@ -1,4 +1,4 @@
-import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
 import type { InputConfiguration } from "../Typings/Option.struct";
 
 export class InputDecorator {
@@ -15,7 +15,7 @@ export class InputDecorator {
    *   public projects: string[];
    * }
    */
-  public static Input(description?: string): AnyClassFieldDecoratorReturnType;
+  public static Input(description?: string): ClassFieldDecoratorImpl;
 
   /**
    * Inject inputs after commands
@@ -27,10 +27,10 @@ export class InputDecorator {
    */
   public static Input(
     configuration?: InputConfiguration
-  ): AnyClassFieldDecoratorReturnType;
+  ): ClassFieldDecoratorImpl;
   public static Input(
     config?: string | InputConfiguration
-  ): AnyClassFieldDecoratorReturnType {
+  ): ClassFieldDecoratorImpl {
     const inputDescription =
       typeof config === "string" ? config : config?.description;
 

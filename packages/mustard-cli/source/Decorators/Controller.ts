@@ -1,7 +1,7 @@
 import { MustardUtils } from "../Components/Utils";
 
 import type { RestrictValueSet } from "../Typings/Controller.struct";
-import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
 
 export class ControllerDecorators {
   /**
@@ -27,14 +27,14 @@ export class ControllerDecorators {
    */
   public static Restrict(
     restrictValues: RestrictValueSet
-  ): AnyClassFieldDecoratorReturnType {
-    return (_, context) => {
+  ): ClassFieldDecoratorImpl {
+    return (_value, context) => {
       context.addInitializer(function () {
         const instanceField = String(context.name);
-        const currentValue = Reflect.get(this, instanceField);
+        const currentValue = Reflect.get(this as object, instanceField);
 
         if (MustardUtils.isOptionInitializer(currentValue)) {
-          Reflect.set(this, instanceField, {
+          Reflect.set(this as object, instanceField, {
             ...currentValue,
             restrictValues,
           });
