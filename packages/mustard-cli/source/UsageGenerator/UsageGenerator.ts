@@ -216,11 +216,14 @@ ${optionsPart}`;
           collect.input.description ? `, ${collect.input.description}` : ""
         }${
           collect.input.defaultValue
-            ? `, default: ${JSON.stringify(
-                collect.input.defaultValue,
-                null,
-                2
-              )}`
+            ? `,` +
+              // Checks
+              `` +
+              // Restricts
+              `` +
+              // XOR
+              `` +
+              ` default: ${JSON.stringify(collect.input.defaultValue, null, 2)}`
             : ""
         }]`
       : "";

@@ -8,6 +8,8 @@ import {
   VariadicOption,
   App,
   Input,
+  Restrict,
+  XOR,
 } from "mustard-cli/decorator";
 import { Validator } from "mustard-cli/validator";
 
@@ -34,6 +36,14 @@ class RootCommandHandle implements MustardCommand {
 
   @Option("msg4", Validator.Date())
   public msg4 = false;
+
+  @VariadicOption("msg5")
+  public msg5: string[] = [];
+
+  @XOR()
+  @Option("msg6")
+  @Restrict(["foo", "bar", "baz"])
+  public msg6: string = "foo";
 
   public run(): void {
     console.log(`Root command executed with: msg: ${this.msg}`);
