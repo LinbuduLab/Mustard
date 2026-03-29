@@ -72,6 +72,7 @@ export class MustardUtils {
           MustardUtils.getInstanceFieldValue(instance, field)
         );
 
+        console.log("03-29 value: ", value);
         if (isInstanceFieldDecorationType(value.type)) {
           return {
             key: field,

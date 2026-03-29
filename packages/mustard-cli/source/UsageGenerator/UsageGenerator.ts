@@ -84,13 +84,6 @@ export class UsageInfoGenerator {
     const decoratedFields = MustardUtils.filterDecoratedInstanceFields(
       instance!
     ).map((option) => {
-      // experimental
-      const schema = option.value.schema;
-      if (schema) {
-        const description = SchemaExtractor.parseSchemaConstraints(schema);
-        console.log("03-29 description: ", description);
-      }
-
       return {
         name: option.key,
         alias: option.value.optionAlias,
