@@ -1,11 +1,8 @@
 import mri from "mri";
 import parse from "yargs-parser";
-import { closest } from "fastest-levenshtein";
+import { closest } from "./Levenshtein.js";
 import { CommandRegistry } from "../Core/CommandRegistry.js";
-import {
-  MustardConstanst,
-  isInstanceFieldDecorationType,
-} from "./Constants.js";
+import { isInstanceFieldDecorationType } from "./Constants.js";
 
 import type {
   CommandInput,

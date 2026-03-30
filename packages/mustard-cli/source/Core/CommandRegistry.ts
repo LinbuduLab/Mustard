@@ -12,21 +12,21 @@ export class CommandRegistry {
 
   public static registerInit(
     identifier: string,
-    payload: Partial<CommandRegistryPayload>,
+    payload: Partial<CommandRegistryPayload>
   ) {
     CommandRegistry.InitCommandRegistry.set(identifier, payload);
   }
 
   public static register(
     identifier: string,
-    payload: Partial<CommandRegistryPayload>,
+    payload: Partial<CommandRegistryPayload>
   ) {
     CommandRegistry.CommandRegistry.set(identifier, payload);
   }
 
   public static upsert(
     identifier: string,
-    payload: Partial<CommandRegistryPayload>,
+    payload: Partial<CommandRegistryPayload>
   ) {
     const prev = CommandRegistry.provide(identifier);
 
@@ -59,11 +59,4 @@ export class CommandRegistry {
   public static provideRootCommand(): CommandRegistryPayload {
     return CommandRegistry.provide(MustardConstanst.RootCommandRegistryKey);
   }
-
-  public static VariadicOptions = new Set<string>();
-
-  // raw - alias
-  public static OptionAliasMap: Dictionary<string> = {};
-
-  public static ExternalProviderRegistry = new Map<unknown, unknown>();
 }

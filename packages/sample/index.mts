@@ -21,28 +21,25 @@ const require = createRequire(import.meta.url);
 
 @RootCommand()
 class RootCommandHandle implements MustardCommand {
-  @Option(
-    "msg",
-    "m",
-    Validator.Required().String().Email().MinLength(5).EndsWith(".com"),
-  )
+  @Option("msg", "m")
+  @Description("description of msg")
   public msg = "default value of msg";
 
-  @Option("msg2", Validator.Number())
-  public msg2 = "default value of msg";
+  // @Option("msg2", Validator.Number())
+  // public msg2 = "default value of msg";
 
-  @Option("msg3", Validator.Boolean())
-  public msg3 = false;
+  // @Option("msg3", Validator.Boolean())
+  // public msg3 = false;
 
-  @Option("msg4", Validator.Date())
-  public msg4 = false;
+  // @Option("msg4", Validator.Date())
+  // public msg4 = false;
 
-  @VariadicOption("msg5")
-  public msg5: string[] = [];
+  // @VariadicOption("msg5")
+  // public msg5: string[] = [];
 
-  @Option("msg6")
-  @Restrict(["foo", "bar", "baz"])
-  public msg6: string = "foo";
+  // @Option("msg6")
+  // @Restrict(["foo", "bar", "baz"])
+  // public msg6: string = "foo";
 
   public run(): void {
     console.log(`Root command executed with: msg: ${this.msg}`);

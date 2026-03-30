@@ -24,6 +24,8 @@ import type { Provider } from "../Typings/DIService.struct.js";
 import type { Dictionary, MaybeArray } from "../Typings/Shared.struct.js";
 import { DidYouMeanOptionError } from "../Errors/DidYouMeanOptionError.js";
 import { UnknownOptionsError } from "../Errors/UnknownOptionsError.js";
+import { ProviderRegistry } from "./ProviderRegistry.js";
+import { GlobalRegistry } from "./GlobalRegistry.js";
 
 const debug = _debug("mustard:command-line");
 
@@ -53,8 +55,8 @@ export class MustardCommandLine {
 
     providerList.forEach((provider) => {
       MustardInternalUtils.isConstructable(provider)
-        ? CommandRegistry.ExternalProviderRegistry.set(provider.name, provider)
-        : CommandRegistry.ExternalProviderRegistry.set(
+        ? ProviderRegistry.ExternalProviderRegistry.set(provider.name, provider)
+        : ProviderRegistry.ExternalProviderRegistry.set(
             provider.identifier,
             provider.value,
           );
@@ -127,8 +129,8 @@ export class MustardCommandLine {
     });
 
     this.parsedArgs = MustardInternalUtils.parseFromProcessArgs(
-      Array.from(CommandRegistry.VariadicOptions),
-      CommandRegistry.OptionAliasMap,
+      Array.from(GlobalRegistry.VariadicOptions),
+      GlobalRegistry.OptionAliasMap,
     );
 
     debug("parsed arguments: %O", this.parsedArgs);

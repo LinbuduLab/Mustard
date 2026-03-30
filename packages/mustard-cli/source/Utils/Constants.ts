@@ -1,15 +1,23 @@
 export enum InstanceFieldDecorationTypes {
-  Option = "Option",
-  Options = "Options",
-  VariadicOption = "VariadicOption",
-  Input = "Input",
-  Context = "Context",
-  Utils = "Utils",
-  Inject = "Inject",
+  Option = "Mustard:Field:Option",
+
+  Options = "Mustard:Field:Options",
+
+  VariadicOption = "Mustard:Field:VariadicOption",
+
+  Input = "Mustard:Field:Input",
+
+  Context = "Mustard:Field:Context",
+
+  Utils = "Mustard:Field:Utils",
+
+  Inject = "Mustard:Field:Inject",
 }
 
 export enum InstanceFieldAdditionalDecorationTypes {
-  Description = "Description",
+  Description = "Mustard:Field:Description",
+
+  Validator = "Mustard:Field:Validator",
 }
 
 export function isInstanceFieldDecorationType(

@@ -2,7 +2,7 @@ import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
 
 import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
 import type { InputConfiguration } from "../Typings/Option.struct.js";
-import { InputInitialValue } from "../Typings/Utils.struct.js";
+import { BaseClassFieldInitialValue } from "../Typings/Utils.struct.js";
 
 // export class InputDecoratorInitialValue extends DecoratorInitialValue<InputInitialValue> {
 //   public constructor(value: InputInitialValue) {
@@ -11,6 +11,10 @@ import { InputInitialValue } from "../Typings/Utils.struct.js";
 // }
 
 // class DecoratorInitialValue
+
+export interface InputInitialValue extends BaseClassFieldInitialValue {
+  type: InstanceFieldDecorationTypes.Input;
+}
 
 export class InputDecorator {
   /**

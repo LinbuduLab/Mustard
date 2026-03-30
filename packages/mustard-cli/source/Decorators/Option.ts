@@ -11,6 +11,7 @@ import type {
 import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
 import type { Nullable } from "../Typings/Shared.struct.js";
 import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
+import { GlobalRegistry } from "../Core/GlobalRegistry.js";
 
 const debug = _debug("mustard:decorator:option");
 
@@ -252,11 +253,11 @@ export class OptionDecorators {
         debug("Option %s registered", applyOptionName);
 
         alias
-          ? (CommandRegistry.OptionAliasMap[applyOptionName] = alias)
+          ? (GlobalRegistry.OptionAliasMap[applyOptionName] = alias)
           : void 0;
 
         return <OptionInitializerPlaceHolder>{
-          type: "Option",
+          type: InstanceFieldDecorationTypes.Option,
           optionName: applyOptionName,
           optionAlias: alias,
           initValue,
@@ -376,12 +377,12 @@ export class OptionDecorators {
 
       debug("Variadic Option %s registered", applyOptionName);
 
-      CommandRegistry.VariadicOptions.add(applyOptionName);
+      GlobalRegistry.VariadicOptions.add(applyOptionName);
 
-      alias ? CommandRegistry.VariadicOptions.add(alias) : void 0;
+      alias ? GlobalRegistry.VariadicOptions.add(alias) : void 0;
 
       return <OptionInitializerPlaceHolder>{
-        type: "VariadicOption",
+        type: InstanceFieldDecorationTypes.VariadicOption,
         optionName: applyOptionName,
         optionAlias: alias,
         description,
@@ -405,7 +406,7 @@ export class OptionDecorators {
     return (_, context) => (initValue) => {
       debug("Options registered in %s field", context.name);
       return <OptionInitializerPlaceHolder>{
-        type: "Options",
+        type: InstanceFieldDecorationTypes.Options,
         initValue,
       };
     };

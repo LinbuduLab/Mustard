@@ -3,6 +3,7 @@ import type {
   UtilsInitializerPlaceHolder,
 } from "../Typings/Context.struct.js";
 import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
 
 /**
  * Built-in providers related decorators
@@ -23,7 +24,7 @@ export class BuiltInDecorators {
   public static Utils(): ClassFieldDecoratorImpl {
     return (_, context) => () =>
       <UtilsInitializerPlaceHolder>{
-        type: "Utils",
+        type: InstanceFieldDecorationTypes.Utils,
       };
   }
 
@@ -42,7 +43,7 @@ export class BuiltInDecorators {
   public static Ctx(): ClassFieldDecoratorImpl {
     return (_, context) => () =>
       <ContextInitializerPlaceHolder>{
-        type: "Context",
+        type: InstanceFieldDecorationTypes.Context,
       };
   }
 }

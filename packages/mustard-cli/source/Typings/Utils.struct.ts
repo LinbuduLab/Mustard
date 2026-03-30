@@ -11,10 +11,6 @@ export interface BaseClassFieldInitialValue {
   schema?: z.Schema;
 }
 
-export interface InputInitialValue extends BaseClassFieldInitialValue {
-  type: InstanceFieldDecorationTypes.Input;
-}
-
 export interface OptionInitialValue extends BaseClassFieldInitialValue {
   type: InstanceFieldDecorationTypes.Option;
 

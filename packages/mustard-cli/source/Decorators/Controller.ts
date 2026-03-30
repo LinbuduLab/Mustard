@@ -26,7 +26,7 @@ export class ControllerDecorators {
    * bin run --value=qux // foo
    */
   public static Restrict(
-    restrictValues: RestrictValueSet
+    restrictValues: RestrictValueSet,
   ): ClassFieldDecoratorImpl {
     return (_value, context) => {
       context.addInitializer(function () {

@@ -3,8 +3,12 @@ import type { ZodType } from "zod";
 import type { ClassStruct } from "./Shared.struct.js";
 import type { ValidatorFactory } from "../Validators/Factory.js";
 import type { RestrictValueSet } from "./Controller.struct.js";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
 
-export type OptionInjectionType = "VariadicOption" | "Option" | "Options";
+export type OptionInjectionType =
+  | InstanceFieldDecorationTypes.VariadicOption
+  | InstanceFieldDecorationTypes.Option
+  | InstanceFieldDecorationTypes.Options;
 
 export type OptionRegistryPayload = {
   optionName: string;

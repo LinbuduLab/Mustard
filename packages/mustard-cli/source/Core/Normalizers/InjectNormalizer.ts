@@ -3,6 +3,7 @@ import { MustardInternalUtils } from "../../Utils/Utils.js";
 
 import type { InjectInitializerPlaceHolder } from "../../Typings/Context.struct.js";
 import type { MustardCommand } from "../../Typings/Command.struct.js";
+import { ProviderRegistry } from "../ProviderRegistry.js";
 
 export class InjectNormalizer {
   public static normalize(instance: MustardCommand, instanceField: string) {
@@ -10,7 +11,7 @@ export class InjectNormalizer {
       MustardInternalUtils.getInstanceFieldValue(instance, instanceField)
     );
 
-    const providerFactory = CommandRegistry.ExternalProviderRegistry.get(
+    const providerFactory = ProviderRegistry.ExternalProviderRegistry.get(
       injectValue.identifier,
     );
 

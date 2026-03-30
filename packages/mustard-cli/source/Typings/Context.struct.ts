@@ -1,3 +1,5 @@
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
+
 export type PackageManagerUtils = {
   install: () => void;
   uninstall: () => void;
@@ -26,24 +28,18 @@ export type Context = {
 };
 
 export type ContextInitializerPlaceHolder = {
-  type: "Context";
+  type: InstanceFieldDecorationTypes.Context;
 };
 
 export type InputInitializerPlaceHolder = {
-  type: "Input";
+  type: InstanceFieldDecorationTypes.Input;
 };
 
 export type UtilsInitializerPlaceHolder = {
-  type: "Utils";
+  type: InstanceFieldDecorationTypes.Utils;
 };
 
 export type InjectInitializerPlaceHolder = {
-  type: "Inject";
+  type: InstanceFieldDecorationTypes.Inject;
   identifier: string;
-};
-
-export type ProvideInitializerPlaceHolder = {
-  type: "Provide";
-  identifier: string;
-  context: ClassDecoratorContext;
 };
