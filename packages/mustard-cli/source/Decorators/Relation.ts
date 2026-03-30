@@ -1,4 +1,4 @@
-import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
 
 export class RelationDecorators {
   public static XOR(): ClassFieldDecoratorImpl {

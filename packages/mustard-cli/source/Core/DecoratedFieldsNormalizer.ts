@@ -1,15 +1,15 @@
-import { ContextNormalizer } from "./Normalizers/ContextNormalizer";
-import { InjectNormalizer } from "./Normalizers/InjectNormalizer";
-import { InputNormalizer } from "./Normalizers/InputNormalizer";
-import { OptionNormalizer } from "./Normalizers/OptionNormalizer";
-import { OptionsNormalizer } from "./Normalizers/OptionsNormalizer";
-import { UtilNormalizer } from "./Normalizers/UtilNormalizer";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
 
-import { InstanceFieldDecorationTypes } from "../Utils/Constants";
+import { ContextNormalizer } from "./Normalizers/ContextNormalizer.js";
+import { InjectNormalizer } from "./Normalizers/InjectNormalizer.js";
+import { InputNormalizer } from "./Normalizers/InputNormalizer.js";
+import { OptionNormalizer } from "./Normalizers/OptionNormalizer.js";
+import { OptionsNormalizer } from "./Normalizers/OptionsNormalizer.js";
+import { UtilNormalizer } from "./Normalizers/UtilNormalizer.js";
 
-import type { CommandRegistryPayload } from "../Typings/Command.struct";
-import type { Dictionary } from "../Typings/Shared.struct";
-import type { CLIInstantiationConfiguration } from "../Typings/Configuration.struct";
+import type { CommandRegistryPayload } from "../Typings/Command.struct.js";
+import type { Dictionary } from "../Typings/Shared.struct.js";
+import type { CLIInstantiationConfiguration } from "../Typings/Configuration.struct.js";
 
 export class DecoratedClassFieldsNormalizer {
   private static appOptions: CLIInstantiationConfiguration;
@@ -18,7 +18,7 @@ export class DecoratedClassFieldsNormalizer {
     command: CommandRegistryPayload,
     parsedInputs: string[],
     parsedArgs: Dictionary,
-    appOptions?: CLIInstantiationConfiguration
+    appOptions?: CLIInstantiationConfiguration,
   ) {
     DecoratedClassFieldsNormalizer.appOptions = appOptions ?? {};
 
@@ -40,7 +40,7 @@ export class DecoratedClassFieldsNormalizer {
             instance,
             instanceField,
             parsedInputs,
-            value
+            value,
           );
           break;
         case InstanceFieldDecorationTypes.Option:
@@ -49,7 +49,7 @@ export class DecoratedClassFieldsNormalizer {
             instance,
             instanceField,
             parsedArgs,
-            value
+            value,
           );
           break;
         case InstanceFieldDecorationTypes.Options:
@@ -57,7 +57,7 @@ export class DecoratedClassFieldsNormalizer {
             instance,
             instanceField,
             parsedArgs,
-            decoratedInstanceFields
+            decoratedInstanceFields,
           );
           break;
         default:

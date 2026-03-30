@@ -2,8 +2,8 @@ import { z } from "zod";
 
 import type { ZodType, ZodNumber } from "zod";
 
-import type { BaseValidator, MaybeOptionalZodType } from "./Typings";
-import type { ValidationTypes } from "../Typings/Shared.struct";
+import type { BaseValidator, MaybeOptionalZodType } from "./Typings.js";
+import type { ValidationTypes } from "../Typings/Shared.struct.js";
 
 export class NumberValidator implements BaseValidator<ZodType<Number>, number> {
   _schema: ZodNumber;

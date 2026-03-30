@@ -1,12 +1,12 @@
 import chalk from "chalk";
 
-import { UsageInfoGenerator } from "../UsageGenerator/UsageGenerator";
-import { MustardConstanst } from "../Utils/Constants";
+import { UsageInfoGenerator } from "../UsageGenerator/UsageGenerator.js";
+import { MustardConstanst } from "../Utils/Constants.js";
 
-import type { MustardConfigurations } from "../Typings/Configuration.struct";
+import type { MustardConfigurations } from "../Typings/Configuration.struct.js";
 import type { Arguments } from "yargs-parser";
-import type { CommandRegistryPayload } from "../Typings/Command.struct";
-import type { MaybeFactory } from "../Typings/Shared.struct";
+import type { CommandRegistryPayload } from "../Typings/Command.struct.js";
+import type { MaybeFactory } from "../Typings/Shared.struct.js";
 
 export class BuiltInCommands {
   public static containsHelpFlag(parsedArgs: Arguments): boolean {

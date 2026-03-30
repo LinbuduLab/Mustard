@@ -1,1 +1,1 @@
-export { Validator } from "../Validators";
+export { Validator } from "../Validators/index.js";

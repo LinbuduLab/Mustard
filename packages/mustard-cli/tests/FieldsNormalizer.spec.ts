@@ -10,7 +10,7 @@ import {
   CommandStruct,
 } from "../Typings/Command.struct";
 import { MustardUtils } from "../Components/Utils";
-import { MustardRegistry } from "../Components/Registry";
+import { CommandRegistry } from "../Components/Registry";
 import { Validator } from "../Validators";
 import { ValidationError } from "../Errors/ValidationError";
 
@@ -70,7 +70,7 @@ describe("FieldsNormalizer", () => {
         {
           foo: "bar",
         },
-        false
+        false,
       );
     } catch (error) {
       expect(error).toBeInstanceOf(UnknownOptionsError);
@@ -82,7 +82,7 @@ describe("FieldsNormalizer", () => {
         {
           foo: "bar",
         },
-        true
+        true,
       );
     } catch (error) {
       expect(error).toBeInstanceOf(DidYouMeanError);
@@ -96,27 +96,27 @@ describe("FieldsNormalizer", () => {
   it("should dispatch normalizer", () => {
     vi.spyOn(
       DecoratedClassFieldsNormalizer,
-      "normalizeContextField"
+      "normalizeContextField",
     ).mockImplementationOnce(() => {});
     vi.spyOn(
       DecoratedClassFieldsNormalizer,
-      "normalizeUtilField"
+      "normalizeUtilField",
     ).mockImplementationOnce(() => {});
     vi.spyOn(
       DecoratedClassFieldsNormalizer,
-      "normalizeInputField"
+      "normalizeInputField",
     ).mockImplementationOnce(() => {});
     vi.spyOn(
       DecoratedClassFieldsNormalizer,
-      "normalizeInjectField"
+      "normalizeInjectField",
     ).mockImplementationOnce(() => {});
     vi.spyOn(
       DecoratedClassFieldsNormalizer,
-      "normalizeOption"
+      "normalizeOption",
     ).mockImplementationOnce(() => {});
     vi.spyOn(
       DecoratedClassFieldsNormalizer,
-      "normalizeOptions"
+      "normalizeOptions",
     ).mockImplementationOnce(() => {});
 
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
@@ -134,11 +134,11 @@ describe("FieldsNormalizer", () => {
       },
       [],
       {},
-      {}
+      {},
     );
 
     expect(
-      DecoratedClassFieldsNormalizer.normalizeContextField
+      DecoratedClassFieldsNormalizer.normalizeContextField,
     ).toBeCalledTimes(1);
 
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
@@ -158,11 +158,11 @@ describe("FieldsNormalizer", () => {
       },
       [],
       {},
-      {}
+      {},
     );
 
     expect(DecoratedClassFieldsNormalizer.normalizeInjectField).toBeCalledTimes(
-      1
+      1,
     );
 
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
@@ -181,11 +181,11 @@ describe("FieldsNormalizer", () => {
       },
       [],
       {},
-      {}
+      {},
     );
 
     expect(DecoratedClassFieldsNormalizer.normalizeInputField).toBeCalledTimes(
-      1
+      1,
     );
 
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
@@ -204,7 +204,7 @@ describe("FieldsNormalizer", () => {
       },
       [],
       {},
-      {}
+      {},
     );
 
     expect(DecoratedClassFieldsNormalizer.normalizeOption).toBeCalledTimes(1);
@@ -225,7 +225,7 @@ describe("FieldsNormalizer", () => {
       },
       [],
       {},
-      {}
+      {},
     );
 
     expect(DecoratedClassFieldsNormalizer.normalizeOptions).toBeCalledTimes(1);
@@ -246,7 +246,7 @@ describe("FieldsNormalizer", () => {
       },
       [],
       {},
-      {}
+      {},
     );
 
     expect(DecoratedClassFieldsNormalizer.normalizeOption).toBeCalledTimes(2);
@@ -267,11 +267,11 @@ describe("FieldsNormalizer", () => {
       },
       [],
       {},
-      {}
+      {},
     );
 
     expect(DecoratedClassFieldsNormalizer.normalizeUtilField).toBeCalledTimes(
-      1
+      1,
     );
 
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
@@ -292,22 +292,22 @@ describe("FieldsNormalizer", () => {
       },
       [],
       {},
-      {}
+      {},
     );
 
     expect(DecoratedClassFieldsNormalizer.normalizeUtilField).toBeCalledTimes(
-      1
+      1,
     );
     expect(
-      DecoratedClassFieldsNormalizer.normalizeContextField
+      DecoratedClassFieldsNormalizer.normalizeContextField,
     ).toBeCalledTimes(1);
     expect(DecoratedClassFieldsNormalizer.normalizeInputField).toBeCalledTimes(
-      1
+      1,
     );
     expect(DecoratedClassFieldsNormalizer.normalizeOption).toBeCalledTimes(2);
     expect(DecoratedClassFieldsNormalizer.normalizeOptions).toBeCalledTimes(1);
     expect(DecoratedClassFieldsNormalizer.normalizeInjectField).toBeCalledTimes(
-      1
+      1,
     );
   });
 
@@ -324,7 +324,7 @@ describe("FieldsNormalizer", () => {
     });
 
     // START --- Plain Injecttion ---
-    MustardRegistry.ExternalProviderRegistry = new Map().set("foo", {
+    CommandRegistry.ExternalProviderRegistry = new Map().set("foo", {
       value: "injected-foo-value",
     });
 
@@ -337,9 +337,9 @@ describe("FieldsNormalizer", () => {
     // END --- Plain Injecttion ---
 
     // START --- Function Injecttion ---
-    MustardRegistry.ExternalProviderRegistry = new Map().set(
+    CommandRegistry.ExternalProviderRegistry = new Map().set(
       "foo",
-      () => "computed-injected-foo-value"
+      () => "computed-injected-foo-value",
     );
 
     DecoratedClassFieldsNormalizer.normalizeInjectField(foo, "field1");
@@ -348,10 +348,10 @@ describe("FieldsNormalizer", () => {
     // END --- Function Injecttion ---
 
     // START --- Async Function Injecttion ---
-    MustardRegistry.ExternalProviderRegistry = new Map().set(
+    CommandRegistry.ExternalProviderRegistry = new Map().set(
       "foo",
       () =>
-        new Promise((resolve) => resolve("async-computed-injected-foo-value"))
+        new Promise((resolve) => resolve("async-computed-injected-foo-value")),
     );
 
     await DecoratedClassFieldsNormalizer.normalizeInjectField(foo, "field1");
@@ -362,7 +362,7 @@ describe("FieldsNormalizer", () => {
     // START --- Class Injecttion ---
     class InjectFoo {}
 
-    MustardRegistry.ExternalProviderRegistry = new Map().set("foo", InjectFoo);
+    CommandRegistry.ExternalProviderRegistry = new Map().set("foo", InjectFoo);
 
     DecoratedClassFieldsNormalizer.normalizeInjectField(foo, "field1");
 
@@ -397,7 +397,7 @@ describe("FieldsNormalizer", () => {
       {
         type: "Input",
         initValue: "bar",
-      }
+      },
     );
 
     // @ts-expect-error
@@ -415,7 +415,7 @@ describe("FieldsNormalizer", () => {
         type: "Option",
         optionName: "foo",
         initValue: undefined,
-      }
+      },
     );
 
     expect(foo.field1).toBe("foo-value");
@@ -430,7 +430,7 @@ describe("FieldsNormalizer", () => {
         type: "Option",
         optionName: "foo",
         initValue: "foo-init-value",
-      }
+      },
     );
 
     expect(foo.field1).toBe("foo-value");
@@ -443,7 +443,7 @@ describe("FieldsNormalizer", () => {
         type: "Option",
         optionName: "foo",
         initValue: "foo-init-value",
-      }
+      },
     );
 
     expect(foo.field1).toBe("foo-init-value");
@@ -460,7 +460,7 @@ describe("FieldsNormalizer", () => {
         type: "VariadicOption",
         optionName: "foo",
         initValue: undefined,
-      }
+      },
     );
 
     expect(foo.field1).toEqual(["foo-value"]);
@@ -475,7 +475,7 @@ describe("FieldsNormalizer", () => {
         type: "VariadicOption",
         optionName: "foo",
         initValue: ["foo-init-value"],
-      }
+      },
     );
 
     expect(foo.field1).toEqual(["foo-value"]);
@@ -488,7 +488,7 @@ describe("FieldsNormalizer", () => {
         type: "VariadicOption",
         optionName: "foo",
         initValue: ["foo-init-value"],
-      }
+      },
     );
 
     expect(foo.field1).toEqual(["foo-init-value"]);
@@ -501,7 +501,7 @@ describe("FieldsNormalizer", () => {
       {
         foo: "foo-value",
       },
-      []
+      [],
     );
 
     expect(foo.field1).toEqual({});
@@ -531,7 +531,7 @@ describe("FieldsNormalizer", () => {
             initValue: ["baz-value"],
           },
         },
-      ]
+      ],
     );
 
     expect(foo.field1).toEqual({
@@ -556,7 +556,7 @@ describe("FieldsNormalizer", () => {
         optionName: "foo",
         initValue: "foo-init-value",
         schema: Validator.String().schema,
-      }
+      },
     );
 
     expect(foo.field1).toBe(123);
@@ -577,8 +577,8 @@ describe("FieldsNormalizer", () => {
           optionName: "foo",
           initValue: "foo-init-value",
           schema: Validator.String().schema,
-        }
-      )
+        },
+      ),
     ).toThrow(ValidationError);
 
     (DecoratedClassFieldsNormalizer as any).appOptions = {
@@ -593,7 +593,7 @@ describe("FieldsNormalizer", () => {
         optionName: "requiredField",
         initValue: undefined,
         schema: Validator.Required().String().schema,
-      }
+      },
     );
 
     (DecoratedClassFieldsNormalizer as any).appOptions = {
@@ -609,8 +609,8 @@ describe("FieldsNormalizer", () => {
           optionName: "requiredField",
           initValue: undefined,
           schema: Validator.Required().String().schema,
-        }
-      )
+        },
+      ),
     ).toThrow(ValidationError);
   });
 
@@ -637,7 +637,7 @@ describe("FieldsNormalizer", () => {
             optionName: "noop",
           },
         },
-      ] as any
+      ] as any,
     );
 
     expect(foo.field1).toEqual({});

@@ -1,11 +1,11 @@
-import { StringValidator } from "./StringValidator";
-import { BooleanValidator } from "./BooleanValidator";
-import { NumberValidator } from "./NumberValidator";
-import { DateValidator } from "./DateValidator";
+import { StringValidator } from "./StringValidator.js";
+import { BooleanValidator } from "./BooleanValidator.js";
+import { NumberValidator } from "./NumberValidator.js";
+import { DateValidator } from "./DateValidator.js";
 
 import type { ZodType } from "zod";
 
-import type { Nullable } from "../Typings/Shared.struct";
+import type { Nullable } from "../Typings/Shared.struct.js";
 
 export class ValidatorFactory {
   public schema: Nullable<ZodType> = null;

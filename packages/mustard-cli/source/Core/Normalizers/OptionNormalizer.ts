@@ -1,11 +1,11 @@
-import { MustardInternalUtils } from "../../Utils/Utils";
-import { ValidationError } from "../../Errors/ZodValidationError";
+import { MustardInternalUtils } from "../../Utils/Utils.js";
+import { ValidationError } from "../../Errors/ZodValidationError.js";
 
-import type { OptionInitializerPlaceHolder } from "../../Typings/Option.struct";
-import type { Dictionary } from "../../Typings/Shared.struct";
-import type { MustardCommand } from "../../Typings/Command.struct";
-import type { BasePlaceholder } from "../../Typings/Utils.struct";
-import type { CLIInstantiationConfiguration } from "../../Typings/Configuration.struct";
+import type { OptionInitializerPlaceHolder } from "../../Typings/Option.struct.js";
+import type { Dictionary } from "../../Typings/Shared.struct.js";
+import type { MustardCommand } from "../../Typings/Command.struct.js";
+import type { BasePlaceholder } from "../../Typings/Utils.struct.js";
+import type { CLIInstantiationConfiguration } from "../../Typings/Configuration.struct.js";
 
 export class OptionNormalizer {
   public static normalize(
@@ -13,7 +13,7 @@ export class OptionNormalizer {
     instanceField: string,
     parsedArgs: Dictionary,
     value: BasePlaceholder,
-    appOptions: CLIInstantiationConfiguration = {}
+    appOptions: CLIInstantiationConfiguration = {},
   ) {
     const {
       optionName: injectKey,
@@ -49,8 +49,8 @@ export class OptionNormalizer {
               argValue,
               ValidationError.formatError(
                 injectKey ?? injectSubKey,
-                validation.error
-              )
+                validation.error,
+              ),
             );
           }
         }
@@ -62,13 +62,13 @@ export class OptionNormalizer {
       const restrictedValue = MustardInternalUtils.applyRestrictions(
         validatedValue,
         initValue,
-        restrictValues
+        restrictValues,
       );
 
       MustardInternalUtils.setInstanceFieldValue(
         instance,
         instanceField,
-        restrictedValue
+        restrictedValue,
       );
     } else if (isCurrentFieldRequired) {
       // required field but not specified in parsed args
@@ -78,7 +78,7 @@ export class OptionNormalizer {
         throw new ValidationError(
           injectKey ?? injectSubKey,
           undefined,
-          "Required field not specified in parsed args"
+          "Required field not specified in parsed args",
         );
       }
     } else {
@@ -87,7 +87,7 @@ export class OptionNormalizer {
       MustardInternalUtils.setInstanceFieldValue(
         instance,
         instanceField,
-        initValue ?? undefined
+        initValue ?? undefined,
       );
     }
   }

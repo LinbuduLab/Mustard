@@ -9,7 +9,7 @@ import {
   App,
   Input,
   Restrict,
-  XOR,
+  Description,
 } from "mustard-cli/decorator";
 import { Validator } from "mustard-cli/validator";
 
@@ -24,7 +24,7 @@ class RootCommandHandle implements MustardCommand {
   @Option(
     "msg",
     "m",
-    Validator.Required().String().Email().MinLength(5).EndsWith(".com")
+    Validator.Required().String().Email().MinLength(5).EndsWith(".com"),
   )
   public msg = "default value of msg";
 
@@ -40,7 +40,6 @@ class RootCommandHandle implements MustardCommand {
   @VariadicOption("msg5")
   public msg5: string[] = [];
 
-  @XOR()
   @Option("msg6")
   @Restrict(["foo", "bar", "baz"])
   public msg6: string = "foo";
@@ -50,57 +49,58 @@ class RootCommandHandle implements MustardCommand {
   }
 }
 
-@Command("update", "u", "update project dependencies")
-class UpdateCommand implements MustardCommand {
-  @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
-  public depth = 10;
+// @Command("update", "u", "update project dependencies")
+// class UpdateCommand implements MustardCommand {
+//   @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
+//   public depth = 10;
 
-  @Option(Validator.Boolean())
-  public dry = false;
+//   @Option(Validator.Boolean())
+//   public dry = false;
 
-  @Option({ name: "target", alias: "t" })
-  public targetOption: string;
+//   @Option({ name: "target", alias: "t" })
+//   public targetOption: string;
 
-  @Input()
-  public input: string[] = [];
+//   @Input()
+//   @Description("input description")
+//   public input: string[] = [];
 
-  @VariadicOption()
-  public packages: string[] = [];
+//   @VariadicOption()
+//   public packages: string[] = [];
 
-  public run(): void {
-    console.log(
-      `Update command executed with: depth: ${this.depth}, dry: ${
-        this.dry
-      }, targetOption: ${this.targetOption}, input: ${JSON.stringify(
-        this.input
-      )}, packages: ${JSON.stringify(this.packages)}`
-    );
-  }
-}
+//   public run(): void {
+//     console.log(
+//       `Update command executed with: depth: ${this.depth}, dry: ${
+//         this.dry
+//       }, targetOption: ${this.targetOption}, input: ${JSON.stringify(
+//         this.input,
+//       )}, packages: ${JSON.stringify(this.packages)}`,
+//     );
+//   }
+// }
 
-@Command("sync", "s", "sync project")
-class SyncCommand implements MustardCommand {
-  @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
-  public depth = 10;
+// @Command("sync", "s", "sync project")
+// class SyncCommand implements MustardCommand {
+//   @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
+//   public depth = 10;
 
-  @Option(Validator.Boolean())
-  public dry = false;
+//   @Option(Validator.Boolean())
+//   public dry = false;
 
-  @Option({ name: "target", alias: "t" })
-  public targetOption: string;
+//   @Option({ name: "target", alias: "t" })
+//   public targetOption: string;
 
-  @Input()
-  public input: string[] = [];
+//   @Input()
+//   public input: string[] = [];
 
-  @VariadicOption()
-  public packages: string[] = [];
+//   @VariadicOption()
+//   public packages: string[] = [];
 
-  public run(): void {}
-}
+//   public run(): void {}
+// }
 
 @App({
   name: "create-mustard-app",
-  commands: [RootCommandHandle, UpdateCommand, SyncCommand],
+  commands: [RootCommandHandle],
   configurations: {
     allowUnknownOptions: true,
     enableUsage: true,

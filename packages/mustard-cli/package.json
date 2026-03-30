@@ -56,58 +56,29 @@
     "test:igu": "cross-env TEST_TYPE=INTEGRATION vitest -u",
     "test:unit": "cross-env TEST_TYPE=UNIT vitest"
   },
-  "nodemonConfig": {
-    "delay": 500,
-    "env": {
-      "NODE_ENV": "development"
-    },
-    "execMap": {
-      "ts": "tsx"
-    },
-    "ext": "ts,json",
-    "ignore": [
-      "**/test/**",
-      "**/docs/**",
-      "node_modules"
-    ],
-    "restartable": "rs",
-    "verbose": true,
-    "watch": [
-      "*.ts"
-    ]
-  },
   "dependencies": {
-    "chalk": "^5.0.0",
-    "debug": "^4.3.4",
+    "chalk": "^5.6.2",
+    "debug": "^4.4.3",
     "fastest-levenshtein": "^1.0.16",
-    "find-up": "^6.3.0",
-    "lodash.groupby": "^4.6.0",
-    "lodash.uniqby": "^4.7.0",
+    "find-up": "^8.0.0",
     "mri": "^1.2.0",
-    "yargs-parser": "^21.1.1",
-    "zod": "^3.20.2"
+    "yargs-parser": "^22.0.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.7",
-    "@types/lodash.groupby": "^4.6.7",
-    "@types/lodash.uniqby": "^4.7.7",
-    "@types/node": "^18.11.17",
-    "@types/tmp": "^0.2.3",
-    "@types/yargs-parser": "^21.0.0",
-    "@vitest/coverage-c8": "^0.29.3",
-    "cross-env": "^7.0.3",
-    "execa": "^6.0.0",
-    "lodash": "^4.17.21",
-    "nodemon": "^2.0.20",
-    "tmp": "^0.2.1",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.1",
-    "tsx": "^4.20.6",
-    "typescript": "^5.3.3",
-    "vitest": "^0.29.3"
-  },
-  "peerDependencies": {
-    "typescript": ">=5.0.0"
+    "@types/debug": "^4.1.13",
+    "@types/node": "catalog:",
+    "@types/tmp": "^0.2.6",
+    "@types/yargs-parser": "^21.0.3",
+    "@vitest/coverage-c8": "^0.33.0",
+    "cross-env": "^10.1.0",
+    "execa": "^9.6.1",
+    "lodash": "^4.17.23",
+    "nodemon": "^3.1.14",
+    "tmp": "^0.2.5",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "^4.1.2"
   },
   "publishConfig": {
     "access": "public",

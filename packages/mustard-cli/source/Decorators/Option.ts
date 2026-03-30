@@ -1,15 +1,16 @@
 import _debug from "debug";
 
-import { MustardRegistry } from "../Core/Registry";
-import { ValidatorFactory } from "../Validators/Factory";
+import { CommandRegistry } from "../Core/CommandRegistry.js";
+import { ValidatorFactory } from "../Validators/Factory.js";
 
 import type {
   OptionInitializerPlaceHolder,
   OptionConfiguration,
   VariadicOptionConfiguration,
-} from "../Typings/Option.struct";
-import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
-import type { Nullable } from "../Typings/Shared.struct";
+} from "../Typings/Option.struct.js";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
+import type { Nullable } from "../Typings/Shared.struct.js";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
 
 const debug = _debug("mustard:decorator:option");
 
@@ -44,7 +45,7 @@ export class OptionDecorators {
    * }
    */
   public static Option(
-    validator: Partial<ValidatorFactory>
+    validator: Partial<ValidatorFactory>,
   ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
@@ -55,7 +56,7 @@ export class OptionDecorators {
    * }
    */
   public static Option(
-    optionConfig: OptionConfiguration
+    optionConfig: OptionConfiguration,
   ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
@@ -70,7 +71,7 @@ export class OptionDecorators {
    */
   public static Option(
     optionName: string,
-    aliasOrDescription: string
+    aliasOrDescription: string,
   ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
@@ -82,7 +83,7 @@ export class OptionDecorators {
    */
   public static Option(
     optionName: string,
-    validator: Partial<ValidatorFactory>
+    validator: Partial<ValidatorFactory>,
   ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
@@ -98,7 +99,7 @@ export class OptionDecorators {
   public static Option(
     optionName: string,
     aliasOrDescription: string,
-    validator: Partial<ValidatorFactory>
+    validator: Partial<ValidatorFactory>,
   ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
@@ -111,7 +112,7 @@ export class OptionDecorators {
   public static Option(
     optionName: string,
     alias: string,
-    description: string
+    description: string,
   ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
@@ -125,7 +126,7 @@ export class OptionDecorators {
     optionName: string,
     alias: string,
     description: string,
-    validator: Partial<ValidatorFactory>
+    validator: Partial<ValidatorFactory>,
   ): ClassFieldDecoratorImpl;
   public static Option(
     optionNameOrValidatorOrCompleteConfig?:
@@ -134,7 +135,7 @@ export class OptionDecorators {
       | OptionConfiguration,
     aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
     descriptionOrValidator?: string | Partial<ValidatorFactory>,
-    validator?: Partial<ValidatorFactory>
+    validator?: Partial<ValidatorFactory>,
   ): ClassFieldDecoratorImpl {
     if (
       !optionNameOrValidatorOrCompleteConfig &&
@@ -151,7 +152,7 @@ export class OptionDecorators {
           null,
           null,
           null,
-          optionNameOrValidatorOrCompleteConfig
+          optionNameOrValidatorOrCompleteConfig,
         );
       } else {
         const {
@@ -175,7 +176,7 @@ export class OptionDecorators {
           optionNameOrValidatorOrCompleteConfig,
           null,
           null,
-          null
+          null,
         );
       }
 
@@ -183,7 +184,7 @@ export class OptionDecorators {
         null,
         null,
         null,
-        <Partial<ValidatorFactory>>optionNameOrValidatorOrCompleteConfig
+        <Partial<ValidatorFactory>>optionNameOrValidatorOrCompleteConfig,
       );
     }
 
@@ -203,7 +204,7 @@ export class OptionDecorators {
           optionNameOrValidatorOrCompleteConfig,
           asAlias ? aliasOrDescriptionOrValidator : null,
           asAlias ? null : aliasOrDescriptionOrValidator,
-          null
+          null,
         );
       }
 
@@ -211,7 +212,7 @@ export class OptionDecorators {
         <string>optionNameOrValidatorOrCompleteConfig,
         null,
         null,
-        <Partial<ValidatorFactory>>aliasOrDescriptionOrValidator
+        <Partial<ValidatorFactory>>aliasOrDescriptionOrValidator,
       );
     }
 
@@ -226,7 +227,7 @@ export class OptionDecorators {
         <string>optionNameOrValidatorOrCompleteConfig,
         asAlias ? aliasOrDescriptionOrValidator : null,
         asAlias ? null : aliasOrDescriptionOrValidator,
-        <Partial<ValidatorFactory>>descriptionOrValidator
+        <Partial<ValidatorFactory>>descriptionOrValidator,
       );
     }
 
@@ -234,7 +235,7 @@ export class OptionDecorators {
       <string>optionNameOrValidatorOrCompleteConfig,
       <string>aliasOrDescriptionOrValidator,
       <string>descriptionOrValidator,
-      <Partial<ValidatorFactory>>validator ?? null
+      <Partial<ValidatorFactory>>validator ?? null,
     );
   }
 
@@ -242,7 +243,7 @@ export class OptionDecorators {
     optionName?: Nullable<string>,
     alias?: Nullable<string>,
     description?: Nullable<string>,
-    validator?: Nullable<Partial<ValidatorFactory>>
+    validator?: Nullable<Partial<ValidatorFactory>>,
   ): ClassFieldDecoratorImpl {
     return (_, { name }) =>
       (initValue) => {
@@ -251,7 +252,7 @@ export class OptionDecorators {
         debug("Option %s registered", applyOptionName);
 
         alias
-          ? (MustardRegistry.OptionAliasMap[applyOptionName] = alias)
+          ? (CommandRegistry.OptionAliasMap[applyOptionName] = alias)
           : void 0;
 
         return <OptionInitializerPlaceHolder>{
@@ -292,7 +293,7 @@ export class OptionDecorators {
    * }
    */
   public static VariadicOption(
-    config: VariadicOptionConfiguration
+    config: VariadicOptionConfiguration,
   ): ClassFieldDecoratorImpl;
   /**
    * Register variadic option value inject
@@ -307,7 +308,7 @@ export class OptionDecorators {
    */
   public static VariadicOption(
     optionName: string,
-    aliasOrDescription?: string
+    aliasOrDescription?: string,
   ): ClassFieldDecoratorImpl;
   /**
    * Register variadic option value inject
@@ -320,12 +321,12 @@ export class OptionDecorators {
   public static VariadicOption(
     optionName: string,
     alias: string,
-    description: string
+    description: string,
   ): ClassFieldDecoratorImpl;
   public static VariadicOption(
     optionNameOrCompleteConfig?: string | VariadicOptionConfiguration,
     aliasOrDescription?: string,
-    description?: string
+    description?: string,
   ): ClassFieldDecoratorImpl {
     if (typeof optionNameOrCompleteConfig === "object") {
       const {
@@ -340,7 +341,7 @@ export class OptionDecorators {
       return OptionDecorators.VariadicOptionImpl(
         optionNameOrCompleteConfig ?? null,
         aliasOrDescription ?? null,
-        description
+        description,
       );
     }
 
@@ -348,7 +349,7 @@ export class OptionDecorators {
       return OptionDecorators.VariadicOptionImpl(
         optionNameOrCompleteConfig,
         null,
-        null
+        null,
       );
     }
 
@@ -361,23 +362,23 @@ export class OptionDecorators {
     return OptionDecorators.VariadicOptionImpl(
       optionNameOrCompleteConfig ?? null,
       asAlias ? aliasOrDescription : null,
-      asAlias ? null : aliasOrDescription
+      asAlias ? null : aliasOrDescription,
     );
   }
 
   private static VariadicOptionImpl(
     optionName?: Nullable<string>,
     alias?: Nullable<string>,
-    description?: Nullable<string>
+    description?: Nullable<string>,
   ): ClassFieldDecoratorImpl {
     return (_, context) => (initValue) => {
       const applyOptionName = optionName ?? String(context.name);
 
       debug("Variadic Option %s registered", applyOptionName);
 
-      MustardRegistry.VariadicOptions.add(applyOptionName);
+      CommandRegistry.VariadicOptions.add(applyOptionName);
 
-      alias ? MustardRegistry.VariadicOptions.add(alias) : void 0;
+      alias ? CommandRegistry.VariadicOptions.add(alias) : void 0;
 
       return <OptionInitializerPlaceHolder>{
         type: "VariadicOption",

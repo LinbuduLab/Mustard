@@ -1,7 +1,7 @@
-import { MustardInternalUtils } from "../../Utils/Utils";
+import { MustardInternalUtils } from "../../Utils/Utils.js";
 
-import type { Context } from "../../Typings/Context.struct";
-import type { MustardCommand } from "../../Typings/Command.struct";
+import type { Context } from "../../Typings/Context.struct.js";
+import type { MustardCommand } from "../../Typings/Command.struct.js";
 
 export class ContextNormalizer {
   public static normalize(instance: MustardCommand, instanceField: string) {

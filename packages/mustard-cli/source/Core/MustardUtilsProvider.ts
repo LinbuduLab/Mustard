@@ -3,7 +3,7 @@ import fsp from "fs/promises";
 import tty from "tty";
 import { EOL } from "os";
 
-import type { Nullable } from "../Typings/Shared.struct";
+import type { Nullable } from "../Typings/Shared.struct.js";
 
 interface ReadJsonOptions {
   encoding?: null | undefined;

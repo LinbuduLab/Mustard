@@ -1,11 +1,12 @@
-import type { Constructable } from "./Shared.struct";
+import type { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
+import type { Constructable } from "./Shared.struct.js";
 
 /**
  * ref: https://github.com/tc39/proposal-decorators?tab=readme-ov-file#classes
  */
 export type ClassDecoratorImpl = (
   target: Constructable,
-  context: ClassDecoratorContext
+  context: ClassDecoratorContext,
 ) => void;
 
 /**
@@ -13,7 +14,7 @@ export type ClassDecoratorImpl = (
  */
 export type ClassMethodDecoratorImpl = (
   self: Function,
-  context: ClassMethodDecoratorContext
+  context: ClassMethodDecoratorContext,
 ) => Function | void;
 
 /**
@@ -21,5 +22,5 @@ export type ClassMethodDecoratorImpl = (
  */
 export type ClassFieldDecoratorImpl = (
   _value: undefined,
-  context: ClassFieldDecoratorContext
+  context: ClassFieldDecoratorContext,
 ) => (initialValue: any) => any | void;

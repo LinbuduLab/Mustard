@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import { CLI } from "../Commands/CommandLine";
-import { MustardRegistry } from "../Components/Registry";
+import { CommandRegistry } from "../Components/Registry";
 import { BuiltInCommands } from "../Commands/BuiltInCommands";
 import { MustardConstanst } from "../Components/Constants";
 import { MustardUtils } from "../Components/Utils";
@@ -9,11 +9,11 @@ import { DecoratedClassFieldsNormalizer } from "../Components/DecoratedFieldsNor
 
 describe("CommandLine", () => {
   it("should register providers", () => {
-    vi.spyOn(MustardRegistry.ExternalProviderRegistry, "set");
+    vi.spyOn(CommandRegistry.ExternalProviderRegistry, "set");
 
     const cli = new CLI("mm", []);
 
-    expect(MustardRegistry.ExternalProviderRegistry.set).not.toBeCalled();
+    expect(CommandRegistry.ExternalProviderRegistry.set).not.toBeCalled();
 
     cli.registerProvider({
       identifier: "foo",
@@ -21,7 +21,7 @@ describe("CommandLine", () => {
     });
 
     expect(
-      MustardRegistry.ExternalProviderRegistry.set
+      CommandRegistry.ExternalProviderRegistry.set,
     ).toHaveBeenLastCalledWith("foo", "bar");
 
     class Foo {}
@@ -29,7 +29,7 @@ describe("CommandLine", () => {
     cli.registerProvider(Foo);
 
     expect(
-      MustardRegistry.ExternalProviderRegistry.set
+      CommandRegistry.ExternalProviderRegistry.set,
     ).toHaveBeenLastCalledWith("Foo", Foo);
 
     cli.registerProvider([
@@ -40,7 +40,7 @@ describe("CommandLine", () => {
       Foo,
     ]);
 
-    expect(MustardRegistry.ExternalProviderRegistry.set).toBeCalledTimes(4);
+    expect(CommandRegistry.ExternalProviderRegistry.set).toBeCalledTimes(4);
   });
 
   it("should normalized configurations", () => {
@@ -110,10 +110,10 @@ describe("CommandLine", () => {
     vi.spyOn(cli, "dispatchRootHandler").mockImplementation(() => {});
     vi.spyOn(cli, "dispatchCommand").mockImplementation(() => {});
     vi.spyOn(BuiltInCommands, "useVersionCommand").mockImplementationOnce(
-      () => {}
+      () => {},
     );
     vi.spyOn(BuiltInCommands, "useVersionCommand").mockImplementationOnce(
-      () => {}
+      () => {},
     );
 
     cli.start();
@@ -146,7 +146,7 @@ describe("CommandLine", () => {
       run() {}
     }
 
-    vi.spyOn(MustardRegistry, "provideInit").mockImplementation(
+    vi.spyOn(CommandRegistry, "provideInit").mockImplementation(
       (requestName) => {
         return {
           commandInvokeName: requestName.toLowerCase().replace("command", ""),
@@ -160,31 +160,31 @@ describe("CommandLine", () => {
           decoratedInstanceFields: [],
           childCommandList: [],
         };
-      }
+      },
     );
 
-    vi.spyOn(MustardRegistry, "register");
+    vi.spyOn(CommandRegistry, "register");
 
     cli.registerCommand([]);
 
-    expect(MustardRegistry.register).not.toBeCalled();
+    expect(CommandRegistry.register).not.toBeCalled();
 
     cli.registerCommand([RootCommand]);
 
-    expect(MustardRegistry.register).toBeCalledWith(
+    expect(CommandRegistry.register).toBeCalledWith(
       MustardConstanst.RootCommandRegistryKey,
-      MustardRegistry.provideInit("RootCommand")
+      CommandRegistry.provideInit("RootCommand"),
     );
 
     cli.registerCommand([RunCommand]);
 
-    expect(MustardRegistry.register).toBeCalledWith(
+    expect(CommandRegistry.register).toBeCalledWith(
       "run",
-      MustardRegistry.provideInit("RunCommand")
+      CommandRegistry.provideInit("RunCommand"),
     );
-    expect(MustardRegistry.register).toBeCalledWith(
+    expect(CommandRegistry.register).toBeCalledWith(
       "r",
-      MustardRegistry.provideInit("RunCommand")
+      CommandRegistry.provideInit("RunCommand"),
     );
 
     class ChildCommand {
@@ -194,7 +194,7 @@ describe("CommandLine", () => {
       run() {}
     }
 
-    vi.spyOn(MustardRegistry, "provideInit").mockImplementation(
+    vi.spyOn(CommandRegistry, "provideInit").mockImplementation(
       (requestName) => {
         if (requestName === ParentCommand.name) {
           return {
@@ -217,13 +217,13 @@ describe("CommandLine", () => {
           instance: new ChildCommand(),
           decoratedInstanceFields: [],
         };
-      }
+      },
     );
 
     cli.registerCommand([ParentCommand]);
-    expect(MustardRegistry.register).toBeCalledWith(
+    expect(CommandRegistry.register).toBeCalledWith(
       "child",
-      MustardRegistry.provideInit("ChildCommand")
+      CommandRegistry.provideInit("ChildCommand"),
     );
   });
 
@@ -231,7 +231,7 @@ describe("CommandLine", () => {
     class RunCommand {}
     const cli = new CLI("mm", []);
 
-    vi.spyOn(MustardRegistry, "provide").mockImplementationOnce(() => {
+    vi.spyOn(CommandRegistry, "provide").mockImplementationOnce(() => {
       const map = new Map();
 
       map.set("run", {
@@ -243,20 +243,20 @@ describe("CommandLine", () => {
 
     vi.spyOn(
       MustardUtils,
-      "filterDecoratedInstanceFields"
+      "filterDecoratedInstanceFields",
     ).mockImplementationOnce(() => []);
 
-    vi.spyOn(MustardRegistry, "upsert").mockImplementationOnce(() => {});
+    vi.spyOn(CommandRegistry, "upsert").mockImplementationOnce(() => {});
 
     vi.spyOn(MustardUtils, "parseFromProcessArgs").mockImplementationOnce(
       () => ({
         _: ["foo", "bar"],
-      })
+      }),
     );
 
     cli["instantiateWithParse"]();
 
-    expect(MustardRegistry.upsert).toBeCalledWith("run", {
+    expect(CommandRegistry.upsert).toBeCalledWith("run", {
       instance: new RunCommand(),
       decoratedInstanceFields: [],
     });
@@ -290,7 +290,7 @@ describe("CommandLine", () => {
     });
 
     vi.spyOn(BuiltInCommands, "useHelpCommand").mockImplementationOnce(
-      () => {}
+      () => {},
     );
 
     // @ts-expect-error
@@ -353,8 +353,8 @@ describe("CommandLine", () => {
       childCommandList: [],
     };
 
-    vi.spyOn(MustardRegistry, "provideRootCommand").mockReturnValueOnce(
-      rootRegistration
+    vi.spyOn(CommandRegistry, "provideRootCommand").mockReturnValueOnce(
+      rootRegistration,
     );
 
     cli["parsedArgs"] = {
@@ -370,14 +370,14 @@ describe("CommandLine", () => {
         _: ["p1", "p2", "p3"],
       },
       rootRegistration,
-      true
+      true,
     );
 
     // @ts-expect-error
     expect(cli.executeCommandFromRegistration).toBeCalledWith(rootRegistration);
 
     // @ts-expect-error
-    vi.spyOn(MustardRegistry, "provideRootCommand").mockReturnValueOnce(null);
+    vi.spyOn(CommandRegistry, "provideRootCommand").mockReturnValueOnce(null);
 
     cli.configure({
       enableUsage: true,
@@ -390,11 +390,11 @@ describe("CommandLine", () => {
       "mm",
       true,
       undefined,
-      true
+      true,
     );
 
     // @ts-expect-error
-    vi.spyOn(MustardRegistry, "provideRootCommand").mockReturnValueOnce(null);
+    vi.spyOn(CommandRegistry, "provideRootCommand").mockReturnValueOnce(null);
 
     cli.configure({
       enableUsage: false,
@@ -404,7 +404,7 @@ describe("CommandLine", () => {
       cli["dispatchRootHandler"]();
     } catch (error) {
       expect(error).toMatchInlineSnapshot(
-        "[NoRootHandlerError: No root handler found, please provide command decorated with '@RootCommand' or enable option enableUsage for usage info generation.]"
+        "[NoRootHandlerError: No root handler found, please provide command decorated with '@RootCommand' or enable option enableUsage for usage info generation.]",
       );
     }
   });
@@ -435,12 +435,12 @@ describe("CommandLine", () => {
 
     vi.spyOn(
       DecoratedClassFieldsNormalizer,
-      "throwOnUnknownOptions"
+      "throwOnUnknownOptions",
     ).mockImplementationOnce(() => {});
 
     vi.spyOn(
       DecoratedClassFieldsNormalizer,
-      "normalizeDecoratedFields"
+      "normalizeDecoratedFields",
     ).mockImplementationOnce(() => {});
 
     cli["executeCommandFromRegistration"](rootRegistration, ["p1", "p2", "p3"]);
@@ -451,7 +451,7 @@ describe("CommandLine", () => {
     });
 
     expect(
-      DecoratedClassFieldsNormalizer.throwOnUnknownOptions
+      DecoratedClassFieldsNormalizer.throwOnUnknownOptions,
     ).toBeCalledTimes(1);
 
     expect(DecoratedClassFieldsNormalizer.throwOnUnknownOptions).toBeCalledWith(
@@ -459,15 +459,15 @@ describe("CommandLine", () => {
       {
         _: ["p1", "p2", "p3"],
       },
-      true
+      true,
     );
 
     expect(
-      DecoratedClassFieldsNormalizer.normalizeDecoratedFields
+      DecoratedClassFieldsNormalizer.normalizeDecoratedFields,
     ).toBeCalledTimes(1);
 
     expect(
-      DecoratedClassFieldsNormalizer.normalizeDecoratedFields
+      DecoratedClassFieldsNormalizer.normalizeDecoratedFields,
     ).toHaveBeenLastCalledWith(rootRegistration, ["p1", "p2", "p3"], {
       _: ["p1", "p2", "p3"],
     });
@@ -482,7 +482,7 @@ describe("CommandLine", () => {
     cli["executeCommandFromRegistration"](rootRegistration, ["p1", "p2", "p3"]);
 
     expect(
-      DecoratedClassFieldsNormalizer.throwOnUnknownOptions
+      DecoratedClassFieldsNormalizer.throwOnUnknownOptions,
     ).toBeCalledTimes(1);
   });
 

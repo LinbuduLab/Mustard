@@ -1,7 +1,7 @@
-import { MustardInternalUtils } from "../Utils/Utils";
+import { MustardInternalUtils } from "../Utils/Utils.js";
 
-import type { RestrictValueSet } from "../Typings/Controller.struct";
-import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
+import type { RestrictValueSet } from "../Typings/Controller.struct.js";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
 
 export class ControllerDecorators {
   /**

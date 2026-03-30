@@ -1,8 +1,8 @@
 import type { ZodType } from "zod";
 
-import type { ClassStruct } from "./Shared.struct";
-import type { ValidatorFactory } from "../Validators/Factory";
-import type { RestrictValueSet } from "./Controller.struct";
+import type { ClassStruct } from "./Shared.struct.js";
+import type { ValidatorFactory } from "../Validators/Factory.js";
+import type { RestrictValueSet } from "./Controller.struct.js";
 
 export type OptionInjectionType = "VariadicOption" | "Option" | "Options";
 

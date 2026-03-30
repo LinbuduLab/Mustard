@@ -1,10 +1,10 @@
-import { MustardCommandLine } from "./CommandLine";
-import { NullishAppFactoryOptionError } from "../Errors/NullishAppFactoryOptionError";
+import { MustardCommandLine } from "./CommandLine.js";
+import { NullishAppFactoryOptionError } from "../Errors/NullishAppFactoryOptionError.js";
 
-import type { MustardLifecycle } from "../Typings/Lifecycle.struct";
-import type { AppFactoryOptions } from "../Typings/Configuration.struct";
-import type { Constructable, Nullable } from "../Typings/Shared.struct";
-import type { ClassDecoratorImpl } from "../Typings/Decorator.struct";
+import type { MustardLifecycle } from "../Typings/Lifecycle.struct.js";
+import type { AppFactoryOptions } from "../Typings/Configuration.struct.js";
+import type { Constructable, Nullable } from "../Typings/Shared.struct.js";
+import type { ClassDecoratorImpl } from "../Typings/Decorator.struct.js";
 
 export class MustardApp {
   private static AppFactoryOptions: Nullable<AppFactoryOptions> = null;
@@ -29,7 +29,7 @@ export class MustardApp {
    * @returns
    */
   public static start(
-    Cls: Constructable<MustardLifecycle>
+    Cls: Constructable<MustardLifecycle>,
   ): MustardCommandLine {
     if (!MustardApp.AppFactoryOptions) throw new NullishAppFactoryOptionError();
 

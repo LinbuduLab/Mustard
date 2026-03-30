@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MustardUtils } from "../Components/Utils";
+import { MustardInternalUtils } from "../source/Utils/Utils";
 import { CommandStruct } from "../Typings/Command.struct";
 
 import mri from "mri";
 import parse from "yargs-parser";
-import { MustardRegistry } from "../Components/Registry";
+import { CommandRegistry } from "../Components/Registry";
 
 class Foo implements CommandStruct {
   public bar: string = "bar";
@@ -79,10 +80,10 @@ describe("Utils", () => {
     expect(MustardUtils.applyRestrictions("foo", "bar", ["foo"])).toBe("foo");
     expect(MustardUtils.applyRestrictions("baz", "bar", ["foo"])).toBe("bar");
     expect(
-      MustardUtils.applyRestrictions("foo", "bar", { foo: "foo", baz: "baz" })
+      MustardUtils.applyRestrictions("foo", "bar", { foo: "foo", baz: "baz" }),
     ).toBe("foo");
     expect(
-      MustardUtils.applyRestrictions("xxx", "bar", { foo: "foo", baz: "baz" })
+      MustardUtils.applyRestrictions("xxx", "bar", { foo: "foo", baz: "baz" }),
     ).toBe("bar");
   });
 
@@ -97,7 +98,7 @@ describe("Utils", () => {
       run() {}
     }
 
-    vi.spyOn(MustardRegistry, "provide").mockReturnValueOnce(
+    vi.spyOn(CommandRegistry, "provide").mockReturnValueOnce(
       new Map<any, any>([
         [
           "c1",
@@ -121,7 +122,7 @@ describe("Utils", () => {
             commandInvokeName: "c1-dup",
           },
         ],
-      ])
+      ]),
     );
 
     const matched = MustardUtils.matchFromCommandClass([C1, C3]);
@@ -280,41 +281,41 @@ describe("Utils.findHandlerCommandWithInputs", () => {
     run() {}
   }
 
-  MustardRegistry.register("foo", {
+  CommandRegistry.register("foo", {
     commandInvokeName: "foo",
     commandAlias: "f",
     childCommandList: [],
     Class: Foo,
   });
 
-  MustardRegistry.register("f", {
+  CommandRegistry.register("f", {
     commandInvokeName: "foo",
     commandAlias: "f",
     childCommandList: [],
     Class: Foo,
   });
 
-  MustardRegistry.register("bar", {
+  CommandRegistry.register("bar", {
     commandInvokeName: "bar",
     commandAlias: "b",
     childCommandList: [Baz],
     Class: Bar,
   });
 
-  MustardRegistry.register("b", {
+  CommandRegistry.register("b", {
     commandInvokeName: "bar",
     commandAlias: "b",
     childCommandList: [Baz],
     Class: Bar,
   });
 
-  MustardRegistry.register("baz", {
+  CommandRegistry.register("baz", {
     commandInvokeName: "baz",
     childCommandList: [],
     Class: Baz,
   });
 
-  MustardRegistry.register("root", {
+  CommandRegistry.register("root", {
     root: true,
     childCommandList: [],
     Class: Root,
@@ -323,13 +324,13 @@ describe("Utils.findHandlerCommandWithInputs", () => {
   it("should handle root", () => {
     const r1 = MustardUtils.findHandlerCommandWithInputs([]);
     expect(r1).toEqual({
-      command: MustardRegistry.provideRootCommand(),
+      command: CommandRegistry.provideRootCommand(),
       inputs: [],
     });
 
     const r2 = MustardUtils.findHandlerCommandWithInputs(["ffff"]);
     expect(r2).toEqual({
-      command: MustardRegistry.provideRootCommand(),
+      command: CommandRegistry.provideRootCommand(),
       inputs: ["ffff"],
     });
   });
@@ -337,19 +338,19 @@ describe("Utils.findHandlerCommandWithInputs", () => {
   it("should find for only one input", () => {
     const r1 = MustardUtils.findHandlerCommandWithInputs(["foo"]);
     expect(r1).toEqual({
-      command: MustardRegistry.provide("foo"),
+      command: CommandRegistry.provide("foo"),
       inputs: [],
     });
 
     const r2 = MustardUtils.findHandlerCommandWithInputs(["bar"]);
     expect(r2).toEqual({
-      command: MustardRegistry.provide("bar"),
+      command: CommandRegistry.provide("bar"),
       inputs: [],
     });
 
     const r3 = MustardUtils.findHandlerCommandWithInputs(["barzzz"]);
     expect(r3).toEqual({
-      command: MustardRegistry.provideRootCommand(),
+      command: CommandRegistry.provideRootCommand(),
       inputs: ["barzzz"],
     });
   });
@@ -357,19 +358,19 @@ describe("Utils.findHandlerCommandWithInputs", () => {
   it("should handle alias", () => {
     const r1 = MustardUtils.findHandlerCommandWithInputs(["f"]);
     expect(r1).toEqual({
-      command: MustardRegistry.provide("foo"),
+      command: CommandRegistry.provide("foo"),
       inputs: [],
     });
 
     const r2 = MustardUtils.findHandlerCommandWithInputs(["b"]);
     expect(r2).toEqual({
-      command: MustardRegistry.provide("bar"),
+      command: CommandRegistry.provide("bar"),
       inputs: [],
     });
 
     const r3 = MustardUtils.findHandlerCommandWithInputs(["barzzz"]);
     expect(r3).toEqual({
-      command: MustardRegistry.provideRootCommand(),
+      command: CommandRegistry.provideRootCommand(),
       inputs: ["barzzz"],
     });
   });
@@ -377,7 +378,7 @@ describe("Utils.findHandlerCommandWithInputs", () => {
   it("should find for multi inputs", () => {
     const r1 = MustardUtils.findHandlerCommandWithInputs(["foo", "bar"]);
     expect(r1).toEqual({
-      command: MustardRegistry.provide("foo"),
+      command: CommandRegistry.provide("foo"),
       inputs: ["bar"],
     });
 
@@ -388,26 +389,196 @@ describe("Utils.findHandlerCommandWithInputs", () => {
       "3",
     ]);
     expect(r2).toEqual({
-      command: MustardRegistry.provide("foo"),
+      command: CommandRegistry.provide("foo"),
       inputs: ["1", "2", "3"],
     });
 
     const r3 = MustardUtils.findHandlerCommandWithInputs(["bar", "baz"]);
     expect(r3).toEqual({
-      command: MustardRegistry.provide("baz"),
+      command: CommandRegistry.provide("baz"),
       inputs: [],
     });
 
     const r4 = MustardUtils.findHandlerCommandWithInputs(["bar", "baz", "fff"]);
     expect(r4).toEqual({
-      command: MustardRegistry.provide("baz"),
+      command: CommandRegistry.provide("baz"),
       inputs: ["fff"],
     });
 
     const r5 = MustardUtils.findHandlerCommandWithInputs(["bar", "baz", "foo"]);
     expect(r5).toEqual({
-      command: MustardRegistry.provide("baz"),
+      command: CommandRegistry.provide("baz"),
       inputs: ["foo"],
     });
+  });
+});
+
+describe("MustardInternalUtils.uniqBy", () => {
+  it("should deduplicate by function iteratee", () => {
+    const input = [
+      { id: 1, name: "a" },
+      { id: 2, name: "b" },
+      { id: 3, name: "a" },
+    ];
+    const result = MustardInternalUtils.uniqBy(input, (item) => item.name);
+    expect(result).toEqual([
+      { id: 1, name: "a" },
+      { id: 2, name: "b" },
+    ]);
+  });
+
+  it("should deduplicate by property key", () => {
+    const input = [
+      { id: 1, name: "a" },
+      { id: 2, name: "b" },
+      { id: 3, name: "a" },
+    ];
+    const result = MustardInternalUtils.uniqBy(input, "name");
+    expect(result).toEqual([
+      { id: 1, name: "a" },
+      { id: 2, name: "b" },
+    ]);
+  });
+
+  it("should keep the first occurrence", () => {
+    const input = [
+      { id: 1, category: "x" },
+      { id: 2, category: "x" },
+      { id: 3, category: "y" },
+    ];
+    const result = MustardInternalUtils.uniqBy(input, "category");
+    expect(result).toEqual([
+      { id: 1, category: "x" },
+      { id: 3, category: "y" },
+    ]);
+  });
+
+  it("should return empty array for empty input", () => {
+    const result = MustardInternalUtils.uniqBy([], (x) => x);
+    expect(result).toEqual([]);
+  });
+
+  it("should return all items when all are unique", () => {
+    const input = [
+      { id: 1, name: "a" },
+      { id: 2, name: "b" },
+      { id: 3, name: "c" },
+    ];
+    const result = MustardInternalUtils.uniqBy(input, "name");
+    expect(result).toEqual(input);
+  });
+
+  it("should handle primitive arrays with identity iteratee", () => {
+    const input = [1, 2, 2, 3, 1, 4];
+    const result = MustardInternalUtils.uniqBy(input, (x) => x);
+    expect(result).toEqual([1, 2, 3, 4]);
+  });
+
+  it("should handle iteratee returning different types", () => {
+    const input = [{ value: 1 }, { value: "1" }, { value: 2 }];
+    const result = MustardInternalUtils.uniqBy(input, (item) => item.value);
+    expect(result).toEqual([{ value: 1 }, { value: "1" }, { value: 2 }]);
+  });
+
+  it("should not mutate the original array", () => {
+    const input = [
+      { id: 1, name: "a" },
+      { id: 2, name: "a" },
+    ];
+    const copy = [...input];
+    MustardInternalUtils.uniqBy(input, "name");
+    expect(input).toEqual(copy);
+  });
+});
+
+describe("MustardInternalUtils.groupBy", () => {
+  it("should group by function iteratee", () => {
+    const input = [
+      { id: 1, category: "a" },
+      { id: 2, category: "b" },
+      { id: 3, category: "a" },
+    ];
+    const result = MustardInternalUtils.groupBy(input, (item) => item.category);
+    expect(result).toEqual({
+      a: [
+        { id: 1, category: "a" },
+        { id: 3, category: "a" },
+      ],
+      b: [{ id: 2, category: "b" }],
+    });
+  });
+
+  it("should group by property key", () => {
+    const input = [
+      { id: 1, category: "a" },
+      { id: 2, category: "b" },
+      { id: 3, category: "a" },
+    ];
+    const result = MustardInternalUtils.groupBy(input, "category");
+    expect(result).toEqual({
+      a: [
+        { id: 1, category: "a" },
+        { id: 3, category: "a" },
+      ],
+      b: [{ id: 2, category: "b" }],
+    });
+  });
+
+  it("should return empty object for empty input", () => {
+    const result = MustardInternalUtils.groupBy([], (x) => String(x));
+    expect(result).toEqual({});
+  });
+
+  it("should handle numeric keys via string coercion", () => {
+    const input = [
+      { name: "alice", age: 30 },
+      { name: "bob", age: 25 },
+      { name: "carol", age: 30 },
+    ];
+    const result = MustardInternalUtils.groupBy(input, (item) => item.age);
+    expect(result).toEqual({
+      "30": [
+        { name: "alice", age: 30 },
+        { name: "carol", age: 30 },
+      ],
+      "25": [{ name: "bob", age: 25 }],
+    });
+  });
+
+  it("should place each item in exactly one group", () => {
+    const input = [1, 2, 3, 4, 5, 6];
+    const result = MustardInternalUtils.groupBy(input, (x) =>
+      x % 2 === 0 ? "even" : "odd",
+    );
+    expect(result).toEqual({
+      odd: [1, 3, 5],
+      even: [2, 4, 6],
+    });
+  });
+
+  it("should preserve insertion order within groups", () => {
+    const input = ["banana", "apple", "blueberry", "avocado", "cherry"];
+    const result = MustardInternalUtils.groupBy(input, (s) => s[0]);
+    expect(result).toEqual({
+      b: ["banana", "blueberry"],
+      a: ["apple", "avocado"],
+      c: ["cherry"],
+    });
+  });
+
+  it("should not mutate the original array", () => {
+    const input = [
+      { id: 1, group: "x" },
+      { id: 2, group: "y" },
+    ];
+    const copy = [...input];
+    MustardInternalUtils.groupBy(input, "group");
+    expect(input).toEqual(copy);
+  });
+
+  it("should handle single-element array", () => {
+    const input = [{ tag: "solo" }];
+    const result = MustardInternalUtils.groupBy(input, "tag");
+    expect(result).toEqual({ solo: [{ tag: "solo" }] });
   });
 });

@@ -1,4 +1,4 @@
-import { MustardError } from "../Typings/MustardError.struct";
+import { MustardError } from "../Typings/MustardError.struct.js";
 
 import type { Arguments } from "yargs-parser";
 

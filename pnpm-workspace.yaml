@@ -1,18 +1,11 @@
 packages:
   - packages/**
   - experimentals/**
-  - '!**/test/**'
-  - '!**/template-**'
+  - "!**/test/**"
+  - "!**/template-**"
 
-link-workspace-packages: false
-
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
-  - vue-demi
-
-prefer-workspace-packages: false
-
-save-workspace-protocol: true
-
-shared-workspace-lockfile: true
+catalog:
+  typescript: 6.0.2
+  "@types/node": 25.5.0
+  tsx: 4.21.0
+  zod: 3.20.2

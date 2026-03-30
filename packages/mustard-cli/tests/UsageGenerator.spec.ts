@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
-import { MustardRegistry } from "../Components/Registry";
+import { CommandRegistry } from "../Components/Registry";
 import { MustardUtils } from "../Components/Utils";
 import {
   ParsedCommandUsage,
@@ -113,7 +113,7 @@ beforeAll(() => {
   });
 
   // @ts-expect-error
-  vi.spyOn(MustardRegistry, "provide").mockImplementationOnce(() => {
+  vi.spyOn(CommandRegistry, "provide").mockImplementationOnce(() => {
     const map = new Map<string, CommandRegistryPayload>();
 
     map.set("run", _RunCommandRegistration);
@@ -177,7 +177,7 @@ describe("UsageGenerator", () => {
     });
 
     expect(UsageInfoGenerator.assemblePreviousInputsWithBinary("cmd")).toBe(
-      "cli foo bar cmd"
+      "cli foo bar cmd",
     );
 
     UsageInfoGenerator.initGenerator({
@@ -186,7 +186,7 @@ describe("UsageGenerator", () => {
     });
 
     expect(UsageInfoGenerator.assemblePreviousInputsWithBinary("cmd")).toBe(
-      "cli cmd"
+      "cli cmd",
     );
 
     UsageInfoGenerator.initGenerator({
@@ -195,7 +195,7 @@ describe("UsageGenerator", () => {
     });
 
     expect(UsageInfoGenerator.assemblePreviousInputsWithBinary("cmd")).toBe(
-      "cli foo bar cmd"
+      "cli foo bar cmd",
     );
   });
 
@@ -267,7 +267,7 @@ describe("UsageGenerator", () => {
 
   it("should collect specific command usage", () => {
     expect(
-      UsageInfoGenerator.collectSpecificCommandUsage(_RunCommandRegistration)
+      UsageInfoGenerator.collectSpecificCommandUsage(_RunCommandRegistration),
     ).toMatchInlineSnapshot(`
       {
         "alias": "r",
@@ -281,7 +281,9 @@ describe("UsageGenerator", () => {
     `);
 
     expect(
-      UsageInfoGenerator.collectSpecificCommandUsage(_UpdateCommandRegistration)
+      UsageInfoGenerator.collectSpecificCommandUsage(
+        _UpdateCommandRegistration,
+      ),
     ).toMatchInlineSnapshot(`
       {
         "alias": "u",
@@ -298,26 +300,26 @@ describe("UsageGenerator", () => {
   it("should invoke corresponding formatter", () => {
     vi.spyOn(
       UsageInfoGenerator,
-      "collectSpecificCommandUsage"
+      "collectSpecificCommandUsage",
     ).mockImplementationOnce(() => collect);
 
     vi.spyOn(
       UsageInfoGenerator,
-      "collectCompleteAppUsage"
+      "collectCompleteAppUsage",
     ).mockImplementationOnce(() => [collect]);
 
     vi.spyOn(
       UsageInfoGenerator,
-      "formatRootCommandUsage"
+      "formatRootCommandUsage",
     ).mockImplementationOnce(() => "root command usage");
 
     vi.spyOn(UsageInfoGenerator, "formatCommandUsage").mockImplementationOnce(
-      () => "command usage"
+      () => "command usage",
     );
 
     vi.spyOn(
       UsageInfoGenerator,
-      "batchfFormatCommandUsage"
+      "batchfFormatCommandUsage",
     ).mockImplementationOnce(() => "batch command usage");
 
     UsageInfoGenerator.printHelp(undefined);
@@ -395,7 +397,7 @@ describe("UsageGenerator", () => {
             initValue: "",
           },
         },
-      ] as any
+      ] as any,
     );
 
     const result = UsageInfoGenerator.collectSpecificCommandUsage(withChild);
@@ -474,7 +476,7 @@ describe("UsageGenerator", () => {
 
     expect(commandWithChild).toContain("Child Command(s):");
     expect(commandWithChild).toContain(
-      "Run 'mm parent [child command] --help' for more information on child command."
+      "Run 'mm parent [child command] --help' for more information on child command.",
     );
   });
 });

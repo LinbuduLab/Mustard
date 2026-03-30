@@ -1,10 +1,10 @@
-import { MustardRegistry } from "../Core/Registry";
+import { CommandRegistry } from "../Core/CommandRegistry.js";
 
-import type { InjectInitializerPlaceHolder } from "../Typings/Context.struct";
+import type { InjectInitializerPlaceHolder } from "../Typings/Context.struct.js";
 import type {
   ClassDecoratorImpl,
   ClassFieldDecoratorImpl,
-} from "../Typings/Decorator.struct";
+} from "../Typings/Decorator.struct.js";
 
 /**
  * DI related decorators
@@ -20,10 +20,10 @@ export class DIServiceDecorators {
 
   public static Provide(identifier?: string): ClassDecoratorImpl {
     return (target, context) => () => {
-      MustardRegistry.ExternalProviderRegistry.set(
+      CommandRegistry.ExternalProviderRegistry.set(
         identifier ?? context.name,
 
-        target
+        target,
       );
     };
   }

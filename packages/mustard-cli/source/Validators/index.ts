@@ -1,4 +1,4 @@
-import { ValidatorFactory } from "./Factory";
+import { ValidatorFactory } from "./Factory.js";
 
 // control from validateOptions
 // defaultRequired: true

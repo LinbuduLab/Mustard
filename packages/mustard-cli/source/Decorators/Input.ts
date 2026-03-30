@@ -1,5 +1,16 @@
-import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
-import type { InputConfiguration } from "../Typings/Option.struct";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
+
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
+import type { InputConfiguration } from "../Typings/Option.struct.js";
+import { InputInitialValue } from "../Typings/Utils.struct.js";
+
+// export class InputDecoratorInitialValue extends DecoratorInitialValue<InputInitialValue> {
+//   public constructor(value: InputInitialValue) {
+//     super(value);
+//   }
+// }
+
+// class DecoratorInitialValue
 
 export class InputDecorator {
   /**
@@ -26,19 +37,20 @@ export class InputDecorator {
    * }
    */
   public static Input(
-    configuration?: InputConfiguration
+    configuration?: InputConfiguration,
   ): ClassFieldDecoratorImpl;
   public static Input(
-    config?: string | InputConfiguration
+    config?: string | InputConfiguration,
   ): ClassFieldDecoratorImpl {
     const inputDescription =
       typeof config === "string" ? config : config?.description;
 
     return (_, context) => (initValue) => {
+      console.log("03-30 @Input initValue: ", initValue);
       return {
-        type: "Input",
-        initValue,
+        type: InstanceFieldDecorationTypes.Input,
         description: inputDescription,
+        initValue,
       };
     };
   }

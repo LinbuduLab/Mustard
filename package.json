@@ -8,36 +8,10 @@
     "release": "pnpm --filter mustard-cli publish --no-git-checks",
     "test": "pnpm --filter mustard-cli test -- -u"
   },
-  "nodemonConfig": {
-    "delay": 500,
-    "env": {
-      "NODE_ENV": "development"
-    },
-    "execMap": {
-      "ts": "tsx"
-    },
-    "ext": "ts,json",
-    "ignore": [
-      "**/test/**",
-      "**/docs/**",
-      "node_modules"
-    ],
-    "restartable": "rs",
-    "verbose": true,
-    "watch": [
-      "*.ts"
-    ]
-  },
   "prettier": {},
-  "dependencies": {
-    "@changesets/cli": "^2.26.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/node": "^18.11.7",
-    "nodemon": "^2.0.20",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.0",
-    "tsx": "^4.20.6",
-    "typescript": "^5.3.3"
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   }
 }

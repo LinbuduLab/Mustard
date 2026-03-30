@@ -1,8 +1,8 @@
 import type {
   ContextInitializerPlaceHolder,
   UtilsInitializerPlaceHolder,
-} from "../Typings/Context.struct";
-import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct";
+} from "../Typings/Context.struct.js";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
 
 /**
  * Built-in providers related decorators

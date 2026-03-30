@@ -1,5 +1,5 @@
 import { CommandStruct } from "../Typings/Command.struct";
-import { MustardRegistry } from "../Components/Registry";
+import { CommandRegistry } from "../Components/Registry";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { BuiltInDecorators } from "../Decorators/BuiltIn";
 import { CommandDecorators } from "../Decorators/Command";
@@ -28,17 +28,17 @@ const commandImplSpy = vi.fn();
 vi.spyOn(OptionDecorators, "OptionImpl").mockImplementation(optionImplSpy);
 // @ts-expect-error
 vi.spyOn(OptionDecorators, "VariadicOptionImpl").mockImplementation(
-  variadicOptionImplSpy
+  variadicOptionImplSpy,
 );
 
 // @ts-expect-error
 vi.spyOn(CommandDecorators, "registerCommandImpl").mockImplementation(
-  commandImplSpy
+  commandImplSpy,
 );
 
-vi.spyOn(MustardRegistry, "registerInit");
+vi.spyOn(CommandRegistry, "registerInit");
 
-const { ExternalProviderRegistry } = MustardRegistry;
+const { ExternalProviderRegistry } = CommandRegistry;
 
 vi.spyOn(ExternalProviderRegistry, "set");
 
@@ -68,7 +68,7 @@ describe("Decorators.@Option", () => {
       "dry",
       null,
       "dry run this",
-      null
+      null,
     );
 
     Option("dry", V);
@@ -82,7 +82,7 @@ describe("Decorators.@Option", () => {
       "dry",
       null,
       "dry run this",
-      V
+      V,
     );
 
     Option("dry", "d", "dry run this");
@@ -90,7 +90,7 @@ describe("Decorators.@Option", () => {
       "dry",
       "d",
       "dry run this",
-      null
+      null,
     );
 
     Option("dry", "d", "dry run this", V);
@@ -98,7 +98,7 @@ describe("Decorators.@Option", () => {
       "dry",
       "d",
       "dry run this",
-      V
+      V,
     );
   });
 
@@ -116,7 +116,7 @@ describe("Decorators.@Option", () => {
       "dry",
       "d",
       "dry run this",
-      V
+      V,
     );
   });
 
@@ -134,14 +134,14 @@ describe("Decorators.@Option", () => {
     expect(variadicOptionImplSpy).toHaveBeenLastCalledWith(
       "dry",
       null,
-      "dry run this"
+      "dry run this",
     );
 
     VariadicOption("dry", "d", "dry run this");
     expect(variadicOptionImplSpy).toHaveBeenLastCalledWith(
       "dry",
       "d",
-      "dry run this"
+      "dry run this",
     );
   });
 
@@ -157,7 +157,7 @@ describe("Decorators.@Option", () => {
     expect(variadicOptionImplSpy).toHaveBeenLastCalledWith(
       "dry",
       "d",
-      "dry run this"
+      "dry run this",
     );
   });
 
@@ -195,7 +195,7 @@ describe("Decorators.@Command", () => {
       "run",
       null,
       "run command",
-      []
+      [],
     );
 
     Command("run", "r", "run command");
@@ -203,7 +203,7 @@ describe("Decorators.@Command", () => {
       "run",
       "r",
       "run command",
-      []
+      [],
     );
 
     Command("run", [ChildCommand]);
@@ -221,7 +221,7 @@ describe("Decorators.@Command", () => {
       "run",
       "run command",
       null,
-      [ChildCommand]
+      [ChildCommand],
     );
   });
 
@@ -233,7 +233,7 @@ describe("Decorators.@Command", () => {
       "run",
       undefined,
       undefined,
-      undefined
+      undefined,
     );
 
     Command({
@@ -245,7 +245,7 @@ describe("Decorators.@Command", () => {
       "run",
       "r",
       "run command",
-      undefined
+      undefined,
     );
 
     Command({
@@ -261,7 +261,7 @@ describe("Decorators.@Command", () => {
 
   it("should handle root command", () => {
     RootCommand()({ type: "target" }, { name: "rootClassName" });
-    expect(MustardRegistry.registerInit).toBeCalledWith("rootClassName", {
+    expect(CommandRegistry.registerInit).toBeCalledWith("rootClassName", {
       Class: {
         type: "target",
       },
@@ -316,7 +316,7 @@ describe("Decorators.DIService", () => {
       Inject()(undefined, {
         name: "inputField",
         kind: "field",
-      })()
+      })(),
     ).toEqual({
       type: "Inject",
       identifier: "inputField",
@@ -326,7 +326,7 @@ describe("Decorators.DIService", () => {
       Inject("spec")(undefined, {
         name: "inputField",
         kind: "field",
-      })()
+      })(),
     ).toEqual({
       type: "Inject",
       identifier: "spec",
@@ -344,7 +344,7 @@ describe("Decorators.DIService", () => {
         name: "context_name",
         kind: "class",
         addInitializer: () => {},
-      }
+      },
     )();
     expect(ExternalProviderRegistry.set).toBeCalledWith("context_name", {});
 
@@ -354,7 +354,7 @@ describe("Decorators.DIService", () => {
         name: "context_name",
         kind: "class",
         addInitializer: () => {},
-      }
+      },
     )();
     expect(ExternalProviderRegistry.set).toBeCalledWith("spec", {});
   });
@@ -363,13 +363,13 @@ describe("Decorators.DIService", () => {
 describe("Decorators runtime branches", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    MustardRegistry.OptionAliasMap = {};
-    MustardRegistry.VariadicOptions.clear();
+    CommandRegistry.OptionAliasMap = {};
+    CommandRegistry.VariadicOptions.clear();
     (CommandDecorators as any).RootCommandTargetClass = null;
   });
 
   it("should execute command decorator registration branches", () => {
-    const registerInitSpy = vi.spyOn(MustardRegistry, "registerInit");
+    const registerInitSpy = vi.spyOn(CommandRegistry, "registerInit");
 
     class ChildCmd implements CommandStruct {
       run() {}
@@ -395,7 +395,7 @@ describe("Decorators runtime branches", () => {
       "task",
       "t",
       "desc",
-      undefined as any
+      undefined as any,
     )(RunCmd, {
       name: "RunCmd2",
     } as any);
@@ -412,7 +412,7 @@ describe("Decorators runtime branches", () => {
       "work",
       "w",
       "work",
-      "oops" as any
+      "oops" as any,
     )(RunCmd, {
       name: "RunCmd3",
     } as any);
@@ -453,10 +453,10 @@ describe("Decorators runtime branches", () => {
       schema: undefined,
       description: "dry mode",
     });
-    expect(MustardRegistry.OptionAliasMap["dry"]).toBe("d");
+    expect(CommandRegistry.OptionAliasMap["dry"]).toBe("d");
 
     const validatorOptionDecorator = OptionDecorators.Option(
-      Validator.Boolean()
+      Validator.Boolean(),
     );
     const validatorInitializerFactory = validatorOptionDecorator(undefined, {
       name: "requiredField",
@@ -467,7 +467,7 @@ describe("Decorators runtime branches", () => {
     const variadicDecorator = OptionDecorators.VariadicOption(
       "pkgs",
       "p",
-      "packages"
+      "packages",
     );
     const variadicInitializerFactory = variadicDecorator(undefined, {
       name: "pkgs",
@@ -480,7 +480,7 @@ describe("Decorators runtime branches", () => {
       description: "packages",
       initValue: ["a"],
     });
-    expect(MustardRegistry.VariadicOptions.has("pkgs")).toBe(true);
-    expect(MustardRegistry.VariadicOptions.has("p")).toBe(true);
+    expect(CommandRegistry.VariadicOptions.has("pkgs")).toBe(true);
+    expect(CommandRegistry.VariadicOptions.has("p")).toBe(true);
   });
 });

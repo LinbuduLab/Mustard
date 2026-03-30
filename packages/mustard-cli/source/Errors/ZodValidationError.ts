@@ -1,7 +1,7 @@
 import { z } from "zod";
 import chalk from "chalk";
 
-import { MustardError } from "../Typings/MustardError.struct";
+import { MustardError } from "../Typings/MustardError.struct.js";
 
 import type { ZodInvalidTypeIssue } from "zod";
 
@@ -11,7 +11,7 @@ export class ValidationError extends MustardError implements MustardError {
   constructor(
     private invalidOptionName: string,
     private invalidOptionValue: unknown,
-    private msg: string
+    private msg: string,
   ) {
     super();
     this.stack = undefined;
@@ -19,7 +19,7 @@ export class ValidationError extends MustardError implements MustardError {
 
   get message(): string {
     return chalk.yellow(
-      `Invalid input for option ${chalk.bold(this.invalidOptionName)}`
+      `Invalid input for option ${chalk.bold(this.invalidOptionName)}`,
     );
   }
 
@@ -34,7 +34,7 @@ export class ValidationError extends MustardError implements MustardError {
 
     if (expected && received) {
       return `Invalid input for argument '${argName}', expected: ${chalk.green(
-        expected
+        expected,
       )}, received: ${chalk.yellow(received)}`;
     } else {
       return message ?? `Invalid input for argument '${argName}`;

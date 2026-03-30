@@ -1,6 +1,9 @@
-import type { CommandRegistryPayload, MustardCommand } from "./Command.struct";
-import type { Provider } from "./DIService.struct";
-import type { MaybeFactory } from "./Shared.struct";
+import type {
+  CommandRegistryPayload,
+  MustardCommand,
+} from "./Command.struct.js";
+import type { Provider } from "./DIService.struct.js";
+import type { MaybeFactory } from "./Shared.struct.js";
 
 export interface MustardConfigurations {
   /**

@@ -29,7 +29,7 @@
 ```mermaid
 flowchart TB
     subgraph Phase1["阶段一：类加载 · 装饰器元数据采集"]
-        D1["@Command / @RootCommand<br/>→ MustardRegistry.registerInit()"]
+        D1["@Command / @RootCommand<br/>→ CommandRegistry.registerInit()"]
         D2["@Option / @VariadicOption<br/>→ 返回占位对象 + 写入 AliasMap / VariadicOptions"]
         D3["@Options / @Input<br/>→ 返回占位对象"]
         D4["@Inject<br/>→ 返回 Inject 占位对象"]
@@ -82,7 +82,7 @@ flowchart TB
 
 ### 命令注册
 
-`@Command` 和 `@RootCommand` 在类加载时将命令元数据写入 `MustardRegistry.InitCommandRegistry`。
+`@Command` 和 `@RootCommand` 在类加载时将命令元数据写入 `CommandRegistry.InitCommandRegistry`。
 
 ```mermaid
 flowchart LR
@@ -118,7 +118,7 @@ flowchart TB
         O1["解析重载参数"]
         O2["OptionImpl(name, alias, desc, validator)"]
         O3["返回 field initializer"]
-        O4["alias → MustardRegistry.OptionAliasMap"]
+        O4["alias → CommandRegistry.OptionAliasMap"]
         O5["返回占位对象:<br/>{type: 'Option', optionName,<br/>optionAlias, initValue, schema, description}"]
     end
 
@@ -129,7 +129,7 @@ flowchart TB
     subgraph VariadicDec["@VariadicOption(name?, alias?, desc?)"]
         V1["解析重载参数"]
         V2["VariadicOptionImpl"]
-        V3["MustardRegistry.VariadicOptions.add(name)"]
+        V3["CommandRegistry.VariadicOptions.add(name)"]
         V4["alias → VariadicOptions.add(alias)"]
         V5["返回占位对象:<br/>{type: 'VariadicOption', optionName,<br/>optionAlias, description, initValue}"]
     end
@@ -201,7 +201,7 @@ sequenceDiagram
     participant App as @App 装饰器
     participant Factory as MustardFactory
     participant CLIClass as CLI
-    participant Registry as MustardRegistry
+    participant Registry as CommandRegistry
 
     User->>App: @App({ name, commands, configurations, providers })
     App->>Factory: 存储 FactoryOptions (静态变量)
@@ -252,7 +252,7 @@ flowchart TB
         Inst1["遍历 CommandRegistry"]
         Inst2["new commandRegistration.Class()"]
         Inst3["filterDecoratedInstanceFields(instance)<br/>收集所有带 type 标记的占位字段"]
-        Inst4["MustardRegistry.upsert(key, { instance, decoratedInstanceFields })"]
+        Inst4["CommandRegistry.upsert(key, { instance, decoratedInstanceFields })"]
         Inst5["parseFromProcessArgs(VariadicOptions, OptionAliasMap)"]
         Inst6{"存在 VariadicOptions<br/>或 AliasMap?"}
         Inst7["使用 yargs-parser<br/>(array + alias + greedy-arrays)"]
@@ -648,7 +648,7 @@ sequenceDiagram
     participant App as @App
     participant Factory as MustardFactory
     participant CLI as CLI
-    participant Registry as MustardRegistry
+    participant Registry as CommandRegistry
     participant Normalizer as DecoratedFieldsNormalizer
     participant Handler as CommandHandler
 

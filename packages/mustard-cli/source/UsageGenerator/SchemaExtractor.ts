@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { Nullable } from "../Typings/Shared.struct";
+import type { Nullable } from "../Typings/Shared.struct.js";
 
 export interface ConstraintCheck {
   kind: string;

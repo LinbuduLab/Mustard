@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MustardRegistry } from "../Components/Registry";
+import { CommandRegistry } from "../Components/Registry";
 
 describe("Registry", () => {
   it("should register and provide init payload", () => {
@@ -9,11 +9,11 @@ describe("Registry", () => {
       run: () => {},
     };
 
-    MustardRegistry.registerInit("foo", payload);
+    CommandRegistry.registerInit("foo", payload);
 
-    expect(MustardRegistry.provideInit("foo")).toEqual(payload);
-    expect(Array.from(MustardRegistry.provideInit().keys())).toEqual(["foo"]);
-    expect(Array.from(MustardRegistry.provideInit().values())).toEqual([
+    expect(CommandRegistry.provideInit("foo")).toEqual(payload);
+    expect(Array.from(CommandRegistry.provideInit().keys())).toEqual(["foo"]);
+    expect(Array.from(CommandRegistry.provideInit().values())).toEqual([
       payload,
     ]);
   });
@@ -25,11 +25,11 @@ describe("Registry", () => {
       run: () => {},
     };
 
-    MustardRegistry.register("foo", payload);
+    CommandRegistry.register("foo", payload);
 
-    expect(MustardRegistry.provide("foo")).toEqual(payload);
-    expect(Array.from(MustardRegistry.provide().keys())).toEqual(["foo"]);
-    expect(Array.from(MustardRegistry.provide().values())).toEqual([payload]);
+    expect(CommandRegistry.provide("foo")).toEqual(payload);
+    expect(Array.from(CommandRegistry.provide().keys())).toEqual(["foo"]);
+    expect(Array.from(CommandRegistry.provide().values())).toEqual([payload]);
   });
 
   it("should upsert from registry", () => {
@@ -39,19 +39,19 @@ describe("Registry", () => {
       run: () => {},
     };
 
-    MustardRegistry.register("foo", payload);
+    CommandRegistry.register("foo", payload);
 
-    MustardRegistry.upsert("foo", { description: "bar" });
-    MustardRegistry.upsert("bar", { description: "bar" });
+    CommandRegistry.upsert("foo", { description: "bar" });
+    CommandRegistry.upsert("bar", { description: "bar" });
 
-    expect(MustardRegistry.provide("foo").description).toBe("bar");
-    expect(MustardRegistry.provide("bar").description).toBe("bar");
+    expect(CommandRegistry.provide("foo").description).toBe("bar");
+    expect(CommandRegistry.provide("bar").description).toBe("bar");
   });
 
   it("should handle root", () => {
-    MustardRegistry.register("root", { description: "root" });
+    CommandRegistry.register("root", { description: "root" });
 
-    expect(MustardRegistry.provideRootCommand()).toEqual({
+    expect(CommandRegistry.provideRootCommand()).toEqual({
       description: "root",
     });
   });

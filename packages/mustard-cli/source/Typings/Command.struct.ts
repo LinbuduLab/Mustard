@@ -1,6 +1,6 @@
-import type { MaybePromise, Constructable, Nullable } from "./Shared.struct";
-import type { CommandList } from "./Configuration.struct";
-import type { TaggedDecoratedInstanceFields } from "./Utils.struct";
+import type { MaybePromise, Constructable, Nullable } from "./Shared.struct.js";
+import type { CommandList } from "./Configuration.struct.js";
+import type { TaggedDecoratedInstanceFields } from "./Utils.struct.js";
 
 export type CommandRegistryPayload = {
   commandInvokeName: string;

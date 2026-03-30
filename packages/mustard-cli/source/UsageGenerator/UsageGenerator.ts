@@ -1,11 +1,10 @@
-import { MustardRegistry } from "../Core/Registry";
-import { MustardInternalUtils } from "../Utils/Utils";
-import uniqBy from "lodash.uniqby";
+import { CommandRegistry } from "../Core/CommandRegistry.js";
+import { MustardInternalUtils } from "../Utils/Utils.js";
 
-import { InstanceFieldDecorationTypes } from "../Utils/Constants";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
 
-import type { CommandRegistryPayload } from "../Typings/Command.struct";
-import type { Nullable } from "../Typings/Shared.struct";
+import type { CommandRegistryPayload } from "../Typings/Command.struct.js";
+import type { Nullable } from "../Typings/Shared.struct.js";
 
 interface SharedInfo {
   name: string;
@@ -40,7 +39,7 @@ export class UsageInfoGenerator {
   }
 
   public static assemblePreviousInputsWithBinary(
-    currentCommandInvokeName: string
+    currentCommandInvokeName: string,
   ): string {
     const { parsedInputs } = UsageInfoGenerator.generatorOptions;
 
@@ -54,20 +53,20 @@ export class UsageInfoGenerator {
   }
 
   public static collectCompleteAppUsage() {
-    const completeRegistration = MustardRegistry.provide();
+    const completeRegistration = CommandRegistry.provide();
 
-    const commands: ParsedCommandUsage[] = uniqBy(
+    const commands: ParsedCommandUsage[] = MustardInternalUtils.uniqBy(
       Array.from(completeRegistration.values()).map((c) =>
-        UsageInfoGenerator.collectSpecificCommandUsage(c)
+        UsageInfoGenerator.collectSpecificCommandUsage(c),
       ),
-      "name"
+      "name",
     );
 
     return commands;
   }
 
   public static collectSpecificCommandUsage(
-    registration: CommandRegistryPayload
+    registration: CommandRegistryPayload,
   ): ParsedCommandUsage {
     const { commandInvokeName, instance, childCommandList = [] } = registration;
 
@@ -82,7 +81,7 @@ export class UsageInfoGenerator {
     );
 
     const decoratedFields = MustardInternalUtils.filterDecoratedInstanceFields(
-      instance!
+      instance!,
     ).map((option) => {
       return {
         name: option.key,
@@ -95,15 +94,15 @@ export class UsageInfoGenerator {
     });
 
     const options: ParsedOptionInfo[] = decoratedFields.filter(
-      (o) => o.type === InstanceFieldDecorationTypes.Option
+      (o) => o.type === InstanceFieldDecorationTypes.Option,
     ) as ParsedOptionInfo[];
 
     const variadicOptions: ParsedOptionInfo[] = decoratedFields.filter(
-      (o) => o.type === InstanceFieldDecorationTypes.VariadicOption
+      (o) => o.type === InstanceFieldDecorationTypes.VariadicOption,
     ) as ParsedOptionInfo[];
 
     const input: ParsedOptionInfo = decoratedFields.find(
-      (o) => o.type === InstanceFieldDecorationTypes.Input
+      (o) => o.type === InstanceFieldDecorationTypes.Input,
     ) as ParsedOptionInfo;
 
     const command: ParsedCommandUsage = {
@@ -129,20 +128,20 @@ export class UsageInfoGenerator {
         ? // print usage info for RootCommand only
           console.log(
             UsageInfoGenerator.formatRootCommandUsage(
-              UsageInfoGenerator.collectSpecificCommandUsage(registration)
-            )
+              UsageInfoGenerator.collectSpecificCommandUsage(registration),
+            ),
           )
         : // print usage info for specific command only
           console.log(
             UsageInfoGenerator.formatCommandUsage(
-              UsageInfoGenerator.collectSpecificCommandUsage(registration)
-            )
+              UsageInfoGenerator.collectSpecificCommandUsage(registration),
+            ),
           )
       : // print usage info for complete application
         console.log(
           UsageInfoGenerator.batchfFormatCommandUsage(
-            UsageInfoGenerator.collectCompleteAppUsage()
-          )
+            UsageInfoGenerator.collectCompleteAppUsage(),
+          ),
         );
   }
 
@@ -151,17 +150,15 @@ export class UsageInfoGenerator {
 Usage:
 
   $ ${UsageInfoGenerator.assemblePreviousInputsWithBinary(collect.name)} ${
-      collect.input ? `[${collect.input.name}]` : ""
-    } ${
-      collect.options.length || collect.variadicOptions.length
-        ? "[options]"
-        : ""
-    }
+    collect.input ? `[${collect.input.name}]` : ""
+  } ${
+    collect.options.length || collect.variadicOptions.length ? "[options]" : ""
+  }
 ${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
   }
 
   public static formatCommandUsageInternal(
-    collect: ParsedCommandUsage
+    collect: ParsedCommandUsage,
   ): string {
     const commandPart = `Command:\n  ${collect.name}${
       collect.alias ? `, ${collect.alias},` : ""
@@ -173,7 +170,7 @@ ${UsageInfoGenerator.formatCommandUsageInternal(collect)}`;
             (c) =>
               ` ${c.name}${c.alias ? `, ${c.alias},` : ""} ${
                 c.description ? c.description + "\n" : "\n"
-              }`
+              }`,
           )
           .join(" ")}
 Run '${UsageInfoGenerator.generatorOptions.bin} ${
@@ -241,7 +238,7 @@ Options: ${optionsPart}`;
   }
 
   public static batchfFormatCommandUsage(
-    collect: ParsedCommandUsage[]
+    collect: ParsedCommandUsage[],
   ): string {
     let result = "";
 

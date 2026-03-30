@@ -1,20 +1,22 @@
 import mri from "mri";
-import uniqby from "lodash.uniqby";
 import parse from "yargs-parser";
 import { closest } from "fastest-levenshtein";
-import { MustardRegistry } from "../Core/Registry";
-import { MustardConstanst, isInstanceFieldDecorationType } from "./Constants";
+import { CommandRegistry } from "../Core/CommandRegistry.js";
+import {
+  MustardConstanst,
+  isInstanceFieldDecorationType,
+} from "./Constants.js";
 
 import type {
   CommandInput,
   CommandRegistryPayload,
   MustardCommand,
-} from "../Typings/Command.struct";
-import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct";
-import type { Constructable, Dictionary } from "../Typings/Shared.struct";
-import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct";
-import type { RestrictValueSet } from "../Typings/Controller.struct";
-import type { CommandList } from "../Typings/Configuration.struct";
+} from "../Typings/Command.struct.js";
+import type { TaggedDecoratedInstanceFields } from "../Typings/Utils.struct.js";
+import type { Constructable, Dictionary } from "../Typings/Shared.struct.js";
+import type { OptionInitializerPlaceHolder } from "../Typings/Option.struct.js";
+import type { RestrictValueSet } from "../Typings/Controller.struct.js";
+import type { CommandList } from "../Typings/Configuration.struct.js";
 
 export class MustardInternalUtils {
   public static getInstanceFields(instance: MustardCommand): string[] {
@@ -23,7 +25,7 @@ export class MustardInternalUtils {
 
   public static getInstanceFieldValue<TExpected>(
     instance: MustardCommand,
-    field: string
+    field: string,
   ): TExpected {
     return <TExpected>Reflect.get(instance, field);
   }
@@ -31,7 +33,7 @@ export class MustardInternalUtils {
   public static setInstanceFieldValue<T>(
     instance: MustardCommand,
     field: string,
-    value: T
+    value: T,
   ) {
     Reflect.set(instance, field, value);
 
@@ -41,10 +43,10 @@ export class MustardInternalUtils {
   public static parseFromProcessArgs(
     withVariadic: string[] = [],
 
-    aliasMap: Dictionary<string> = {}
+    aliasMap: Dictionary<string> = {},
   ) {
     const useCompleteParse = Boolean(
-      withVariadic.length || Object.keys(aliasMap).length
+      withVariadic.length || Object.keys(aliasMap).length,
     );
 
     const parsed = useCompleteParse
@@ -62,7 +64,7 @@ export class MustardInternalUtils {
   }
 
   public static filterDecoratedInstanceFields(
-    instance: MustardCommand
+    instance: MustardCommand,
   ): TaggedDecoratedInstanceFields[] {
     const fields = <string[]>MustardInternalUtils.getInstanceFields(instance);
 
@@ -87,8 +89,8 @@ export class MustardInternalUtils {
 
   public static findHandlerCommandWithInputs(
     inputs: CommandInput | string[],
-    commands: string[] = Array.from(MustardRegistry.provide().keys()),
-    fallback: CommandRegistryPayload = MustardRegistry.provideRootCommand()
+    commands: string[] = Array.from(CommandRegistry.provide().keys()),
+    fallback: CommandRegistryPayload = CommandRegistry.provideRootCommand(),
   ): {
     command?: CommandRegistryPayload;
     inputs: string[];
@@ -96,7 +98,7 @@ export class MustardInternalUtils {
     const [matcher, ...rest] = inputs;
 
     // match command from first input
-    const matchFromFirstInput = MustardRegistry.provide().get(matcher);
+    const matchFromFirstInput = CommandRegistry.provide().get(matcher);
 
     // if only one input is provided, use it directly
     if (inputs.length === 1) {
@@ -121,7 +123,7 @@ export class MustardInternalUtils {
     )
       .map((C) => {
         const matched = commands.find((commandIdentifier) => {
-          const registered = MustardRegistry.provide(commandIdentifier)?.Class;
+          const registered = CommandRegistry.provide(commandIdentifier)?.Class;
 
           return typeof registered !== "undefined" && registered === C;
         });
@@ -143,7 +145,7 @@ export class MustardInternalUtils {
     return MustardInternalUtils.findHandlerCommandWithInputs(
       rest,
       childCommands.concat([...rest]),
-      matchFromFirstInput
+      matchFromFirstInput,
     );
   }
 
@@ -170,13 +172,13 @@ export class MustardInternalUtils {
 
   public static levenshtein(
     unknownOption: string,
-    avaliableOptions: string[] = []
+    avaliableOptions: string[] = [],
   ): string {
     return closest(unknownOption, avaliableOptions);
   }
 
   public static isOptionInitializer(
-    input: any
+    input: any,
   ): input is OptionInitializerPlaceHolder {
     return typeof input === "object" && input.type === "Option";
   }
@@ -184,7 +186,7 @@ export class MustardInternalUtils {
   public static applyRestrictions(
     inputValue: unknown,
     defaultValue: unknown,
-    restrictions?: RestrictValueSet
+    restrictions?: RestrictValueSet,
   ) {
     if (!restrictions) return inputValue;
 
@@ -195,12 +197,40 @@ export class MustardInternalUtils {
     return restrictValues.includes(inputValue) ? inputValue : defaultValue;
   }
 
+  public static uniqBy<T>(
+    array: readonly T[],
+    iteratee: ((item: T) => unknown) | keyof T,
+  ): T[] {
+    const seen = new Set<unknown>();
+    return array.filter((item) => {
+      const key =
+        typeof iteratee === "function" ? iteratee(item) : item[iteratee];
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  public static groupBy<T>(
+    array: readonly T[],
+    iteratee: ((item: T) => string | number) | keyof T,
+  ): Record<string, T[]> {
+    return array.reduce<Record<string, T[]>>((result, item) => {
+      const key =
+        typeof iteratee === "function"
+          ? String(iteratee(item))
+          : String(item[iteratee]);
+      (result[key] ??= []).push(item);
+      return result;
+    }, {});
+  }
+
   public static matchFromCommandClass(
-    commandClassList: CommandList
+    commandClassList: CommandList,
   ): CommandRegistryPayload[] {
     const commandNameList = commandClassList.map((C) => C.name);
 
-    const completeRegistration = MustardRegistry.provide();
+    const completeRegistration = CommandRegistry.provide();
 
     const matched = Array.from(completeRegistration.values()).filter(
       (registration) => {
@@ -208,9 +238,12 @@ export class MustardInternalUtils {
           typeof registration !== "undefined" &&
           commandNameList.includes(registration.Class.name)
         );
-      }
+      },
     );
 
-    return uniqby(matched, (registration) => registration.Class.name);
+    return MustardInternalUtils.uniqBy(
+      matched,
+      (registration) => registration.Class.name,
+    );
   }
 }

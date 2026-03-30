@@ -1,8 +1,8 @@
-import { MustardInternalUtils } from "../../Utils/Utils";
+import { MustardInternalUtils } from "../../Utils/Utils.js";
 
-import type { Dictionary } from "../../Typings/Shared.struct";
-import type { MustardCommand } from "../../Typings/Command.struct";
-import type { TaggedDecoratedInstanceFields } from "../../Typings/Utils.struct";
+import type { Dictionary } from "../../Typings/Shared.struct.js";
+import type { MustardCommand } from "../../Typings/Command.struct.js";
+import type { TaggedDecoratedInstanceFields } from "../../Typings/Utils.struct.js";
 
 export class OptionsNormalizer {
   public static normalize(

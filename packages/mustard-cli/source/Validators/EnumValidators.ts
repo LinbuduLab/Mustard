@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import type { ZodNativeEnum } from "zod";
-import type { Dictionary } from "../Typings/Shared.struct";
-import type { MaybeOptionalZodType } from "./Typings";
+import type { Dictionary } from "../Typings/Shared.struct.js";
+import type { MaybeOptionalZodType } from "./Typings.js";
 
 type CommonEnumType = ZodNativeEnum<Dictionary<string>>;
 

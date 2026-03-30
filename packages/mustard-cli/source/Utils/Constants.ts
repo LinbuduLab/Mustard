@@ -8,11 +8,15 @@ export enum InstanceFieldDecorationTypes {
   Inject = "Inject",
 }
 
+export enum InstanceFieldAdditionalDecorationTypes {
+  Description = "Description",
+}
+
 export function isInstanceFieldDecorationType(
-  type: string
+  type: string,
 ): type is InstanceFieldDecorationTypes {
   return Object.values(InstanceFieldDecorationTypes).includes(
-    type as InstanceFieldDecorationTypes
+    type as InstanceFieldDecorationTypes,
   );
 }
 

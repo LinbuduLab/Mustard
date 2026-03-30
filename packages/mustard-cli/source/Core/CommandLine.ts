@@ -1,29 +1,29 @@
 import _debug from "debug";
 
-import { MustardRegistry } from "./Registry";
-import { MustardConstanst } from "../Utils/Constants";
-import { DecoratedClassFieldsNormalizer } from "./DecoratedFieldsNormalizer";
-import { MustardInternalUtils } from "../Utils/Utils";
+import { CommandRegistry } from "./CommandRegistry.js";
+import { MustardConstanst } from "../Utils/Constants.js";
+import { DecoratedClassFieldsNormalizer } from "./DecoratedFieldsNormalizer.js";
+import { MustardInternalUtils } from "../Utils/Utils.js";
 
-import { BuiltInCommands } from "./BuiltInCommands";
+import { BuiltInCommands } from "./BuiltInCommands.js";
 
-import { CommandNotFoundError } from "../Errors/CommandNotFoundError";
-import { NoRootHandlerError } from "../Errors/NoRootHandlerError";
+import { CommandNotFoundError } from "../Errors/CommandNotFoundError.js";
+import { NoRootHandlerError } from "../Errors/NoRootHandlerError.js";
 
 import type { Arguments } from "yargs-parser";
 import {
   CommandInput,
   CommandRegistryPayload,
   MustardCommand,
-} from "../Typings/Command.struct";
+} from "../Typings/Command.struct.js";
 import type {
   CLIInstantiationConfiguration,
   CommandList,
-} from "../Typings/Configuration.struct";
-import type { Provider } from "../Typings/DIService.struct";
-import type { Dictionary, MaybeArray } from "../Typings/Shared.struct";
-import { DidYouMeanOptionError } from "../Errors/DidYouMeanOptionError";
-import { UnknownOptionsError } from "../Errors/UnknownOptionsError";
+} from "../Typings/Configuration.struct.js";
+import type { Provider } from "../Typings/DIService.struct.js";
+import type { Dictionary, MaybeArray } from "../Typings/Shared.struct.js";
+import { DidYouMeanOptionError } from "../Errors/DidYouMeanOptionError.js";
+import { UnknownOptionsError } from "../Errors/UnknownOptionsError.js";
 
 const debug = _debug("mustard:command-line");
 
@@ -31,7 +31,7 @@ export class MustardCommandLine {
   constructor(
     readonly identifier: string,
     Commands: CommandList,
-    private options?: CLIInstantiationConfiguration
+    private options?: CLIInstantiationConfiguration,
   ) {
     this.initialize(Commands);
   }
@@ -40,7 +40,9 @@ export class MustardCommandLine {
 
   private initialize(Commands: CommandList) {
     this.normalizeConfigurations();
+
     this.registerCommand(Commands);
+
     this.registerProvider(this.options?.providers ?? []);
   }
 
@@ -51,10 +53,10 @@ export class MustardCommandLine {
 
     providerList.forEach((provider) => {
       MustardInternalUtils.isConstructable(provider)
-        ? MustardRegistry.ExternalProviderRegistry.set(provider.name, provider)
-        : MustardRegistry.ExternalProviderRegistry.set(
+        ? CommandRegistry.ExternalProviderRegistry.set(provider.name, provider)
+        : CommandRegistry.ExternalProviderRegistry.set(
             provider.identifier,
-            provider.value
+            provider.value,
           );
     });
   }
@@ -88,42 +90,45 @@ export class MustardCommandLine {
 
   public registerCommand(Commands: CommandList) {
     for (const Command of Commands) {
-      const CommandRegistration = MustardRegistry.provideInit(Command.name);
+      const CommandRegistration = CommandRegistry.provideInit(Command.name);
 
-      MustardRegistry.register(
+      CommandRegistry.register(
         CommandRegistration.root
           ? MustardConstanst.RootCommandRegistryKey
           : CommandRegistration.commandInvokeName,
 
-        CommandRegistration
+        CommandRegistration,
       );
 
       CommandRegistration.commandAlias
-        ? MustardRegistry.register(
+        ? CommandRegistry.register(
             CommandRegistration.commandAlias,
-            CommandRegistration
+            CommandRegistration,
           )
         : void 0;
 
-      if (CommandRegistration.childCommandList.length > 0) {
+      if (
+        !CommandRegistration.root &&
+        CommandRegistration.childCommandList.length > 0
+      ) {
         this.registerCommand(CommandRegistration.childCommandList);
       }
     }
   }
 
   private instantiateWithParse() {
-    MustardRegistry.provide().forEach((commandRegistration, key) => {
+    CommandRegistry.provide().forEach((commandRegistration, key) => {
       const instance = new commandRegistration.Class();
 
       const decoratedInstanceFields =
         MustardInternalUtils.filterDecoratedInstanceFields(instance);
 
-      MustardRegistry.upsert(key, { instance, decoratedInstanceFields });
+      CommandRegistry.upsert(key, { instance, decoratedInstanceFields });
     });
 
     this.parsedArgs = MustardInternalUtils.parseFromProcessArgs(
-      Array.from(MustardRegistry.VariadicOptions),
-      MustardRegistry.OptionAliasMap
+      Array.from(CommandRegistry.VariadicOptions),
+      CommandRegistry.OptionAliasMap,
     );
 
     debug("parsed arguments: %O", this.parsedArgs);
@@ -136,7 +141,7 @@ export class MustardCommandLine {
 
     BuiltInCommands.useVersionCommand(
       this.parsedArgs,
-      this.options?.enableVersion
+      this.options?.enableVersion,
     );
 
     const useRootHandle = this.parsedArgs._?.length === 0;
@@ -147,7 +152,7 @@ export class MustardCommandLine {
   private dispatchCommand() {
     const { command: commandRegistration, inputs: commandInput } =
       MustardInternalUtils.findHandlerCommandWithInputs(
-        <CommandInput>this.parsedArgs._
+        <CommandInput>this.parsedArgs._,
       );
 
     // should only throw when no matched command found
@@ -160,7 +165,7 @@ export class MustardCommandLine {
       this.identifier,
       this.parsedArgs,
       commandRegistration,
-      this.options?.enableUsage
+      this.options?.enableUsage,
     );
 
     this.handleCommandExecution(commandRegistration, commandInput);
@@ -168,7 +173,7 @@ export class MustardCommandLine {
 
   private handleCommandExecution(
     commandRegistration: CommandRegistryPayload,
-    commandInput: string[]
+    commandInput: string[],
   ) {
     this.executeCommandFromRegistration(commandRegistration, commandInput)
       .then(this.options?.lifeCycles?.onComplete ?? (() => {}))
@@ -176,20 +181,20 @@ export class MustardCommandLine {
         this.options?.lifeCycles?.onError ??
           ((err) => {
             throw err;
-          })
+          }),
       );
   }
 
   private static throwOnUnknownOption(
     instance: MustardCommand,
     parsedArgs: Dictionary,
-    useDidYouMean: boolean
+    useDidYouMean: boolean,
   ) {
     const instanceDeclaredOptions =
       MustardInternalUtils.getInstanceFields(instance);
 
     const unknownOptions = Object.keys(parsedArgs).filter(
-      (key) => !instanceDeclaredOptions.includes(key) && key !== "_"
+      (key) => !instanceDeclaredOptions.includes(key) && key !== "_",
     );
 
     if (unknownOptions.length > 0) {
@@ -199,8 +204,8 @@ export class MustardCommandLine {
           firstUnknownOption,
           MustardInternalUtils.levenshtein(
             firstUnknownOption,
-            instanceDeclaredOptions
-          )
+            instanceDeclaredOptions,
+          ),
         );
       }
 
@@ -210,7 +215,7 @@ export class MustardCommandLine {
 
   private async executeCommandFromRegistration(
     command: CommandRegistryPayload,
-    inputs: string[] = []
+    inputs: string[] = [],
   ) {
     const handler: MustardCommand = command.instance!;
 
@@ -218,21 +223,21 @@ export class MustardCommandLine {
       ? MustardCommandLine.throwOnUnknownOption(
           handler,
           this.parsedArgs,
-          this.options?.didYouMean ?? true
+          this.options?.didYouMean ?? true,
         )
       : void 0;
 
     DecoratedClassFieldsNormalizer.normalizeDecoratedFields(
       command,
       inputs,
-      this.parsedArgs
+      this.parsedArgs,
     );
 
     await handler.run();
   }
 
   private dispatchRootHandler() {
-    const rootCommandRegistration = MustardRegistry.provideRootCommand();
+    const rootCommandRegistration = CommandRegistry.provideRootCommand();
 
     if (rootCommandRegistration) {
       // bin --help with root command specified
@@ -241,7 +246,7 @@ export class MustardCommandLine {
         this.identifier,
         this.parsedArgs,
         rootCommandRegistration,
-        this.options?.enableUsage
+        this.options?.enableUsage,
       );
 
       this.executeCommandFromRegistration(rootCommandRegistration);
@@ -252,7 +257,7 @@ export class MustardCommandLine {
         this.identifier,
         true,
         undefined,
-        this.options?.enableUsage
+        this.options?.enableUsage,
       );
     } else {
       // no root command specified and options.enableUsage is disabled

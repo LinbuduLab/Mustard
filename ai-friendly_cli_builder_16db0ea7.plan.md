@@ -120,7 +120,7 @@ Examples:
 
 当前 `formatRootCommandUsage` **不展示子命令列表**，AI 代理在 `mm --help` 时看不到有哪些子命令可用。
 
-修改 `printHelp` 逻辑：当 registration 为 root 时，额外从 `MustardRegistry.provide()` 收集非 root 的命令一并附在 Root usage 下方，形如：
+修改 `printHelp` 逻辑：当 registration 为 root 时，额外从 `CommandRegistry.provide()` 收集非 root 的命令一并附在 Root usage 下方，形如：
 
 ```
 Commands:
@@ -209,7 +209,7 @@ Claude Code / Cursor 等支持 Skills / AGENTS.md 机制。Mustard 框架可以�
 ### 3.2 实现思路
 
 - 新增内置命令类 `InstallSkillsCommand`，注册为 `install-skills`。
-- 运行时收集 `MustardRegistry` 中所有命令元数据 + `UsageInfoGenerator` 增强后的结构化信息。
+- 运行时收集 `CommandRegistry` 中所有命令元数据 + `UsageInfoGenerator` 增强后的结构化信息。
 - 生成 Markdown 写入 `.cursor/skills/<tool-name>/SKILL.md` 或 `.claude/AGENTS.md`（可通过参数选择目标格式）。
 - 在 `@App` 配置中新增 `aiSkills?: { version?: string; workflows?: string[] }` 允许开发者补充高阶信息。
 

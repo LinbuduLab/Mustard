@@ -1,4 +1,4 @@
-import { MustardError } from "../Typings/MustardError.struct";
+import { MustardError } from "../Typings/MustardError.struct.js";
 
 export class NoRootHandlerError extends MustardError implements MustardError {
   public name = "NoRootHandlerError";
