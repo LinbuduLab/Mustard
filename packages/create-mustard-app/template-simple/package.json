@@ -30,9 +30,9 @@
       "NODE_ENV": "development"
     },
     "execMap": {
-      "js": "node --experimental-specifier-resolution=node",
-      "ts": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node-esm",
-      "mts": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node-esm"
+      "js": "node",
+      "ts": "tsx",
+      "mts": "tsx"
     },
     "ext": "ts,mts,js,mjs,json",
     "ignore": [
@@ -55,6 +55,7 @@
   "devDependencies": {
     "@types/node": "latest",
     "ts-node": "^10.9.1",
+    "tsx": "^4.20.6",
     "typescript": "^5.0.0"
   }
 }

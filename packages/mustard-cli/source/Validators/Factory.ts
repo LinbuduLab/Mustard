@@ -1,17 +1,16 @@
-import { NativeEnumValidator } from "./EnumValidators";
-import {
-  StringValidator,
-  BooleanValidator,
-  NumberValidator,
-} from "./PrimitiveValidators";
+import { StringValidator } from "./StringValidator.js";
+import { BooleanValidator } from "./BooleanValidator.js";
+import { NumberValidator } from "./NumberValidator.js";
+import { DateValidator } from "./DateValidator.js";
 
-import type { Dictionary, Nullable } from "../Typings/Shared.struct";
 import type { ZodType } from "zod";
+
+import type { Nullable } from "../Typings/Shared.struct.js";
 
 export class ValidatorFactory {
   public schema: Nullable<ZodType> = null;
 
-  constructor(public required: boolean = false) {}
+  constructor(private required: boolean = false) {}
 
   public Required() {
     return new ValidatorFactory(true);
@@ -33,7 +32,11 @@ export class ValidatorFactory {
     return new NumberValidator(this.required);
   }
 
-  public Enum(input: Dictionary<unknown>): NativeEnumValidator {
-    return new NativeEnumValidator(this.required, input);
+  public Date(): DateValidator {
+    return new DateValidator(this.required);
   }
+
+  // public Enum(input: Dictionary<unknown>): NativeEnumValidator {
+  //   return new NativeEnumValidator(this.required, input);
+  // }
 }

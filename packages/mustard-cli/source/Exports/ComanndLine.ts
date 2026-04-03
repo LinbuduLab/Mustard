@@ -1,4 +1,4 @@
-export { CLI } from "../Commands/CommandLine";
+export { MustardCommandLine } from "../Core/CommandLine.js";
 
-export type { MustardApp } from "../Typings/Factory.struct";
-export type { CommandStruct } from "../Typings/Command.struct";
+export type { MustardLifecycle } from "../Typings/Lifecycle.struct.js";
+export type { MustardCommand } from "../Typings/Command.struct.js";

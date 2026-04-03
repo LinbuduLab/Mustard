@@ -1,20 +1,20 @@
-import type { MaybePromise, Constructable, Nullable } from "./Shared.struct";
-import type { CommandList } from "./Configuration.struct";
-import type { TaggedDecoratedInstanceFields } from "./Utils.struct";
+import type { MaybePromise, Constructable, Nullable } from "./Shared.struct.js";
+import type { CommandList } from "./Configuration.struct.js";
+import type { TaggedDecoratedInstanceFields } from "./Utils.struct.js";
 
 export type CommandRegistryPayload = {
   commandInvokeName: string;
-  Class: Constructable<CommandStruct>;
+  Class: Constructable<MustardCommand>;
   root: boolean;
   childCommandList: CommandList;
 
   commandAlias?: Nullable<string>;
   description?: Nullable<string>;
-  instance: CommandStruct;
+  instance: MustardCommand;
   decoratedInstanceFields: TaggedDecoratedInstanceFields[];
 };
 
-export abstract class CommandStruct {
+export abstract class MustardCommand {
   abstract example?: () => string;
 
   abstract run(): MaybePromise<void>;

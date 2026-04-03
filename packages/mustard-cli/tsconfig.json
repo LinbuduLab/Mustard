@@ -1,39 +1,10 @@
 {
-  "ts-node": {
-    "swc": false,
-    "pretty": true,
-    "transpileOnly": true,
-    "require": ["tsconfig-paths/register"]
-  },
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": [],
-    "target": "ES6",
-    "module": "ES2022",
     "outDir": "dist",
-    "skipLibCheck": true,
-    "moduleResolution": "node",
-    "strictNullChecks": true,
-    "declaration": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "declarationMap": true,
-    "noEmitOnError": true,
-    "noImplicitReturns": true,
-    "noUnusedParameters": false,
-    "noImplicitThis": true,
-    "noUnusedLocals": false,
-    "strictPropertyInitialization": false,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "rootDir": "source"
+    "rootDir": "source",
+    "types": ["node"]
   },
   "include": ["source"],
-  "exclude": [
-    "dist",
-    "samples",
-    "source/__tests__",
-    "vitest.config.ts",
-    "sample.ts"
-  ]
+  "exclude": ["dist", "tests"]
 }

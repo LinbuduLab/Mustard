@@ -1,4 +1,4 @@
-import type { MaybeFactory, Constructable } from "./Shared.struct";
+import type { MaybeFactory, Constructable } from "./Shared.struct.js";
 
 export type Provider =
   | {

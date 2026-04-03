@@ -1,14 +1,14 @@
 import _debug from "debug";
 
-import { MustardRegistry } from "../Components/Registry";
-import { MustardConstanst } from "../Components/Constants";
+import { CommandRegistry } from "../Core/CommandRegistry.js";
+import { MustardConstanst } from "../Utils/Constants.js";
 
-import { MultiRootCommandError } from "../Errors/MultiRootCommandError";
+import { MultipleRootCommandError } from "../Errors/MultipleRootCommandError.js";
 
-import type { CommandList } from "../Typings/Configuration.struct";
-import type { ClassStruct, Nullable } from "../Typings/Shared.struct";
-import type { AnyClassDecoratorReturnType } from "../Typings/Temp";
-import type { CommandConfiguration } from "../Typings/Command.struct";
+import type { CommandList } from "../Typings/Configuration.struct.js";
+import type { ClassStruct, Nullable } from "../Typings/Shared.struct.js";
+import type { ClassDecoratorImpl } from "../Typings/Decorator.struct.js";
+import type { CommandConfiguration } from "../Typings/Command.struct.js";
 
 const debug = _debug("mustard:decorator:command");
 
@@ -18,22 +18,46 @@ const debug = _debug("mustard:decorator:command");
  * `@Command` and `@RootCommand`
  */
 export class CommandDecorators {
+  private static RegisteredRootCommandTarget: Nullable<ClassStruct> = null;
+
+  /**
+   * Register root command handler class
+   * @returns
+   */
+  public static RootCommand(): ClassDecoratorImpl {
+    return (target, context) => {
+      if (CommandDecorators.RegisteredRootCommandTarget) {
+        throw new MultipleRootCommandError(
+          CommandDecorators.RegisteredRootCommandTarget,
+          target,
+        );
+      }
+
+      CommandDecorators.RegisteredRootCommandTarget = target;
+
+      CommandRegistry.registerInit(<string>context.name, {
+        commandInvokeName: MustardConstanst.RootCommandRegistryKey,
+        Class: target,
+        root: true,
+        childCommandList: [],
+      });
+    };
+  }
+
   /**
    * Register command handler class
    * @example
    * \@Command('run')
    * class RunCommand {}
    */
-  public static Command(commandName: string): AnyClassDecoratorReturnType;
+  public static Command(commandName: string): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
    * \@Command({ name: 'run', alias: 'r' })
    * class RunCommand {}
    */
-  public static Command(
-    config: CommandConfiguration
-  ): AnyClassDecoratorReturnType;
+  public static Command(config: CommandConfiguration): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -45,8 +69,8 @@ export class CommandDecorators {
    */
   public static Command(
     commandName: string,
-    aliasOrDescription: string
-  ): AnyClassDecoratorReturnType;
+    aliasOrDescription: string,
+  ): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -58,8 +82,8 @@ export class CommandDecorators {
    */
   public static Command(
     commandName: string,
-    childCommandList: CommandList
-  ): AnyClassDecoratorReturnType;
+    childCommandList: CommandList,
+  ): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -69,8 +93,8 @@ export class CommandDecorators {
   public static Command(
     commandName: string,
     alias: string,
-    description: string
-  ): AnyClassDecoratorReturnType;
+    description: string,
+  ): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -86,8 +110,8 @@ export class CommandDecorators {
   public static Command(
     commandName: string,
     aliasOrDescription: string,
-    childCommandList: CommandList
-  ): AnyClassDecoratorReturnType;
+    childCommandList: CommandList,
+  ): ClassDecoratorImpl;
   /**
    * Register command handler class
    * @example
@@ -101,14 +125,14 @@ export class CommandDecorators {
     commandName: string,
     alias: string,
     description: string,
-    childCommandList: CommandList
-  ): AnyClassDecoratorReturnType;
+    childCommandList: CommandList,
+  ): ClassDecoratorImpl;
   public static Command(
     commandNameOrConfig: string | CommandConfiguration,
     aliasOrDescriptionOrChildComnandList?: string | CommandList,
     descriptionOrChildComnandList?: string | CommandList,
-    childCommandList?: CommandList
-  ): AnyClassDecoratorReturnType {
+    childCommandList?: CommandList,
+  ): ClassDecoratorImpl {
     //  @Command(config: CommandConfiguration)
     if (typeof commandNameOrConfig === "object") {
       const { name, alias, description, childCommandList } =
@@ -117,7 +141,7 @@ export class CommandDecorators {
         name,
         alias,
         description,
-        childCommandList
+        childCommandList,
       );
     }
 
@@ -132,7 +156,7 @@ export class CommandDecorators {
         commandNameOrConfig,
         null,
         null,
-        []
+        [],
       );
     }
 
@@ -150,7 +174,7 @@ export class CommandDecorators {
           commandNameOrConfig,
           asAlias ? aliasOrDescriptionOrChildComnandList : null,
           asAlias ? null : aliasOrDescriptionOrChildComnandList,
-          []
+          [],
         );
       } else {
         // @Command(commandName: string, childCommandList: CommandList)
@@ -158,7 +182,7 @@ export class CommandDecorators {
           commandNameOrConfig,
           null,
           null,
-          aliasOrDescriptionOrChildComnandList
+          aliasOrDescriptionOrChildComnandList,
         );
       }
     }
@@ -175,7 +199,7 @@ export class CommandDecorators {
           commandNameOrConfig,
           <string>aliasOrDescriptionOrChildComnandList,
           descriptionOrChildComnandList,
-          []
+          [],
         );
       } else {
         // @Command(commandName: string, aliasOrDescription: string, childCommandList: CommandList)
@@ -183,7 +207,7 @@ export class CommandDecorators {
           commandNameOrConfig,
           <string>aliasOrDescriptionOrChildComnandList,
           null,
-          descriptionOrChildComnandList
+          descriptionOrChildComnandList,
         );
       }
     }
@@ -194,7 +218,7 @@ export class CommandDecorators {
         commandNameOrConfig,
         <string>aliasOrDescriptionOrChildComnandList,
         <string>descriptionOrChildComnandList,
-        childCommandList
+        childCommandList,
       );
     }
 
@@ -202,45 +226,20 @@ export class CommandDecorators {
       commandNameOrConfig,
       null,
       null,
-      childCommandList
+      childCommandList,
     );
-  }
-
-  private static RootCommandTargetClass: Nullable<ClassStruct> = null;
-
-  /**
-   * Register root command handler class
-   * @returns
-   */
-  public static RootCommand(): AnyClassDecoratorReturnType {
-    return (target, context) => {
-      if (CommandDecorators.RootCommandTargetClass) {
-        throw new MultiRootCommandError(
-          CommandDecorators.RootCommandTargetClass,
-          target
-        );
-      }
-
-      CommandDecorators.RootCommandTargetClass = target;
-      MustardRegistry.registerInit(<string>context.name, {
-        commandInvokeName: MustardConstanst.RootCommandRegistryKey,
-        Class: target,
-        root: true,
-        childCommandList: [],
-      });
-    };
   }
 
   private static registerCommandImpl(
     commandInvokeName: string,
     commandAlias?: Nullable<string>,
     description?: Nullable<string>,
-    childCommandList: CommandList = []
-  ): AnyClassDecoratorReturnType {
+    childCommandList: CommandList = [],
+  ): ClassDecoratorImpl {
     return (target, context) => {
       debug("Command %s registered", commandInvokeName);
 
-      MustardRegistry.registerInit(<string>context.name, {
+      CommandRegistry.registerInit(<string>context.name, {
         commandInvokeName,
         commandAlias,
         description,
@@ -249,5 +248,26 @@ export class CommandDecorators {
         childCommandList,
       });
     };
+  }
+
+  /**
+   * Mark command as dangerous
+   */
+  public static Dangerous(): ClassDecoratorImpl {
+    return (target, context) => {};
+  }
+
+  /**
+   * Mark command as require approval
+   */
+  public static RequireApproval(): ClassDecoratorImpl {
+    return (target, context) => {};
+  }
+
+  /**
+   * Mark command as safe
+   */
+  public static Safe(): ClassDecoratorImpl {
+    return (target, context) => {};
   }
 }

@@ -3,7 +3,9 @@ packages:
   - experimentals/**
   - "!**/test/**"
   - "!**/template-**"
-link-workspace-packages: false
-prefer-workspace-packages: false
-shared-workspace-lockfile: true
-save-workspace-protocol: true
+
+catalog:
+  typescript: 6.0.2
+  "@types/node": 25.5.0
+  tsx: 4.21.0
+  zod: 3.20.2

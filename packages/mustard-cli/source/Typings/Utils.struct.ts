@@ -1,15 +1,49 @@
-import type { InstanceFieldDecorationTypesUnion } from "../Components/Constants";
+import type { z } from "zod";
+import {
+  InstanceFieldAdditionalDecorationTypes,
+  InstanceFieldDecorationTypes,
+} from "../Utils/Constants.js";
+
+export interface BaseClassFieldInitialValue {
+  type: InstanceFieldDecorationTypes;
+  description?: string;
+  initValue?: unknown;
+  schema?: z.Schema;
+}
+
+export interface OptionInitialValue extends BaseClassFieldInitialValue {
+  type: InstanceFieldDecorationTypes.Option;
+
+  optionName?: string;
+  optionAlias?: string;
+}
+
+// export class DecoratorInitialValue<T extends BaseClassFieldInitialValue> {
+//   public constructor(public value: T) {
+//     if (
+//       value.type &&
+//       (value.type in InstanceFieldDecorationTypes ||
+//         value.type in InstanceFieldAdditionalDecorationTypes)
+//     ) {
+//       this.value = {
+//         ...this.value,
+//         ...value,
+//       };
+//     }
+//   }
+// }
 
 export interface BasePlaceholder {
-  type: InstanceFieldDecorationTypesUnion;
+  type: InstanceFieldDecorationTypes;
   optionName?: string;
   optionAlias?: string;
   description?: string;
   initValue?: unknown;
+  schema?: z.Schema;
 }
 
 export type TaggedDecoratedInstanceFields = {
   key: string;
-  type: InstanceFieldDecorationTypesUnion;
+  type: InstanceFieldDecorationTypes;
   value: BasePlaceholder;
 };

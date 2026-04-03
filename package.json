@@ -3,40 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "pnpm --filter mustard-* build",
+    "build": "pnpm --recursive --filter mustard-* build",
     "dev": "pnpm --filter mustard-cli dev",
     "release": "pnpm --filter mustard-cli publish --no-git-checks",
     "test": "pnpm --filter mustard-cli test -- -u"
   },
-  "nodemonConfig": {
-    "delay": 500,
-    "env": {
-      "NODE_ENV": "development"
-    },
-    "execMap": {
-      "ts": "ts-node-esm"
-    },
-    "ext": "ts,json",
-    "ignore": [
-      "**/test/**",
-      "**/docs/**",
-      "node_modules"
-    ],
-    "restartable": "rs",
-    "verbose": true,
-    "watch": [
-      "*.ts"
-    ]
-  },
   "prettier": {},
-  "dependencies": {
-    "@changesets/cli": "^2.26.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/node": "^18.11.7",
-    "nodemon": "^2.0.20",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.0",
-    "typescript": "^5.3.3"
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   }
 }

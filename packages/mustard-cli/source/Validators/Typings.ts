@@ -3,21 +3,19 @@ import type {
   ZodString,
   ZodNumber,
   ZodBoolean,
-  ZodNativeEnum,
   ZodType,
   ZodOptional,
 } from "zod";
-import type { Dictionary, ValidationTypes } from "../Typings/Shared.struct";
+import type { Dictionary, ValidationTypes } from "../Typings/Shared.struct.js";
 
 export type AvaliableSchemaValidations =
   | keyof typeof z
   | keyof ZodString
   | keyof ZodNumber
-  | keyof ZodBoolean
-  | keyof ZodNativeEnum<Dictionary<string>>;
+  | keyof ZodBoolean;
 
 export type ValidationItem<
-  TTypes extends AvaliableSchemaValidations = AvaliableSchemaValidations
+  TTypes extends AvaliableSchemaValidations = AvaliableSchemaValidations,
 > = {
   type: TTypes;
   args: unknown[];
@@ -29,7 +27,7 @@ export type MaybeOptionalZodType<T extends ZodType<unknown>> =
 
 export abstract class BaseValidator<
   TValidationType extends ZodType,
-  TParsedType extends unknown
+  TParsedType extends unknown,
 > {
   _schema!: TValidationType;
 
@@ -41,6 +39,6 @@ export abstract class BaseValidator<
 
   abstract addValidation(
     type: ValidationTypes<TValidationType>,
-    args?: unknown[]
+    args?: unknown[],
   ): void;
 }

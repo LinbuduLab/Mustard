@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 
-import { MustardFactory } from "mustard-cli";
+import { MustardApp } from "mustard-cli";
 import {
   Command,
   RootCommand,
@@ -8,85 +8,106 @@ import {
   VariadicOption,
   App,
   Input,
+  Restrict,
+  Description,
+  Schema,
 } from "mustard-cli/decorator";
-import { Validator } from "mustard-cli/validator";
-import type { CommandStruct, MustardApp } from "mustard-cli/cli";
+
+import { Validator as ValidatorFactory } from "mustard-cli/validator";
+import { z } from "zod";
+
+import type { MustardCommand } from "mustard-cli/cli";
 
 import path from "path";
 
 const require = createRequire(import.meta.url);
 
 @RootCommand()
-class RootCommandHandle implements CommandStruct {
-  @Option("msg", "m", Validator.Required().String().MinLength(5))
+class RootCommandHandle implements MustardCommand {
+  @Option("msgF", "m")
+  @Description("description of msg")
+  @Schema(z.string().min(3).optional().describe("description of msg, from zod"))
   public msg = "default value of msg";
+
+  // @Option("msg2", Validator.Number())
+  // public msg2 = "default value of msg";
+
+  // @Option("msg3", Validator.Boolean())
+  // public msg3 = false;
+
+  // @Option("msg4", Validator.Date())
+  // public msg4 = false;
+
+  // @VariadicOption("msg5")
+  // public msg5: string[] = [];
+
+  // @Option("msg6")
+  // @Restrict(["foo", "bar", "baz"])
+  // public msg6: string = "foo";
 
   public run(): void {
     console.log(`Root command executed with: msg: ${this.msg}`);
   }
 }
 
-@Command("update", "u", "update project dependencies")
-class UpdateCommand implements CommandStruct {
-  @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
-  public depth = 10;
+// @Command("update", "u", "update project dependencies")
+// class UpdateCommand implements MustardCommand {
+//   @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
+//   public depth = 10;
 
-  @Option(Validator.Boolean())
-  public dry = false;
+//   @Option(Validator.Boolean())
+//   public dry = false;
 
-  @Option({ name: "target", alias: "t" })
-  public targetOption: string;
+//   @Option({ name: "target", alias: "t" })
+//   public targetOption: string;
 
-  @Input()
-  public input: string[] = [];
+//   @Input()
+//   @Description("input description")
+//   public input: string[] = [];
 
-  @VariadicOption()
-  public packages: string[] = [];
+//   @VariadicOption()
+//   public packages: string[] = [];
 
-  public run(): void {
-    console.log(
-      `Update command executed with: depth: ${this.depth}, dry: ${
-        this.dry
-      }, targetOption: ${this.targetOption}, input: ${JSON.stringify(
-        this.input
-      )}, packages: ${JSON.stringify(this.packages)}`
-    );
-  }
-}
+//   public run(): void {
+//     console.log(
+//       `Update command executed with: depth: ${this.depth}, dry: ${
+//         this.dry
+//       }, targetOption: ${this.targetOption}, input: ${JSON.stringify(
+//         this.input,
+//       )}, packages: ${JSON.stringify(this.packages)}`,
+//     );
+//   }
+// }
 
-@Command("sync", "s", "sync project")
-class SyncCommand implements CommandStruct {
-  @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
-  public depth = 10;
+// @Command("sync", "s", "sync project")
+// class SyncCommand implements MustardCommand {
+//   @Option("depth", "depth of packages to update", Validator.Number().Gte(1))
+//   public depth = 10;
 
-  @Option(Validator.Boolean())
-  public dry = false;
+//   @Option(Validator.Boolean())
+//   public dry = false;
 
-  @Option({ name: "target", alias: "t" })
-  public targetOption: string;
+//   @Option({ name: "target", alias: "t" })
+//   public targetOption: string;
 
-  @Input()
-  public input: string[] = [];
+//   @Input()
+//   public input: string[] = [];
 
-  @VariadicOption()
-  public packages: string[] = [];
+//   @VariadicOption()
+//   public packages: string[] = [];
 
-  public run(): void {}
-}
+//   public run(): void {}
+// }
 
 @App({
   name: "create-mustard-app",
-  commands: [RootCommandHandle, UpdateCommand, SyncCommand],
+  commands: [RootCommandHandle],
   configurations: {
     allowUnknownOptions: true,
     enableUsage: true,
     enableVersion: require(path.resolve("./package.json")).version,
   },
 })
-class Project implements MustardApp {
-  onStart() {}
+class SampleApp {}
 
-  onComplete() {}
-}
-
-MustardFactory.init(Project).start();
+MustardApp.start(SampleApp);

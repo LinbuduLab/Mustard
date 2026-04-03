@@ -1,8 +1,9 @@
 import type {
   ContextInitializerPlaceHolder,
   UtilsInitializerPlaceHolder,
-} from "../Typings/Context.struct";
-import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
+} from "../Typings/Context.struct.js";
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
 
 /**
  * Built-in providers related decorators
@@ -13,17 +14,17 @@ export class BuiltInDecorators {
    * @example
    * class RunCommand {
    *  \@Utils()
-   *   public utils: MustardUtils;
+   *   public utils: MustardInternalUtils;
    *
    *   run() {
    *     this.utils.json.read();
    *   };
    * }
    */
-  public static Utils(): AnyClassFieldDecoratorReturnType {
+  public static Utils(): ClassFieldDecoratorImpl {
     return (_, context) => () =>
       <UtilsInitializerPlaceHolder>{
-        type: "Utils",
+        type: InstanceFieldDecorationTypes.Utils,
       };
   }
 
@@ -39,10 +40,10 @@ export class BuiltInDecorators {
    *   };
    * }
    */
-  public static Ctx(): AnyClassFieldDecoratorReturnType {
+  public static Ctx(): ClassFieldDecoratorImpl {
     return (_, context) => () =>
       <ContextInitializerPlaceHolder>{
-        type: "Context",
+        type: InstanceFieldDecorationTypes.Context,
       };
   }
 }

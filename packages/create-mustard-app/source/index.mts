@@ -7,7 +7,7 @@ import logSymbols from "log-symbols";
 import { MustardFactory, MustardUtils } from "mustard-cli";
 
 import { RootCommand, Option, App, Utils, Input } from "mustard-cli/decorator";
-import { CommandStruct, MustardApp } from "mustard-cli/cli";
+import { CommandStruct, MustardLifecycle } from "mustard-cli/cli";
 
 const require = createRequire(import.meta.url);
 
@@ -97,7 +97,7 @@ class RootCommandHandle implements CommandStruct {
     enableUsage: true,
   },
 })
-class Project implements MustardApp {
+class Project implements MustardLifecycle {
   onError(error: Error): void {
     console.log(error);
   }

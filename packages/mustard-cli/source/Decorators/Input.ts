@@ -1,5 +1,20 @@
-import type { AnyClassFieldDecoratorReturnType } from "../Typings/Temp";
-import type { InputConfiguration } from "../Typings/Option.struct";
+import { InstanceFieldDecorationTypes } from "../Utils/Constants.js";
+
+import type { ClassFieldDecoratorImpl } from "../Typings/Decorator.struct.js";
+import type { InputConfiguration } from "../Typings/Option.struct.js";
+import { BaseClassFieldInitialValue } from "../Typings/Utils.struct.js";
+
+// export class InputDecoratorInitialValue extends DecoratorInitialValue<InputInitialValue> {
+//   public constructor(value: InputInitialValue) {
+//     super(value);
+//   }
+// }
+
+// class DecoratorInitialValue
+
+export interface InputInitialValue extends BaseClassFieldInitialValue {
+  type: InstanceFieldDecorationTypes.Input;
+}
 
 export class InputDecorator {
   /**
@@ -15,7 +30,7 @@ export class InputDecorator {
    *   public projects: string[];
    * }
    */
-  public static Input(description?: string): AnyClassFieldDecoratorReturnType;
+  public static Input(description?: string): ClassFieldDecoratorImpl;
 
   /**
    * Inject inputs after commands
@@ -26,19 +41,20 @@ export class InputDecorator {
    * }
    */
   public static Input(
-    configuration?: InputConfiguration
-  ): AnyClassFieldDecoratorReturnType;
+    configuration?: InputConfiguration,
+  ): ClassFieldDecoratorImpl;
   public static Input(
-    config?: string | InputConfiguration
-  ): AnyClassFieldDecoratorReturnType {
+    config?: string | InputConfiguration,
+  ): ClassFieldDecoratorImpl {
     const inputDescription =
       typeof config === "string" ? config : config?.description;
 
     return (_, context) => (initValue) => {
+      console.log("03-30 @Input initValue: ", initValue);
       return {
-        type: "Input",
-        initValue,
+        type: InstanceFieldDecorationTypes.Input,
         description: inputDescription,
+        initValue,
       };
     };
   }

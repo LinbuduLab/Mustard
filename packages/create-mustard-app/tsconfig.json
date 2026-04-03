@@ -1,23 +1,10 @@
 {
-  "ts-node": {
-    "swc": false,
-    "pretty": true,
-    "transpileOnly": true
-  },
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ES2022",
-    "moduleResolution": "node",
-    "strict": true,
-    "skipLibCheck": true,
-    "declaration": false,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "outDir": "dist"
+    "outDir": "dist",
+    "rootDir": "source",
+    "types": ["node"]
   },
-  "include": ["source/index.mts"],
-  "exclude": []
+  "include": ["source"],
+  "exclude": ["dist", "tests"]
 }
