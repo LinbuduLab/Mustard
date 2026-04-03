@@ -16,27 +16,35 @@ import { GlobalRegistry } from "../Core/GlobalRegistry.js";
 const debug = _debug("mustard:decorator:option");
 
 /**
- * CLI arguments(options?) related decorators
+ * Options related decorators.
  */
 export class OptionDecorators {
   /**
-   * Register option value inject
+   * Register option for command.
+   * Use property name as option name.
+   *
    * @example
    * class RunCommand {
+   *  // registered as '--dry'
    *  \@Option()
    *   public dry: boolean;
    * }
    */
   public static Option(): ClassFieldDecoratorImpl;
+
   /**
-   * Register option value inject
+   * Register option for command.
+   * Use provided option name.
+   *
    * @example
    * class RunCommand {
+   *  // registered as '--dry-run'
    *  \@Option('dryRun')
    *   public dry: boolean;
    * }
    */
   public static Option(optionName: string): ClassFieldDecoratorImpl;
+
   /**
    * Register option value inject
    * @example
@@ -63,16 +71,13 @@ export class OptionDecorators {
    * Register option value inject
    * @example
    * class RunCommand {
-   *  \@Option('dryRun', 'dry run mode')
-   *   public dry: boolean;
-   *
-   * \@Option('sync', 's')
+   *  \@Option('sync', 's')
    *   public sync: boolean;
    * }
    */
   public static Option(
     optionName: string,
-    aliasOrDescription: string,
+    alias: string,
   ): ClassFieldDecoratorImpl;
   /**
    * Register option value inject
@@ -90,43 +95,13 @@ export class OptionDecorators {
    * Register option value inject
    * @example
    * class RunCommand {
-   *  \@Option('dryRun', 'dry run mode', Validator.Boolean())
-   *   public dry: boolean;
-   *
-   * \@Option('sync', 's', Validator.Boolean())
+   *  \@Option('sync', 's', Validator.Boolean())
    *   public sync: boolean;
    * }
    */
   public static Option(
     optionName: string,
-    aliasOrDescription: string,
-    validator: Partial<ValidatorFactory>,
-  ): ClassFieldDecoratorImpl;
-  /**
-   * Register option value inject
-   * @example
-   * class RunCommand {
-   *  \@Option('dryRun', 'd', 'dry run mode')
-   *   public dry: boolean;
-   * }
-   */
-  public static Option(
-    optionName: string,
     alias: string,
-    description: string,
-  ): ClassFieldDecoratorImpl;
-  /**
-   * Register option value inject
-   * @example
-   * class RunCommand {
-   *  \@Option('dryRun', 'd', 'dry run mode', Validator.Boolean())
-   *   public dry: boolean;
-   * }
-   */
-  public static Option(
-    optionName: string,
-    alias: string,
-    description: string,
     validator: Partial<ValidatorFactory>,
   ): ClassFieldDecoratorImpl;
   public static Option(
@@ -134,23 +109,20 @@ export class OptionDecorators {
       | string
       | Partial<ValidatorFactory>
       | OptionConfiguration,
-    aliasOrDescriptionOrValidator?: string | Partial<ValidatorFactory>,
-    descriptionOrValidator?: string | Partial<ValidatorFactory>,
+    aliasOrValidator?: string | Partial<ValidatorFactory>,
     validator?: Partial<ValidatorFactory>,
   ): ClassFieldDecoratorImpl {
     if (
       !optionNameOrValidatorOrCompleteConfig &&
-      !aliasOrDescriptionOrValidator &&
-      !descriptionOrValidator &&
+      !aliasOrValidator &&
       !validator
     ) {
-      return OptionDecorators.OptionImpl(null, null, null, null);
+      return OptionDecorators.OptionImpl(null, null, null);
     }
 
     if (typeof optionNameOrValidatorOrCompleteConfig === "object") {
       if ("schema" in optionNameOrValidatorOrCompleteConfig) {
         return OptionDecorators.OptionImpl(
-          null,
           null,
           null,
           optionNameOrValidatorOrCompleteConfig,
@@ -159,17 +131,15 @@ export class OptionDecorators {
         const {
           name = null,
           alias = null,
-          description = null,
           validator = null,
         } = <OptionConfiguration>optionNameOrValidatorOrCompleteConfig;
-        return OptionDecorators.OptionImpl(name, alias, description, validator);
+        return OptionDecorators.OptionImpl(name, alias, validator);
       }
     }
 
     if (
       optionNameOrValidatorOrCompleteConfig &&
-      !aliasOrDescriptionOrValidator &&
-      !descriptionOrValidator &&
+      !aliasOrValidator &&
       !validator
     ) {
       if (typeof optionNameOrValidatorOrCompleteConfig === "string") {
@@ -177,12 +147,10 @@ export class OptionDecorators {
           optionNameOrValidatorOrCompleteConfig,
           null,
           null,
-          null,
         );
       }
 
       return OptionDecorators.OptionImpl(
-        null,
         null,
         null,
         <Partial<ValidatorFactory>>optionNameOrValidatorOrCompleteConfig,
@@ -191,20 +159,16 @@ export class OptionDecorators {
 
     if (
       optionNameOrValidatorOrCompleteConfig &&
-      aliasOrDescriptionOrValidator &&
-      !descriptionOrValidator &&
+      aliasOrValidator &&
       !validator
     ) {
       if (
         typeof optionNameOrValidatorOrCompleteConfig === "string" &&
-        typeof aliasOrDescriptionOrValidator === "string"
+        typeof aliasOrValidator === "string"
       ) {
-        const asAlias = aliasOrDescriptionOrValidator.length <= 2;
-
         return OptionDecorators.OptionImpl(
           optionNameOrValidatorOrCompleteConfig,
-          asAlias ? aliasOrDescriptionOrValidator : null,
-          asAlias ? null : aliasOrDescriptionOrValidator,
+          aliasOrValidator,
           null,
         );
       }
@@ -212,30 +176,13 @@ export class OptionDecorators {
       return OptionDecorators.OptionImpl(
         <string>optionNameOrValidatorOrCompleteConfig,
         null,
-        null,
-        <Partial<ValidatorFactory>>aliasOrDescriptionOrValidator,
-      );
-    }
-
-    if (
-      typeof optionNameOrValidatorOrCompleteConfig === "string" &&
-      typeof aliasOrDescriptionOrValidator === "string" &&
-      typeof descriptionOrValidator !== "string"
-    ) {
-      const asAlias = aliasOrDescriptionOrValidator.length <= 2;
-
-      return OptionDecorators.OptionImpl(
-        <string>optionNameOrValidatorOrCompleteConfig,
-        asAlias ? aliasOrDescriptionOrValidator : null,
-        asAlias ? null : aliasOrDescriptionOrValidator,
-        <Partial<ValidatorFactory>>descriptionOrValidator,
+        <Partial<ValidatorFactory>>aliasOrValidator,
       );
     }
 
     return OptionDecorators.OptionImpl(
       <string>optionNameOrValidatorOrCompleteConfig,
-      <string>aliasOrDescriptionOrValidator,
-      <string>descriptionOrValidator,
+      <string>aliasOrValidator,
       <Partial<ValidatorFactory>>validator ?? null,
     );
   }
@@ -243,7 +190,6 @@ export class OptionDecorators {
   private static OptionImpl(
     optionName?: Nullable<string>,
     alias?: Nullable<string>,
-    description?: Nullable<string>,
     validator?: Nullable<Partial<ValidatorFactory>>,
   ): ClassFieldDecoratorImpl {
     return (_, { name }) =>
@@ -262,7 +208,6 @@ export class OptionDecorators {
           optionAlias: alias,
           initValue,
           schema: validator?.schema,
-          description,
         };
       };
   }

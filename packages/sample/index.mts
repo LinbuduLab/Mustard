@@ -10,8 +10,11 @@ import {
   Input,
   Restrict,
   Description,
+  Schema,
 } from "mustard-cli/decorator";
-import { Validator } from "mustard-cli/validator";
+
+import { Validator as ValidatorFactory } from "mustard-cli/validator";
+import { z } from "zod";
 
 import type { MustardCommand } from "mustard-cli/cli";
 
@@ -21,8 +24,9 @@ const require = createRequire(import.meta.url);
 
 @RootCommand()
 class RootCommandHandle implements MustardCommand {
-  @Option("msg", "m")
+  @Option("msgF", "m")
   @Description("description of msg")
+  @Schema(z.string().min(3).optional().describe("description of msg, from zod"))
   public msg = "default value of msg";
 
   // @Option("msg2", Validator.Number())

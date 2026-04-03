@@ -2,7 +2,10 @@ import mri from "mri";
 import parse from "yargs-parser";
 import { closest } from "./Levenshtein.js";
 import { CommandRegistry } from "../Core/CommandRegistry.js";
-import { isInstanceFieldDecorationType } from "./Constants.js";
+import {
+  InstanceFieldDecorationTypes,
+  isInstanceFieldDecorationType,
+} from "./Constants.js";
 
 import type {
   CommandInput,
@@ -16,6 +19,26 @@ import type { RestrictValueSet } from "../Typings/Controller.struct.js";
 import type { CommandList } from "../Typings/Configuration.struct.js";
 
 export class MustardInternalUtils {
+  public static createContextInitializer(
+    context: ClassFieldDecoratorContext,
+    key: string,
+    value: unknown,
+  ): void {
+    context.addInitializer(function () {
+      if (!value) return;
+
+      const instanceField = String(context.name);
+      const currentValue = Reflect.get(this as object, instanceField);
+
+      if (MustardInternalUtils.isOptionInitializer(currentValue)) {
+        Reflect.set(this as object, instanceField, {
+          ...currentValue,
+          [key]: value,
+        });
+      }
+    });
+  }
+
   public static getInstanceFields(instance: MustardCommand): string[] {
     return <string[]>Reflect.ownKeys(instance);
   }
@@ -177,7 +200,13 @@ export class MustardInternalUtils {
   public static isOptionInitializer(
     input: any,
   ): input is OptionInitializerPlaceHolder {
-    return typeof input === "object" && input.type === "Option";
+    return (
+      (typeof input === "object" &&
+        "type" in input &&
+        input.type === InstanceFieldDecorationTypes.Option) ||
+      input.type === InstanceFieldDecorationTypes.Options ||
+      input.type === InstanceFieldDecorationTypes.VariadicOption
+    );
   }
 
   public static applyRestrictions(

@@ -23,7 +23,14 @@ export class OptionNormalizer {
       restrictValues,
     } = <Required<OptionInitializerPlaceHolder>>value;
 
-    const isCurrentFieldRequired = schema ? !schema.isOptional() : false;
+    console.log("04-03 injectKey: ", injectKey);
+    // console.log("04-03 schema: ", schema);
+    console.log("04-03 value: ", value.description);
+
+    // const isCurrentFieldRequired = schema ? !schema.isOptional() : false;
+    const isCurrentFieldRequired = schema
+      ? !schema.safeParse(undefined).success
+      : false;
 
     // use value from parsed args
     if (injectKey in parsedArgs || injectSubKey in parsedArgs) {

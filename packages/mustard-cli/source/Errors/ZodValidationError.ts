@@ -3,7 +3,7 @@ import chalk from "chalk";
 
 import { MustardError } from "../Typings/MustardError.struct.js";
 
-import type { ZodInvalidTypeIssue } from "zod";
+// import type { ZodInvalidTypeIssue } from "zod";
 
 export class ValidationError extends MustardError implements MustardError {
   public name = "ValidationError";
@@ -30,7 +30,8 @@ export class ValidationError extends MustardError implements MustardError {
   public static formatError(argName: string, error: z.ZodError) {
     const issue = error.issues[0];
 
-    const { expected, received, message } = <ZodInvalidTypeIssue>issue;
+    // @ts-expect-error
+    const { expected, received, message } = <z.core.$ZodIssueInvalidType>issue;
 
     if (expected && received) {
       return `Invalid input for argument '${argName}', expected: ${chalk.green(

@@ -7,6 +7,11 @@ import type { MaybeFactory } from "./Shared.struct.js";
 
 export interface MustardConfigurations {
   /**
+   * Specify how to parse option name.
+   */
+  parseCamelCaseOptionName: "dot" | "dash" | "none";
+
+  /**
    * Allow unknown options to be passed to the command. If this is set to `false`, Mustard will throw an error when it encounters an unknown option during parse stage.
    *
    * @default false
@@ -43,8 +48,7 @@ export interface LifeCycles {
   onComplete: () => void;
 }
 
-export interface CLIInstantiationConfiguration
-  extends Partial<MustardConfigurations> {}
+export interface CLIInstantiationConfiguration extends Partial<MustardConfigurations> {}
 
 export type CommandList = (typeof MustardCommand)[];
 

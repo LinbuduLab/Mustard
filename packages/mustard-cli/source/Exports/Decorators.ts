@@ -8,10 +8,12 @@ import { RelationDecorators } from "../Decorators/Relation.js";
 import { SharedDecorators } from "../Decorators/Shared.js";
 
 import { MustardApp } from "../Core/MustardApp.js";
+import { SchemaDecorators } from "../Decorators/Schema.js";
 
 export const { App } = MustardApp;
 export const { Command, RootCommand } = CommandDecorators;
 export const { Option, Options, VariadicOption } = OptionDecorators;
+export const { Schema } = SchemaDecorators;
 export const { Input } = InputDecorator;
 export const { Provide, Inject } = DIServiceDecorators;
 export const { Ctx, Utils } = BuiltInDecorators;
